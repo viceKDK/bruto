@@ -676,70 +676,83 @@ body.auth-active::after {
   position: relative;
   color: transparent;
   background: linear-gradient(180deg,
-    #ffe8b3 0%,      /* Amarillo muy claro */
-    #ffd687 20%,     /* Dorado brillante */
-    #ffb347 40%,     /* Dorado medio */
-    #d68a2e 60%,     /* Bronce */
-    #8b5a1a 80%,     /* Bronce oscuro */
-    #4a3010 100%     /* Café muy oscuro */
+    #f5e6c8 0%,      /* Beige muy claro */
+    #e5c589 15%,     /* Dorado claro */
+    #d4a963 30%,     /* Dorado */
+    #c08f47 45%,     /* Dorado medio */
+    #a67535 60%,     /* Bronce */
+    #8b5d28 75%,     /* Bronce oscuro */
+    #6d461d 90%,     /* Café oscuro */
+    #4a2f14 100%     /* Café muy oscuro */
   );
   -webkit-background-clip: text;
   background-clip: text;
-  -webkit-text-stroke: 2.5px #1a0f05;
+  -webkit-text-stroke: 3.5px #1f1308;
   font-family: 'Impact', 'Arial Black', 'Haettenschweiler', sans-serif;
   font-weight: 900;
-  letter-spacing: 10px;
+  letter-spacing: 14px;
   text-shadow:
-    /* Sombras 3D para profundidad */
-    0 2px 0 #5a3710,
-    0 3px 0 #4a2d0c,
-    0 4px 0 #3e2409,
-    0 5px 0 #321d07,
-    0 6px 0 #281806,
-    /* Sombras difusas */
-    0 10px 20px rgba(0, 0, 0, 0.8),
-    0 15px 30px rgba(0, 0, 0, 0.6),
-    /* Resplandor muy sutil */
-    0 0 15px rgba(255, 180, 80, 0.2);
-  filter: drop-shadow(0 20px 30px rgba(0, 0, 0, 0.7));
+    /* Sombras 3D profundas y marcadas */
+    1px 1px 0 #3d2612,
+    2px 2px 0 #3d2612,
+    3px 3px 0 #342014,
+    4px 4px 0 #2b1a11,
+    5px 5px 0 #22140d,
+    6px 6px 0 #1a0f08,
+    7px 7px 0 #120a05,
+    8px 8px 0 #0a0502,
+    /* Sombras difusas profundas */
+    0 10px 25px rgba(0, 0, 0, 0.9),
+    0 15px 35px rgba(0, 0, 0, 0.8),
+    0 20px 45px rgba(0, 0, 0, 0.7);
+  filter: drop-shadow(0 25px 40px rgba(0, 0, 0, 0.9));
 }
 
-/* Efecto de llamas arriba del texto - más pegadas y definidas */
+/* Efecto de llamas arriba del texto - estilo continuo */
 .auth-title.fire-title::after {
   content: '';
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-  top: -20px;
-  width: 110%;
-  height: 30px;
+  top: -25px;
+  width: 105%;
+  height: 35px;
   pointer-events: none;
   background:
-    /* Llamas más definidas y compactas */
-    radial-gradient(ellipse 35px 25px at 10% 100%, rgba(255, 220, 150, 1), rgba(255, 180, 80, 0.9) 30%, rgba(255, 120, 40, 0.6) 55%, rgba(255, 80, 20, 0.2) 75%, transparent 90%),
-    radial-gradient(ellipse 40px 28px at 22% 100%, rgba(255, 230, 160, 1), rgba(255, 190, 90, 0.95) 28%, rgba(255, 130, 45, 0.65) 52%, rgba(255, 85, 25, 0.25) 72%, transparent 88%),
-    radial-gradient(ellipse 38px 26px at 35% 100%, rgba(255, 225, 155, 1), rgba(255, 185, 85, 0.92) 30%, rgba(255, 125, 42, 0.62) 54%, rgba(255, 82, 22, 0.22) 74%, transparent 89%),
-    radial-gradient(ellipse 42px 29px at 50% 100%, rgba(255, 235, 165, 1), rgba(255, 195, 95, 0.97) 26%, rgba(255, 135, 48, 0.68) 50%, rgba(255, 88, 28, 0.28) 70%, transparent 87%),
-    radial-gradient(ellipse 38px 26px at 65% 100%, rgba(255, 225, 155, 1), rgba(255, 185, 85, 0.92) 30%, rgba(255, 125, 42, 0.62) 54%, rgba(255, 82, 22, 0.22) 74%, transparent 89%),
-    radial-gradient(ellipse 40px 28px at 78% 100%, rgba(255, 230, 160, 1), rgba(255, 190, 90, 0.95) 28%, rgba(255, 130, 45, 0.65) 52%, rgba(255, 85, 25, 0.25) 72%, transparent 88%),
-    radial-gradient(ellipse 35px 25px at 90% 100%, rgba(255, 220, 150, 1), rgba(255, 180, 80, 0.9) 30%, rgba(255, 120, 40, 0.6) 55%, rgba(255, 80, 20, 0.2) 75%, transparent 90%);
-  filter: blur(1.5px) drop-shadow(0 5px 10px rgba(255, 140, 0, 0.7));
-  animation: flameFlicker 2.5s ease-in-out infinite;
+    /* Capa de llamas continuas superpuestas */
+    radial-gradient(ellipse 45px 32px at 5% 100%, rgba(255, 210, 140, 1), rgba(255, 180, 90, 0.95) 25%, rgba(255, 140, 60, 0.7) 45%, rgba(255, 100, 30, 0.4) 65%, transparent 85%),
+    radial-gradient(ellipse 50px 35px at 12% 100%, rgba(255, 220, 150, 1), rgba(255, 190, 100, 0.98) 22%, rgba(255, 150, 70, 0.75) 42%, rgba(255, 110, 35, 0.45) 62%, transparent 82%),
+    radial-gradient(ellipse 48px 34px at 20% 100%, rgba(255, 215, 145, 1), rgba(255, 185, 95, 0.96) 24%, rgba(255, 145, 65, 0.72) 44%, rgba(255, 105, 32, 0.42) 64%, transparent 84%),
+    radial-gradient(ellipse 52px 36px at 28% 100%, rgba(255, 225, 155, 1), rgba(255, 195, 105, 0.99) 20%, rgba(255, 155, 75, 0.78) 40%, rgba(255, 115, 38, 0.48) 60%, transparent 80%),
+    radial-gradient(ellipse 50px 35px at 37% 100%, rgba(255, 220, 150, 1), rgba(255, 190, 100, 0.98) 22%, rgba(255, 150, 70, 0.75) 42%, rgba(255, 110, 35, 0.45) 62%, transparent 82%),
+    radial-gradient(ellipse 54px 37px at 46% 100%, rgba(255, 230, 160, 1), rgba(255, 200, 110, 1) 18%, rgba(255, 160, 80, 0.8) 38%, rgba(255, 120, 40, 0.5) 58%, transparent 78%),
+    radial-gradient(ellipse 52px 36px at 54% 100%, rgba(255, 225, 155, 1), rgba(255, 195, 105, 0.99) 20%, rgba(255, 155, 75, 0.78) 40%, rgba(255, 115, 38, 0.48) 60%, transparent 80%),
+    radial-gradient(ellipse 50px 35px at 63% 100%, rgba(255, 220, 150, 1), rgba(255, 190, 100, 0.98) 22%, rgba(255, 150, 70, 0.75) 42%, rgba(255, 110, 35, 0.45) 62%, transparent 82%),
+    radial-gradient(ellipse 48px 34px at 72% 100%, rgba(255, 215, 145, 1), rgba(255, 185, 95, 0.96) 24%, rgba(255, 145, 65, 0.72) 44%, rgba(255, 105, 32, 0.42) 64%, transparent 84%),
+    radial-gradient(ellipse 50px 35px at 80% 100%, rgba(255, 220, 150, 1), rgba(255, 190, 100, 0.98) 22%, rgba(255, 150, 70, 0.75) 42%, rgba(255, 110, 35, 0.45) 62%, transparent 82%),
+    radial-gradient(ellipse 45px 32px at 88% 100%, rgba(255, 210, 140, 1), rgba(255, 180, 90, 0.95) 25%, rgba(255, 140, 60, 0.7) 45%, rgba(255, 100, 30, 0.4) 65%, transparent 85%),
+    radial-gradient(ellipse 48px 34px at 95% 100%, rgba(255, 215, 145, 1), rgba(255, 185, 95, 0.96) 24%, rgba(255, 145, 65, 0.72) 44%, rgba(255, 105, 32, 0.42) 64%, transparent 84%);
+  filter: blur(2px) drop-shadow(0 6px 12px rgba(255, 140, 0, 0.8));
+  animation: flameFlicker 3s ease-in-out infinite;
 }
 
-/* Animación de parpadeo de llamas más sutil */
+/* Animación de parpadeo de llamas */
 @keyframes flameFlicker {
   0%, 100% {
-    opacity: 0.95;
+    opacity: 0.92;
     transform: translateX(-50%) scaleY(1);
   }
-  33% {
+  25% {
     opacity: 1;
-    transform: translateX(-50%) scaleY(1.08) translateY(-2px);
+    transform: translateX(-50%) scaleY(1.06) translateY(-2px);
   }
-  66% {
-    opacity: 0.9;
-    transform: translateX(-50%) scaleY(0.96) translateY(1px);
+  50% {
+    opacity: 0.88;
+    transform: translateX(-50%) scaleY(0.98) translateY(1px);
+  }
+  75% {
+    opacity: 0.96;
+    transform: translateX(-50%) scaleY(1.03) translateY(-1px);
   }
 }
 /* ============================================
