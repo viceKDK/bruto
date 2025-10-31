@@ -26,6 +26,7 @@ const startGame = () => {
   console.log('[Main] Game Config:', gameConfig);
 
   showGameCanvas();
+  document.body.classList.add('game-active');
   game = new Phaser.Game(gameConfig);
 
   console.log('[Main] Phaser game initialized successfully');

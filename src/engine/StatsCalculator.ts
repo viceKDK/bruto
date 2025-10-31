@@ -1,4 +1,6 @@
 import { IBruto, BrutoStats } from '../models/Bruto';
+import { Skill } from '../models/Skill';
+import { skillEffectEngine } from './skills/SkillEffectEngine';
 
 export type StatSource = 'skill' | 'weapon' | 'pet' | 'progression' | 'equipment' | 'other';
 
@@ -54,6 +56,14 @@ const STAT_LABELS: Record<keyof BrutoStats, string> = {
 };
 
 export class StatsCalculator {
+  /**
+   * Build summary with skill modifiers applied
+   */
+  public buildSummaryWithSkills(bruto: IBruto, skills: Skill[]): StatsSummary {
+    const skillModifiers = skillEffectEngine.calculateStatModifiers(bruto, skills);
+    return this.buildSummary(bruto, skillModifiers);
+  }
+
   public buildSummary(bruto: IBruto, context: StatsCalculationContext = {}): StatsSummary {
     const primary = this.buildPrimaryStats(bruto, context);
     const derived = this.buildDerivedStats(bruto);

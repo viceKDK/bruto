@@ -13,11 +13,14 @@ export interface LandingHandle {
 }
 
 const CHARACTER_IMAGES = [
-  new URL('../assets/sprites/warrior-hero.png', import.meta.url).href,
-  new URL('../assets/sprites/warrior-woman.webp', import.meta.url).href,
-  new URL('../assets/sprites/bruto-left.png', import.meta.url).href,
-  new URL('../assets/sprites/20251031_0113_Guerrero Sin Fondo_remix_01k8w7eyqae73abe4p2f1d0kt4.png', import.meta.url).href,
-  new URL('../assets/sprites/20251031_0115_Guerrero con Calavera_remix_01k8w7j7dtej5vyrd59nvp8hjc.png', import.meta.url).href,
+  {
+    src: new URL('../assets/sprites/bruto-left.png', import.meta.url).href,
+    position: 'left',
+  },
+  {
+    src: new URL('../assets/sprites/warrior-hero.png', import.meta.url).href,
+    position: 'right',
+  },
 ];
 
 const EMBER_COUNT = 80;
@@ -40,9 +43,11 @@ export function mountLanding(rootId: string, options: LandingOptions): LandingHa
     destroyed = true;
     cleanupFns.forEach((fn) => fn());
     document.body.classList.remove('landing-active', 'landing-konami');
+    document.body.classList.add('game-active');
     root.innerHTML = '';
   };
 
+  document.body.classList.remove('game-active');
   document.body.classList.add('landing-active');
   root.innerHTML = landingTemplate;
 
@@ -63,15 +68,14 @@ export function mountLanding(rootId: string, options: LandingOptions): LandingHa
   }, 1200);
 
   if (charactersContainer) {
-    const tiles = CHARACTER_IMAGES.slice(0, 4);
-
-    tiles.forEach((src, index) => {
+    CHARACTER_IMAGES.forEach(({ src, position }, index) => {
       const tile = document.createElement('div');
-      tile.className = 'landing-character-tile';
+      tile.className = `landing-character-tile landing-character-tile--${position}`;
 
       const image = new Image();
       image.src = src;
       image.alt = `Personaje ${index + 1}`;
+      image.loading = 'lazy';
 
       tile.appendChild(image);
       charactersContainer.appendChild(tile);

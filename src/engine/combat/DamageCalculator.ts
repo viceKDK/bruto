@@ -15,6 +15,8 @@ export interface DamageModifiers {
   skillDamageBonus?: number; // Epic 6 integration point
   critChanceBonus?: number; // Epic 5-6 integration point
   multiHitChance?: number; // Epic 5-6 integration point
+  armorBonus?: number; // Epic 6: Passive armor skills (Piel Dura, Esqueleto de Plomo)
+  evasionBonus?: number; // Epic 6: Passive evasion skills (Reflejos Felinos)
 }
 
 export interface DamageResult {
@@ -56,32 +58,16 @@ export class DamageCalculator {
     attacker: IBrutoCombatant,
     defender: IBrutoCombatant,
     modifiers: DamageModifiers = {}
-  ): DamageResult {
-    const breakdown: string[] = [];
-
-    // Base damage
-    const raw = this.calculateBaseDamage(attacker, modifiers);
-    breakdown.push(`Base (STR ${attacker.stats.str}): ${raw}`);
-
-    // Resistance damage reduction
-    // Per architecture: resistance reduces damage (1 - min(0.75, resistance × 0.01))
-    const resistanceFactor = Math.min(0.75, defender.stats.resistance * 0.01);
-    const damageReduction = 1 - resistanceFactor;
-    const mitigated = Math.floor(raw * damageReduction);
-
-    if (resistanceFactor > 0) {
-      breakdown.push(`Resistance (${defender.stats.resistance}): -${Math.floor((1 - damageReduction) * 100)}%`);
-    }
-
-    const final = Math.max(0, mitigated);
-    breakdown.push(`Final: ${final}`);
-
-    return {
-      raw,
-      mitigated,
-      final,
-      breakdown,
-    };
+  ): number {
+    const baseDamage = attacker.stats.str + (modifiers.weaponDamage || 0);
+    const skillDamage = modifiers.skillDamageBonus || 0;
+    
+    // Apply armor bonus from passive skills (Piel Dura, Esqueleto de Plomo)
+    const totalResistance = defender.stats.resistance + (modifiers.armorBonus || 0);
+    const resistanceReduction = 1 - Math.min(0.75, totalResistance * 0.01);
+    
+    const totalDamage = (baseDamage + skillDamage) * resistanceReduction;
+    return Math.max(1, Math.floor(totalDamage));
   }
 
   /**
@@ -126,19 +112,23 @@ export class DamageCalculator {
   }
 
   /**
-   * Calculate dodge chance from Agility stat
-   * Per GDD: "Dodge - Agility stat determines % chance to avoid attacks"
-   * Per Architecture: Agility × 0.1 = dodge percentage
+   * Calculate dodge chance from Agility stat + passive skill modifiers
+   * Per GDD Section 12: Agility × 0.1 (cap 95%)
+   * Epic 6: +Reflejos Felinos bonus, -Esqueleto de Plomo penalty
    */
-  public getDodgeChance(defender: IBrutoCombatant): number {
+  public getDodgeChance(defender: IBrutoCombatant, modifiers: DamageModifiers = {}): number {
+    // Base dodge from agility
     // Agility × 0.1 (Agility 10 = 10% dodge)
-    const dodgeChance = defender.stats.agility * 0.1;
+    let dodgeChance = defender.stats.agility * 0.1;
+    
+    // Apply evasion bonus/penalty from passive skills
+    if (modifiers.evasionBonus) {
+      dodgeChance += modifiers.evasionBonus;
+    }
 
     // Cap at 95% max dodge
-    return Math.min(0.95, dodgeChance);
-  }
-
-  /**
+    return Math.min(0.95, Math.max(0, dodgeChance));
+  }  /**
    * Calculate multi-hit chance from Speed stat
    * Per GDD: "Speed Advantage - Extra turn probability based on Speed stat"
    *

@@ -20,6 +20,11 @@
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       }
 
+      body.game-active {
+        background: #f5f5f5;
+        color: #333;
+      }
+
       #landing-root {
         min-height: 100vh;
       }
@@ -33,6 +38,10 @@
         background: #050100;
       }
 
+      body.game-active #app {
+        background: #f5f5f5;
+      }
+
       #app.is-hidden {
         display: none;
       }
@@ -40,6 +49,10 @@
       canvas {
         display: block;
         background: #050100 !important;
+      }
+
+      body.game-active canvas {
+        background: #f5f5f5 !important;
       }
     </style>
   </head>

@@ -10,6 +10,8 @@ import { CombatAction } from '../../models/Battle';
 import { SeededRandom } from '../../utils/SeededRandom';
 import { CombatStateMachine, CombatState, CombatSide, TurnQueueEntry } from './CombatStateMachine';
 import { DamageCalculator } from './DamageCalculator';
+import { ActiveAbilityManager } from './ActiveAbilityManager';
+import { ActiveAbilityEffects } from './ActiveAbilityEffects';
 
 export interface BattleConfig {
   player: IBrutoCombatant;
@@ -37,6 +39,8 @@ export class CombatEngine {
   private stateMachine: CombatStateMachine;
   private rng: SeededRandom;
   private damageCalculator: DamageCalculator;
+  private activeAbilityManager: ActiveAbilityManager;
+  private activeAbilityEffects: ActiveAbilityEffects;
   private playerState: CombatantState;
   private opponentState: CombatantState;
   private actions: CombatAction[] = [];
@@ -48,6 +52,8 @@ export class CombatEngine {
       : new SeededRandom(Date.now());
 
     this.damageCalculator = new DamageCalculator();
+    this.activeAbilityManager = new ActiveAbilityManager();
+    this.activeAbilityEffects = new ActiveAbilityEffects(this.rng);
 
     // Initialize combatant states
     this.playerState = {
@@ -59,6 +65,9 @@ export class CombatEngine {
       combatant: config.opponent,
       currentHp: config.opponent.stats.hp,
     };
+
+    // Initialize abilities for battle
+    this.activeAbilityManager.initializeBattle(config.player, config.opponent);
   }
 
   /**
@@ -182,11 +191,31 @@ export class CombatEngine {
     }
 
     // Calculate damage using DamageCalculator
-    const damageResult = this.damageCalculator.calculatePhysicalDamage(
+    let damage = this.damageCalculator.calculatePhysicalDamage(
       attackerState.combatant,
       defenderState.combatant
     );
-    let damage = damageResult.final;
+
+    // Check for Fuerza Bruta active ability
+    const fuerzaBrutaId = 'fuerza_bruta';
+    if (this.activeAbilityManager.isAbilityAvailable(attacker, fuerzaBrutaId)) {
+      const abilityEffect = this.activeAbilityEffects.applyFuerzaBruta();
+      if (abilityEffect.damageMultiplier !== undefined) {
+        damage = this.activeAbilityEffects.calculateAbilityDamage(damage, abilityEffect.damageMultiplier);
+      }
+      this.activeAbilityManager.useAbility(attacker, fuerzaBrutaId);
+      
+      this.actions.push({
+        turn: turnNumber,
+        attacker,
+        action: 'ability' as any, // TODO: Extend CombatAction type
+        damage: 0,
+        hpRemaining: {
+          player: this.playerState.currentHp,
+          opponent: this.opponentState.currentHp,
+        },
+      });
+    }
 
     // Check critical hit using DamageCalculator
     const critChance = this.damageCalculator.calculateCritChance(attackerState.combatant);

@@ -1,0 +1,358 @@
+{
+  "skills": [
+    {
+      "id": "fuerza_hercules",
+      "name": "Fuerza Hércules",
+      "category": "stat_buff",
+      "description": "Aumenta STR inmediatamente y potencia las subidas de nivel futuras",
+      "odds": 5.83,
+      "effects": [
+        {
+          "type": "stat_boost",
+          "timing": "immediate",
+          "stat": "str",
+          "value": 3,
+          "modifier": "flat"
+        },
+        {
+          "type": "stat_boost",
+          "timing": "immediate",
+          "stat": "str",
+          "value": 50,
+          "modifier": "percentage"
+        },
+        {
+          "type": "level_up_bonus",
+          "timing": "on_level_up",
+          "stat": "str",
+          "value": 3,
+          "condition": "when_choosing_STR",
+          "description": "Da 3 STR en vez de 2 al subir nivel"
+        }
+      ],
+      "stackable": false,
+      "implemented": false
+    },
+    {
+      "id": "agilidad_felina",
+      "name": "Agilidad Felina",
+      "category": "stat_buff",
+      "description": "Aumenta Agilidad inmediatamente y potencia las subidas de nivel futuras",
+      "odds": 5.83,
+      "effects": [
+        {
+          "type": "stat_boost",
+          "timing": "immediate",
+          "stat": "agility",
+          "value": 3,
+          "modifier": "flat"
+        },
+        {
+          "type": "stat_boost",
+          "timing": "immediate",
+          "stat": "agility",
+          "value": 50,
+          "modifier": "percentage"
+        },
+        {
+          "type": "level_up_bonus",
+          "timing": "on_level_up",
+          "stat": "agility",
+          "value": 3,
+          "condition": "when_choosing_agility",
+          "description": "Da 3 Agility en vez de 2 al subir nivel"
+        }
+      ],
+      "stackable": false,
+      "implemented": false
+    },
+    {
+      "id": "golpe_trueno",
+      "name": "Golpe de Trueno",
+      "category": "stat_buff",
+      "description": "Aumenta Speed inmediatamente y potencia las subidas de nivel futuras",
+      "odds": 5.83,
+      "effects": [
+        {
+          "type": "stat_boost",
+          "timing": "immediate",
+          "stat": "speed",
+          "value": 3,
+          "modifier": "flat"
+        },
+        {
+          "type": "stat_boost",
+          "timing": "immediate",
+          "stat": "speed",
+          "value": 50,
+          "modifier": "percentage"
+        },
+        {
+          "type": "level_up_bonus",
+          "timing": "on_level_up",
+          "stat": "speed",
+          "value": 3,
+          "condition": "when_choosing_speed",
+          "description": "Da 3 Speed en vez de 2 al subir nivel"
+        }
+      ],
+      "stackable": false,
+      "implemented": false
+    },
+    {
+      "id": "vitalidad",
+      "name": "Vitalidad",
+      "category": "stat_buff",
+      "description": "Aumenta HP inmediatamente y potencia las subidas de nivel futuras. Modifica costo de mascotas.",
+      "odds": 5.83,
+      "effects": [
+        {
+          "type": "stat_boost",
+          "timing": "immediate",
+          "stat": "resistance",
+          "value": 3,
+          "modifier": "flat",
+          "description": "+3 Resistance = +18 HP (6 HP por punto de Resistance)"
+        },
+        {
+          "type": "stat_boost",
+          "timing": "immediate",
+          "stat": "resistance",
+          "value": 50,
+          "modifier": "percentage"
+        },
+        {
+          "type": "level_up_bonus",
+          "timing": "on_level_up",
+          "stat": "resistance",
+          "value": 18,
+          "condition": "when_choosing_resistance_full",
+          "description": "Da +18 HP en vez de +12 HP al subir nivel (completo)"
+        },
+        {
+          "type": "level_up_bonus",
+          "timing": "on_level_up",
+          "stat": "resistance",
+          "value": 9,
+          "condition": "when_choosing_resistance_split",
+          "description": "Da +9 HP en vez de +6 HP al subir nivel (dividido)"
+        },
+        {
+          "type": "resistance_change",
+          "timing": "passive",
+          "condition": "when_acquiring_pet",
+          "description": "Modifica costo de mascotas: Perro -3, Pantera -9, Oso -12"
+        }
+      ],
+      "stackable": false,
+      "implemented": false
+    },
+    {
+      "id": "inmortalidad",
+      "name": "Inmortalidad",
+      "category": "stat_buff",
+      "description": "Aumenta Resistencia masivamente pero reduce otras stats. Habilidad más rara del juego.",
+      "odds": 0.01,
+      "effects": [
+        {
+          "type": "stat_boost",
+          "timing": "immediate",
+          "stat": "resistance",
+          "value": 250,
+          "modifier": "percentage"
+        },
+        {
+          "type": "stat_boost",
+          "timing": "immediate",
+          "stat": "str",
+          "value": -25,
+          "modifier": "percentage"
+        },
+        {
+          "type": "stat_boost",
+          "timing": "immediate",
+          "stat": "agility",
+          "value": -25,
+          "modifier": "percentage"
+        },
+        {
+          "type": "stat_boost",
+          "timing": "immediate",
+          "stat": "speed",
+          "value": -25,
+          "modifier": "percentage"
+        },
+        {
+          "type": "level_up_bonus",
+          "timing": "on_level_up",
+          "stat": "resistance",
+          "value": 250,
+          "modifier": "percentage",
+          "description": "+250% en cada mejora futura de Resistencia"
+        },
+        {
+          "type": "resistance_change",
+          "timing": "passive",
+          "condition": "when_acquiring_pet",
+          "description": "Modifica costo de mascotas: Perro -7, Pantera -15, Oso -28"
+        }
+      ],
+      "stackable": false,
+      "implemented": false
+    },
+    {
+      "id": "fuerza_bruta",
+      "name": "Fuerza Bruta",
+      "category": "active_ability",
+      "description": "+10% crítico y golpes potenciados x2 daño. Usos extra cada 30 STR.",
+      "odds": 0,
+      "effects": [
+        {
+          "type": "critical_bonus",
+          "timing": "passive",
+          "value": 10,
+          "modifier": "percentage",
+          "description": "+10% critical chance"
+        },
+        {
+          "type": "special_ability",
+          "timing": "per_turn",
+          "usesPerCombat": 1,
+          "scalesWithStat": "str",
+          "scalingThreshold": 30,
+          "description": "Golpe x2 daño. +1 uso cada 30 STR (0-29=1 uso, 30-59=2 usos, etc.)"
+        }
+      ],
+      "stackable": false,
+      "implemented": false
+    },
+    {
+      "id": "toughened_skin",
+      "name": "Piel Dura",
+      "category": "passive_effect",
+      "description": "+10% Armadura. Se acumula con Armadura hasta 35% de mitigación.",
+      "odds": 0,
+      "effects": [
+        {
+          "type": "armor_bonus",
+          "timing": "passive",
+          "value": 10,
+          "modifier": "percentage",
+          "description": "Absorbe el 10% del daño de cada golpe recibido"
+        }
+      ],
+      "stackable": true,
+      "maxStacks": 1,
+      "implemented": false
+    },
+    {
+      "id": "esqueleto_plomo",
+      "name": "Esqueleto de Plomo",
+      "category": "passive_effect",
+      "description": "+15% Armadura, -15% daño de armas contundentes, -15% Evasión",
+      "odds": 0,
+      "effects": [
+        {
+          "type": "armor_bonus",
+          "timing": "passive",
+          "value": 15,
+          "modifier": "percentage"
+        },
+        {
+          "type": "damage_modifier",
+          "timing": "passive",
+          "damageType": "blunt",
+          "value": -15,
+          "modifier": "percentage",
+          "target": "self",
+          "description": "Reduce 15% el daño de armas contundentes"
+        },
+        {
+          "type": "evasion_modifier",
+          "timing": "passive",
+          "value": -15,
+          "modifier": "percentage"
+        }
+      ],
+      "stackable": false,
+      "implemented": false
+    },
+    {
+      "id": "resistente",
+      "name": "Resistente",
+      "category": "passive_effect",
+      "description": "Limita el daño recibido por golpe al 20% de tu HP máximo",
+      "odds": 0,
+      "effects": [
+        {
+          "type": "damage_modifier",
+          "timing": "on_hit",
+          "value": 20,
+          "modifier": "percentage",
+          "target": "self",
+          "description": "Ningún golpe puede hacer más del 20% de tu HP máximo"
+        }
+      ],
+      "stackable": false,
+      "implemented": false
+    },
+    {
+      "id": "pocion_tragica",
+      "name": "Poción Trágica",
+      "category": "active_ability",
+      "description": "Cura entre 25%-50% HP máximo. Cura envenenamiento de Chef.",
+      "odds": 0,
+      "effects": [
+        {
+          "type": "special_ability",
+          "timing": "per_turn",
+          "usesPerCombat": 1,
+          "value": 25,
+          "description": "Cura entre 25% y 50% del HP máximo (rango aleatorio)"
+        }
+      ],
+      "stackable": false,
+      "implemented": false
+    },
+    {
+      "id": "meditacion",
+      "name": "Meditación",
+      "category": "stat_buff",
+      "description": "+5 Speed, +150% Speed, +50% daño crítico, -200 Iniciativa",
+      "odds": 0,
+      "effects": [
+        {
+          "type": "stat_boost",
+          "timing": "immediate",
+          "stat": "speed",
+          "value": 5,
+          "modifier": "flat"
+        },
+        {
+          "type": "stat_boost",
+          "timing": "immediate",
+          "stat": "speed",
+          "value": 150,
+          "modifier": "percentage"
+        },
+        {
+          "type": "critical_bonus",
+          "timing": "passive",
+          "value": 50,
+          "modifier": "percentage",
+          "description": "+50% daño crítico"
+        },
+        {
+          "type": "level_up_bonus",
+          "timing": "on_level_up",
+          "stat": "speed",
+          "value": 150,
+          "modifier": "percentage",
+          "description": "+150% en cada mejora futura de Speed"
+        }
+      ],
+      "stackable": false,
+      "implemented": false
+    }
+  ]
+}

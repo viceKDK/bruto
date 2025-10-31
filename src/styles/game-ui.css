@@ -1,27 +1,27 @@
-/* ===== Modern Game UI Styles ===== */
-
-:root {
-  --primary-color: #2196F3;
-  --primary-hover: #1976D2;
-  --success-color: #00897B;
-  --success-hover: #00695C;
-  --dark-bg: #ffffff;
-  --card-bg: #ffffff;
-  --border-color: #e0e0e0;
-  --input-border: #d0d0d0;
-  --text-primary: #333333;
-  --text-secondary: #666666;
-  --text-label: #555555;
-  --success: #4caf50;
-  --error: #f44336;
-  --shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  --shadow-hover: 0 4px 12px rgba(0, 0, 0, 0.15);
-}
-
-* {
-  box-sizing: border-box;
-}
-
+/* ===== Modern Game UI Styles ===== */
+
+:root {
+  --primary-color: #2196F3;
+  --primary-hover: #1976D2;
+  --success-color: #00897B;
+  --success-hover: #00695C;
+  --dark-bg: #ffffff;
+  --card-bg: #ffffff;
+  --border-color: #e0e0e0;
+  --input-border: #d0d0d0;
+  --text-primary: #333333;
+  --text-secondary: #666666;
+  --text-label: #555555;
+  --success: #4caf50;
+  --error: #f44336;
+  --shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  --shadow-hover: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+* {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
   padding: 0;
@@ -30,333 +30,353 @@ body {
   overflow-x: hidden;
 }
 
+body.auth-active {
+  overflow: hidden;
+}
+
 /* Remove canvas black borders */
 canvas {
   display: block;
   margin: 0 auto;
   background: #f5f5f5 !important;
+}
+
+/* Game Container */
+#app {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  background: #f5f5f5;
+}
+
+/* Auth Container - Centered with side image */
+.auth-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 95%;
+  max-width: 650px;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* Auth Card - Centered form */
+.auth-card {
+  width: 100%;
+  background: var(--card-bg);
+  border-radius: 12px;
+  box-shadow: var(--shadow-hover);
+  padding: 48px 60px;
+}
+
+/* Warrior Image - Larger, positioned far right */
+.warrior-hero {
+  position: fixed;
+  right: 10%;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 380px;
+  height: auto;
+  z-index: 500;
+  pointer-events: none;
+}
+
+.warrior-hero img {
+  width: 100%;
+  height: auto;
+  max-height: 550px;
+  object-fit: contain;
+  filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.3));
+}
+
+/* Bruto Left - Positioned on the left side */
+.bruto-left {
+  position: fixed;
+  left: 10%;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 460px;
+  height: auto;
+  z-index: 500;
+  pointer-events: none;
+}
+
+.bruto-left img {
+  width: 100%;
+  height: auto;
+  max-height: 665px;
+  object-fit: contain;
+  filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.3));
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -45%);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
+}
+
+/* Title */
+.auth-title {
+  font-size: 36px;
+  font-weight: 700;
+  color: var(--text-primary);
+  text-align: center;
+  margin: 0 0 12px 0;
+  letter-spacing: 1px;
+}
+
+.auth-subtitle {
+  font-size: 20px;
+  font-weight: 400;
+  color: var(--text-secondary);
+  text-align: center;
+  margin: 0 0 32px 0;
+}
+
+/* Form */
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Form Group */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-label);
+  margin: 0;
+}
+
+/* Modern Input Styles */
+.game-input {
+  width: 100%;
+  padding: 12px 16px;
+  font-size: 16px;
+  border: 1px solid var(--input-border);
+  border-radius: 4px;
+  background: var(--card-bg);
+  color: var(--text-primary);
+  transition: all 0.2s ease;
+  outline: none;
+  font-family: inherit;
+}
+
+.game-input:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.1);
+}
+
+.game-input::placeholder {
+  color: #999999;
+  opacity: 1;
+}
+
+/* Date Input */
+.game-input[type="date"] {
+  color: var(--text-primary);
+}
+
+.game-input[type="date"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  opacity: 0.6;
+}
+
+.game-input[type="date"]::-webkit-calendar-picker-indicator:hover {
+  opacity: 1;
+}
+
+/* Password Input */
+.game-input[type="password"] {
+  letter-spacing: 0.1em;
+}
+
+/* Buttons */
+.game-button {
+  width: 100%;
+  max-width: 800px;
+  padding: 18px 40px;
+  font-size: 20px;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+  margin: 16px auto 8px auto;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: block;
+}
+
+.game-button-primary {
+  background: var(--primary-color);
+  color: white;
+  box-shadow: 0 2px 4px rgba(33, 150, 243, 0.3);
+}
+
+.game-button-primary:hover {
+  background: var(--primary-hover);
+  box-shadow: 0 4px 8px rgba(33, 150, 243, 0.4);
+  transform: translateY(-1px);
+}
+
+.game-button-primary:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(33, 150, 243, 0.3);
+}
+
+.game-button-success {
+  background: var(--success-color);
+  color: white;
+  box-shadow: 0 2px 4px rgba(0, 137, 123, 0.3);
+}
+
+.game-button-success:hover {
+  background: var(--success-hover);
+  box-shadow: 0 4px 8px rgba(0, 137, 123, 0.4);
+  transform: translateY(-1px);
+}
+
+.game-button-success:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 137, 123, 0.3);
+}
+
+.game-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+/* Link Text */
+.auth-link {
+  text-align: center;
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin-top: 16px;
+}
+
+.auth-link a {
+  color: var(--primary-color);
+  text-decoration: none;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.auth-link a:hover {
+  text-decoration: underline;
+}
+
+/* Error Messages */
+.error-message {
+  background: #ffebee;
+  border-left: 4px solid var(--error);
+  padding: 12px 16px;
+  border-radius: 4px;
+  color: #c62828;
+  font-size: 14px;
+  margin-top: 16px;
+  animation: shake 0.3s ease;
+  min-height: 0;
+  display: none;
+}
+
+.error-message:not(:empty) {
+  display: block;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-8px); }
+  75% { transform: translateX(8px); }
+}
+
+/* Success Messages */
+.success-message {
+  background: #e8f5e9;
+  border-left: 4px solid var(--success);
+  padding: 12px 16px;
+  border-radius: 4px;
+  color: #2e7d32;
+  font-size: 14px;
+  margin-top: 16px;
+}
+
+/* Loading Spinner */
+.loading-spinner {
+  width: 24px;
+  height: 24px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin: 0 auto;
+  display: inline-block;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.button-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+/* Responsive */
+@media (max-width: 1400px) {
+  .warrior-hero,
+  .bruto-left {
+    display: none; /* Ocultar imágenes cuando no hay espacio */
+  }
+}
+
+@media (max-width: 768px) {
+  .auth-container {
+    width: 95%;
+  }
+  
+  .auth-card {
+    padding: 24px;
+  }
+  
+  .auth-title {
+    font-size: 24px;
+  }
+}
+
+/* Hide Phaser canvas initially */
+canvas {
+  display: block;
+}
+/* Register overlay specific tweaks */
+.zombie img {
+  transform: translate(20%, 12%) scale(1.16);
+  transform-origin: center right;
 }
 
-/* Game Container */
-#app {
-  position: relative;
-  width: 100%;
-  height: 100vh;
-  background: #f5f5f5;
+.chef img {
+  transform: translate(-20%, 7%);
+  transform-origin: center left;
 }
 
-/* Auth Container - Centered with side image */
-.auth-container {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 95%;
-  max-width: 650px;
-  z-index: 1000;
-  animation: fadeIn 0.3s ease-out;
-}
+
+
 
-/* Auth Card - Centered form */
-.auth-card {
-  width: 100%;
-  background: var(--card-bg);
-  border-radius: 12px;
-  box-shadow: var(--shadow-hover);
-  padding: 48px 60px;
-}
 
-/* Warrior Image - Larger, positioned far right */
-.warrior-hero {
-  position: fixed;
-  right: 10%;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 380px;
-  height: auto;
-  z-index: 500;
-  pointer-events: none;
-}
 
-.warrior-hero img {
-  width: 100%;
-  height: auto;
-  max-height: 550px;
-  object-fit: contain;
-  filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.3));
-}
-
-/* Bruto Left - Positioned on the left side */
-.bruto-left {
-  position: fixed;
-  left: 10%;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 460px;
-  height: auto;
-  z-index: 500;
-  pointer-events: none;
-}
-
-.bruto-left img {
-  width: 100%;
-  height: auto;
-  max-height: 665px;
-  object-fit: contain;
-  filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.3));
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translate(-50%, -45%);
-  }
-  to {
-    opacity: 1;
-    transform: translate(-50%, -50%);
-  }
-}
-
-/* Title */
-.auth-title {
-  font-size: 36px;
-  font-weight: 700;
-  color: var(--text-primary);
-  text-align: center;
-  margin: 0 0 12px 0;
-  letter-spacing: 1px;
-}
-
-.auth-subtitle {
-  font-size: 20px;
-  font-weight: 400;
-  color: var(--text-secondary);
-  text-align: center;
-  margin: 0 0 32px 0;
-}
-
-/* Form */
-.auth-form {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-/* Form Group */
-.form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.form-label {
-  font-size: 14px;
-  font-weight: 500;
-  color: var(--text-label);
-  margin: 0;
-}
-
-/* Modern Input Styles */
-.game-input {
-  width: 100%;
-  padding: 12px 16px;
-  font-size: 16px;
-  border: 1px solid var(--input-border);
-  border-radius: 4px;
-  background: var(--card-bg);
-  color: var(--text-primary);
-  transition: all 0.2s ease;
-  outline: none;
-  font-family: inherit;
-}
-
-.game-input:focus {
-  border-color: var(--primary-color);
-  box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.1);
-}
-
-.game-input::placeholder {
-  color: #999999;
-  opacity: 1;
-}
-
-/* Date Input */
-.game-input[type="date"] {
-  color: var(--text-primary);
-}
-
-.game-input[type="date"]::-webkit-calendar-picker-indicator {
-  cursor: pointer;
-  opacity: 0.6;
-}
-
-.game-input[type="date"]::-webkit-calendar-picker-indicator:hover {
-  opacity: 1;
-}
-
-/* Password Input */
-.game-input[type="password"] {
-  letter-spacing: 0.1em;
-}
-
-/* Buttons */
-.game-button {
-  width: 100%;
-  max-width: 800px;
-  padding: 18px 40px;
-  font-size: 20px;
-  font-weight: 600;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  font-family: inherit;
-  margin: 16px auto 8px auto;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  display: block;
-}
-
-.game-button-primary {
-  background: var(--primary-color);
-  color: white;
-  box-shadow: 0 2px 4px rgba(33, 150, 243, 0.3);
-}
-
-.game-button-primary:hover {
-  background: var(--primary-hover);
-  box-shadow: 0 4px 8px rgba(33, 150, 243, 0.4);
-  transform: translateY(-1px);
-}
-
-.game-button-primary:active {
-  transform: translateY(0);
-  box-shadow: 0 2px 4px rgba(33, 150, 243, 0.3);
-}
-
-.game-button-success {
-  background: var(--success-color);
-  color: white;
-  box-shadow: 0 2px 4px rgba(0, 137, 123, 0.3);
-}
-
-.game-button-success:hover {
-  background: var(--success-hover);
-  box-shadow: 0 4px 8px rgba(0, 137, 123, 0.4);
-  transform: translateY(-1px);
-}
-
-.game-button-success:active {
-  transform: translateY(0);
-  box-shadow: 0 2px 4px rgba(0, 137, 123, 0.3);
-}
-
-.game-button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-  transform: none !important;
-}
-
-/* Link Text */
-.auth-link {
-  text-align: center;
-  font-size: 14px;
-  color: var(--text-secondary);
-  margin-top: 16px;
-}
-
-.auth-link a {
-  color: var(--primary-color);
-  text-decoration: none;
-  font-weight: 500;
-  cursor: pointer;
-}
-
-.auth-link a:hover {
-  text-decoration: underline;
-}
-
-/* Error Messages */
-.error-message {
-  background: #ffebee;
-  border-left: 4px solid var(--error);
-  padding: 12px 16px;
-  border-radius: 4px;
-  color: #c62828;
-  font-size: 14px;
-  margin-top: 16px;
-  animation: shake 0.3s ease;
-  min-height: 0;
-  display: none;
-}
-
-.error-message:not(:empty) {
-  display: block;
-}
-
-@keyframes shake {
-  0%, 100% { transform: translateX(0); }
-  25% { transform: translateX(-8px); }
-  75% { transform: translateX(8px); }
-}
-
-/* Success Messages */
-.success-message {
-  background: #e8f5e9;
-  border-left: 4px solid var(--success);
-  padding: 12px 16px;
-  border-radius: 4px;
-  color: #2e7d32;
-  font-size: 14px;
-  margin-top: 16px;
-}
-
-/* Loading Spinner */
-.loading-spinner {
-  width: 24px;
-  height: 24px;
-  border: 3px solid rgba(255, 255, 255, 0.3);
-  border-top-color: white;
-  border-radius: 50%;
-  animation: spin 0.8s linear infinite;
-  margin: 0 auto;
-  display: inline-block;
-}
-
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
-
-.button-content {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-}
-
-/* Responsive */
-@media (max-width: 1400px) {
-  .warrior-hero,
-  .bruto-left {
-    display: none; /* Ocultar imágenes cuando no hay espacio */
-  }
-}
-
-@media (max-width: 768px) {
-  .auth-container {
-    width: 95%;
-  }
-  
-  .auth-card {
-    padding: 24px;
-  }
-  
-  .auth-title {
-    font-size: 24px;
-  }
-}
-
-/* Hide Phaser canvas initially */
-canvas {
-  display: block;
-}

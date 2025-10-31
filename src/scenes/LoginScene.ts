@@ -43,6 +43,8 @@ export class LoginScene extends Phaser.Scene {
       this.brutoLeftImage.remove();
     }
 
+    document.body.classList.add('auth-active');
+
     this.container = document.createElement('div');
     this.container.className = 'auth-container';
     this.container.innerHTML = `
@@ -105,6 +107,8 @@ export class LoginScene extends Phaser.Scene {
       this.brutoLeftImage.remove();
     }
 
+    document.body.classList.add('auth-active');
+
     this.container = document.createElement('div');
     this.container.className = 'auth-container';
     this.container.innerHTML = `
@@ -135,15 +139,16 @@ export class LoginScene extends Phaser.Scene {
 
     // Agregar imagen del guerrero a la derecha
     this.warriorImage = document.createElement('div');
-    this.warriorImage.className = 'warrior-hero';
-    this.warriorImage.innerHTML = `<img src="/src/assets/sprites/warrior-hero.png" alt="Guerrero Héroe" />`;
+    this.warriorImage.className = 'warrior-hero zombie';
+    this.warriorImage.innerHTML = `<img src="/src/assets/sprites/zombie.png" alt="zombie" />`;
     document.body.appendChild(this.warriorImage);
 
     // Agregar imagen de la mujer guerrera a la izquierda (solo en registro)
     this.brutoLeftImage = document.createElement('div');
-    this.brutoLeftImage.className = 'bruto-left';
-    this.brutoLeftImage.innerHTML = `<img src="/src/assets/sprites/warrior-woman.webp" alt="Guerrera" />`;
+    this.brutoLeftImage.className = 'bruto-left chef';
+    this.brutoLeftImage.innerHTML = `<img src="/src/assets/sprites/chef.png" alt="Cheft" />`;
     document.body.appendChild(this.brutoLeftImage);
+
 
     // Event listeners
     const form = document.getElementById('registerForm') as HTMLFormElement;
@@ -245,9 +250,29 @@ export class LoginScene extends Phaser.Scene {
       this.container.remove();
       this.container = null;
     }
+    if (this.warriorImage) {
+      this.warriorImage.remove();
+      this.warriorImage = null;
+    }
+    if (this.brutoLeftImage) {
+      this.brutoLeftImage.remove();
+      this.brutoLeftImage = null;
+    }
+    document.body.classList.remove('auth-active');
   }
 
   shutdown(): void {
     this.cleanup();
   }
 }
+
+
+
+
+
+
+
+
+
+
+
