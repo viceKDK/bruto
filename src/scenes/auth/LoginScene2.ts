@@ -7,6 +7,8 @@ import './auth-styles2.css';
 import Phaser from 'phaser';
 import { useStore } from '../../state/store';
 import { apiClient } from '../../services/ApiClient';
+// Use unified hero image for login/register UI
+const HERO_IMG = new URL('./task_01k8xp2d3dfe4b1qtbmh0j757p_1761932900_img_1.webp', import.meta.url).href;
 
 export class LoginScene extends Phaser.Scene {
   private container: HTMLDivElement | null = null;
@@ -57,7 +59,9 @@ export class LoginScene extends Phaser.Scene {
     this.container.className = 'auth-container';
     this.container.innerHTML = `
       <div class="auth-card">
-        <h1 class="auth-title fire-title">EL BRUTO</h1>
+        <div class="auth-title-wrap">
+          <img src="${HERO_IMG}" alt="EL BRUTO" class="auth-title-image" />
+        </div>
         <h2 class="auth-subtitle">Iniciar Sesión</h2>
         
         <form id="loginForm" class="auth-form">
@@ -137,7 +141,9 @@ export class LoginScene extends Phaser.Scene {
     this.container.className = 'auth-container';
     this.container.innerHTML = `
       <div class="auth-card">
-        <h1 class="auth-title fire-title">EL BRUTO</h1>
+        <div class="auth-title-wrap">
+          <img src="${HERO_IMG}" alt="EL BRUTO" class="auth-title-image" />
+        </div>
         <h2 class="auth-subtitle">Crear Cuenta</h2>
         
         <form id="registerForm" class="auth-form">

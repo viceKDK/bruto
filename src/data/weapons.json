@@ -1,0 +1,358 @@
+[
+  {
+    "id": "bare-hands",
+    "name": "Bare Hands",
+    "nameEs": "Puños",
+    "types": [],
+    "odds": 100,
+    "hitSpeed": 100,
+    "damage": 5,
+    "drawChance": 100,
+    "reach": 1,
+    "modifiers": {
+      "evasion": 10,
+      "dexterity": 20,
+      "block": -25,
+      "disarm": 5
+    }
+  },
+  {
+    "id": "sword",
+    "name": "Sword",
+    "nameEs": "Espada",
+    "types": ["Sharp"],
+    "odds": 0.39,
+    "hitSpeed": 67,
+    "damage": 28,
+    "drawChance": 33,
+    "reach": 2,
+    "modifiers": {
+      "criticalChance": 5,
+      "evasion": 20,
+      "dexterity": 10,
+      "accuracy": 20,
+      "disarm": 10
+    }
+  },
+  {
+    "id": "spear",
+    "name": "Spear",
+    "nameEs": "Lanza",
+    "types": ["Long"],
+    "odds": 3.89,
+    "hitSpeed": 100,
+    "damage": 12,
+    "drawChance": 17,
+    "reach": 3,
+    "modifiers": {
+      "criticalChance": 15,
+      "reversal": -10,
+      "disarm": 10
+    }
+  },
+  {
+    "id": "halberd",
+    "name": "Halberd",
+    "nameEs": "Alabarda",
+    "types": ["Long", "Heavy", "Sharp"],
+    "odds": 0.19,
+    "hitSpeed": 67,
+    "damage": 24,
+    "drawChance": 17,
+    "reach": 4,
+    "modifiers": {
+      "dexterity": -40,
+      "disarm": 10,
+      "combo": 10
+    }
+  },
+  {
+    "id": "sai",
+    "name": "Sai",
+    "nameEs": "Sai",
+    "types": ["Fast"],
+    "odds": 0.58,
+    "hitSpeed": 200,
+    "damage": 8,
+    "drawChance": 8,
+    "reach": 0,
+    "modifiers": {
+      "evasion": 10,
+      "dexterity": 25,
+      "block": 30,
+      "disarm": 75,
+      "combo": 30,
+      "deflect": 25
+    }
+  },
+  {
+    "id": "frying-pan",
+    "name": "Frying Pan",
+    "nameEs": "Sartén",
+    "types": ["Heavy", "Blunt"],
+    "odds": 0.04,
+    "hitSpeed": 100,
+    "damage": 17,
+    "drawChance": 17,
+    "reach": 1,
+    "modifiers": {
+      "block": 40,
+      "combo": -40,
+      "deflect": 40
+    }
+  },
+  {
+    "id": "mammoth-bone",
+    "name": "Mammoth Bone",
+    "nameEs": "Hueso de Mamut",
+    "types": ["Heavy", "Blunt"],
+    "odds": 1.96,
+    "hitSpeed": 75,
+    "damage": 14,
+    "drawChance": 33,
+    "reach": 1,
+    "modifiers": {
+      "criticalChance": 15,
+      "dexterity": -50,
+      "accuracy": 50,
+      "disarm": 10,
+      "combo": -10
+    }
+  },
+  {
+    "id": "trident",
+    "name": "Trident",
+    "nameEs": "Tridente",
+    "types": ["Long"],
+    "odds": 0.97,
+    "hitSpeed": 86,
+    "damage": 14,
+    "drawChance": 33,
+    "reach": 3,
+    "modifiers": {
+      "criticalChance": 5,
+      "reversal": 5,
+      "disarm": 20
+    }
+  },
+  {
+    "id": "flail",
+    "name": "Flail",
+    "nameEs": "Boleadora",
+    "types": ["Heavy", "Blunt"],
+    "odds": 0.39,
+    "hitSpeed": 55,
+    "damage": 36,
+    "drawChance": 33,
+    "reach": 1,
+    "modifiers": {
+      "criticalChance": -20,
+      "evasion": -30,
+      "dexterity": -160,
+      "block": -50,
+      "accuracy": 150,
+      "disarm": -20,
+      "combo": 30
+    }
+  },
+  {
+    "id": "mace",
+    "name": "Mace",
+    "nameEs": "Maza",
+    "types": ["Heavy", "Blunt"],
+    "odds": 4.86,
+    "hitSpeed": 60,
+    "damage": 30,
+    "drawChance": 33,
+    "reach": 1,
+    "modifiers": {
+      "criticalChance": 20,
+      "reversal": -30,
+      "evasion": -30,
+      "dexterity": -65,
+      "block": -30,
+      "accuracy": 30,
+      "disarm": 10,
+      "combo": -60
+    }
+  },
+  {
+    "id": "whip",
+    "name": "Whip",
+    "nameEs": "Látigo",
+    "types": ["Long"],
+    "odds": 0.29,
+    "hitSpeed": 80,
+    "damage": 10,
+    "drawChance": 33,
+    "reach": 5,
+    "modifiers": {
+      "reversal": -10,
+      "evasion": 30,
+      "dexterity": 50,
+      "block": -20,
+      "accuracy": -20,
+      "disarm": 30,
+      "combo": 35
+    }
+  },
+  {
+    "id": "hammer",
+    "name": "Hammer",
+    "nameEs": "Martillo",
+    "types": ["Heavy", "Blunt"],
+    "odds": 0.29,
+    "hitSpeed": 52,
+    "damage": 55,
+    "drawChance": 33,
+    "reach": 1,
+    "modifiers": {
+      "reversal": -20,
+      "evasion": -40,
+      "dexterity": -80,
+      "block": -40,
+      "accuracy": 50,
+      "disarm": 10,
+      "combo": -40
+    }
+  },
+  {
+    "id": "one-handed-axe",
+    "name": "One-handed Axe",
+    "nameEs": "Hacha de 1 Mano",
+    "types": ["Sharp"],
+    "odds": 3.89,
+    "hitSpeed": 80,
+    "damage": 17,
+    "drawChance": 23,
+    "reach": 1,
+    "modifiers": {
+      "criticalChance": 15,
+      "block": -10
+    }
+  },
+  {
+    "id": "morning-star",
+    "name": "Morning Star",
+    "nameEs": "Maza de Acero",
+    "types": ["Heavy", "Blunt"],
+    "odds": 0.58,
+    "hitSpeed": 80,
+    "damage": 20,
+    "drawChance": 33,
+    "reach": 1,
+    "modifiers": {
+      "criticalChance": 5,
+      "evasion": -10,
+      "dexterity": -35,
+      "accuracy": 30,
+      "disarm": 10
+    }
+  },
+  {
+    "id": "broadsword",
+    "name": "Broadsword",
+    "nameEs": "Espadón",
+    "types": ["Sharp"],
+    "odds": 9.72,
+    "hitSpeed": 100,
+    "damage": 10,
+    "drawChance": 33,
+    "reach": 1,
+    "modifiers": {
+      "criticalChance": 30,
+      "reversal": 10,
+      "block": 15,
+      "disarm": 15
+    }
+  },
+  {
+    "id": "knife",
+    "name": "Knife",
+    "nameEs": "Cuchillo",
+    "types": ["Fast", "Sharp"],
+    "odds": 7.78,
+    "hitSpeed": 200,
+    "damage": 7,
+    "drawChance": 33,
+    "reach": 0,
+    "modifiers": {
+      "criticalChance": 25,
+      "evasion": 10,
+      "dexterity": 50,
+      "combo": 30
+    }
+  },
+  {
+    "id": "scimitar",
+    "name": "Scimitar",
+    "nameEs": "Cimitarra",
+    "types": ["Sharp"],
+    "odds": 0.58,
+    "hitSpeed": 150,
+    "damage": 10,
+    "drawChance": 23,
+    "reach": 1,
+    "modifiers": {
+      "criticalChance": 5,
+      "dexterity": 20,
+      "combo": 15,
+      "block": 10
+    }
+  },
+  {
+    "id": "staff",
+    "name": "Staff",
+    "nameEs": "Bastón",
+    "types": ["Long"],
+    "odds": 6.80,
+    "hitSpeed": 120,
+    "damage": 6,
+    "drawChance": 23,
+    "reach": 3,
+    "modifiers": {
+      "criticalChance": 20,
+      "reversal": 30,
+      "evasion": 5,
+      "block": 25,
+      "disarm": 25,
+      "combo": 10
+    }
+  },
+  {
+    "id": "shuriken",
+    "name": "Shuriken",
+    "nameEs": "Shuriken",
+    "types": ["Thrown"],
+    "odds": 0.78,
+    "hitSpeed": 1000,
+    "damage": 3,
+    "drawChance": 33,
+    "reach": 0,
+    "modifiers": {
+      "evasion": 15,
+      "combo": 30,
+      "block": -10,
+      "disarm": -50
+    }
+  },
+  {
+    "id": "two-handed-axe",
+    "name": "Two-handed Axe",
+    "nameEs": "Hacha 2 Manos",
+    "types": ["Sharp", "Heavy"],
+    "odds": 0.97,
+    "hitSpeed": 65,
+    "damage": 32,
+    "drawChance": 33,
+    "reach": 2,
+    "modifiers": {
+      "criticalChance": 25,
+      "evasion": -30,
+      "dexterity": -45,
+      "block": -15,
+      "accuracy": 20,
+      "disarm": 15
+    }
+  }
+]

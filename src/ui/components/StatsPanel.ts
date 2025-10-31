@@ -20,6 +20,14 @@ export interface PetChipData {
   resistanceCost: number;
   description: string;
   acquiredAtLevel?: number;
+  petSlot?: 'A' | 'B' | 'C' | null;  // Story 7.6: Show Perro slot identifiers
+  stats?: {                           // Story 7.6: Mini stat panel
+    hp: number;
+    agility: number;
+    speed: number;
+    multiHitChance?: number;
+    evasionChance?: number;
+  };
 }
 
 export interface ModifierSummary {
@@ -347,11 +355,39 @@ export class StatsPanel {
     this.ensureChipPool(this.petChips, pets.length, COLORS.success);
     const chipsBottom = this.layoutChips(
       this.petChips,
-      pets.map((entry) => ({
-        label: entry.name,
-        sublabel: `RES -${entry.resistanceCost}${entry.acquiredAtLevel ? ` · Nivel ${entry.acquiredAtLevel}` : ''}`,
-        tooltip: `${entry.name}\n${entry.description}\nCoste de resistencia: -${entry.resistanceCost}`,
-      })),
+      pets.map((entry) => {
+        // Story 7.6: Enhanced tooltip with detailed pet stats
+        let tooltip = `${entry.name}\n${entry.description}\n\nCoste de resistencia: -${entry.resistanceCost}`;
+        
+        if (entry.stats) {
+          tooltip += `\n\n--- STATS ---`;
+          tooltip += `\nHP: +${entry.stats.hp}`;
+          tooltip += `\nAgilidad: ${entry.stats.agility}`;
+          tooltip += `\nVelocidad: ${entry.stats.speed}`;
+          if (entry.stats.multiHitChance && entry.stats.multiHitChance > 0) {
+            tooltip += `\nCombo: ${entry.stats.multiHitChance}%`;
+          }
+          if (entry.stats.evasionChance && entry.stats.evasionChance > 0) {
+            tooltip += `\nEvasión: ${entry.stats.evasionChance}%`;
+          }
+        }
+
+        if (entry.acquiredAtLevel) {
+          tooltip += `\n\nAdquirido: Nivel ${entry.acquiredAtLevel}`;
+        }
+
+        // Story 7.6: Show slot badge for Perro A/B/C
+        let displayName = entry.name;
+        if (entry.petSlot) {
+          displayName = `${entry.name}`;  // Name already includes slot from mapper
+        }
+
+        return {
+          label: displayName,
+          sublabel: `RES -${entry.resistanceCost}${entry.petSlot ? ` [${entry.petSlot}]` : ''}`,
+          tooltip,
+        };
+      }),
       startY + this.lineHeight
     );
 

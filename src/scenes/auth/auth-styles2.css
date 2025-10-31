@@ -131,7 +131,7 @@ body.auth-active::after {
   background: var(--auth-card-bg);
   border: 3px solid var(--auth-border);
   border-radius: 24px;
-  padding: 48px 40px;
+  padding: 10px 24px;
   box-shadow: 
     0 0 60px rgba(255, 100, 0, 0.25),
     0 20px 70px rgba(0, 0, 0, 0.8),
@@ -524,7 +524,7 @@ body.auth-active::after {
 
 @media (max-width: 768px) {
   .auth-card {
-    padding: 40px 32px;
+    padding: 10px 20px;
     max-width: 420px;
   }
 
@@ -567,7 +567,7 @@ body.auth-active::after {
   }
 
   .auth-card {
-    padding: 32px 24px;
+    padding: 10px 16px;
     max-width: 100%;
   }
 
@@ -579,6 +579,7 @@ body.auth-active::after {
   .auth-subtitle {
     font-size: 1.1rem;
     letter-spacing: 2px;
+    margin-bottom: 14px;
   }
 
   .warrior-hero,
@@ -599,7 +600,7 @@ body.auth-active::after {
   }
 
   .auth-card {
-    padding: 28px 20px;
+    padding: 20px 16px;
   }
 }
 
@@ -670,89 +671,148 @@ body.auth-active::after {
 }
 
 /* ============================================
-   Fire Title Style - Epic Metallic Gold with Flames
+   Auth Title Image - Direct Image Use
+   ============================================ */
+.auth-title-image {
+  display: block;
+  margin: 0 auto 0 auto;
+  width: 100%;
+  max-width: none;
+  height: clamp(160px, 26vw, 260px);
+  object-fit: contain;
+  /* Zoom into the logo; wrapper crops overflow */
+  transform: scale(2.0);
+  transform-origin: center;
+  /* Keep it crisp and on top */
+  position: relative;
+  z-index: 2;
+  filter: none;
+}
+
+@media (max-width: 480px) {
+  .auth-title-wrap {
+    height: clamp(90px, 24vw, 140px);
+    margin-bottom: 4px;
+  }
+  .auth-title-image {
+    height: auto;
+    transform: scale(1.9);
+  }
+}
+
+/* ============================================
+   Fire Title Style - Epic 3D Golden Text with Realistic Flames
    ============================================ */
 .auth-title.fire-title {
   position: relative;
   color: transparent;
   background: linear-gradient(180deg,
-    #f5e6c8 0%,      /* Beige muy claro */
-    #e5c589 15%,     /* Dorado claro */
-    #d4a963 30%,     /* Dorado */
-    #c08f47 45%,     /* Dorado medio */
-    #a67535 60%,     /* Bronce */
-    #8b5d28 75%,     /* Bronce oscuro */
-    #6d461d 90%,     /* Café oscuro */
-    #4a2f14 100%     /* Café muy oscuro */
+    #ffeaa7 0%,      /* Dorado muy claro brillante */
+    #f5d176 15%,     /* Dorado claro */
+    #ebb951 30%,     /* Dorado medio */
+    #dda63a 50%,     /* Dorado intenso */
+    #c9942e 70%,     /* Dorado oscuro */
+    #a57a24 85%,     /* Bronce */
+    #7a5818 100%     /* Bronce oscuro */
   );
   -webkit-background-clip: text;
   background-clip: text;
-  -webkit-text-stroke: 3.5px #1f1308;
+  -webkit-text-stroke: 0;
   font-family: 'Impact', 'Arial Black', 'Haettenschweiler', sans-serif;
   font-weight: 900;
-  letter-spacing: 14px;
+  letter-spacing: 16px;
   text-shadow:
-    /* Sombras 3D profundas y marcadas */
-    1px 1px 0 #3d2612,
-    2px 2px 0 #3d2612,
-    3px 3px 0 #342014,
-    4px 4px 0 #2b1a11,
-    5px 5px 0 #22140d,
-    6px 6px 0 #1a0f08,
-    7px 7px 0 #120a05,
-    8px 8px 0 #0a0502,
-    /* Sombras difusas profundas */
-    0 10px 25px rgba(0, 0, 0, 0.9),
-    0 15px 35px rgba(0, 0, 0, 0.8),
-    0 20px 45px rgba(0, 0, 0, 0.7);
-  filter: drop-shadow(0 25px 40px rgba(0, 0, 0, 0.9));
+    /* Borde café/marrón 3D muy marcado (lado derecho e inferior) */
+    2px 0 0 #6b3e1a,
+    3px 0 0 #5d341a,
+    4px 0 0 #4f2a14,
+    5px 1px 0 #42200f,
+    6px 2px 0 #35180b,
+    7px 3px 0 #281008,
+    8px 4px 0 #1c0905,
+    9px 5px 0 #100402,
+    /* Borde inferior */
+    0 2px 0 #6b3e1a,
+    0 3px 0 #5d341a,
+    0 4px 0 #4f2a14,
+    0 5px 0 #42200f,
+    0 6px 0 #35180b,
+    0 7px 0 #281008,
+    0 8px 0 #1c0905,
+    /* Sombra negra profunda */
+    0 12px 20px rgba(0, 0, 0, 0.95),
+    0 18px 35px rgba(0, 0, 0, 0.85),
+    0 24px 50px rgba(0, 0, 0, 0.75),
+    /* Brillo dorado sutil */
+    0 0 20px rgba(255, 215, 100, 0.15);
+  filter: drop-shadow(0 30px 50px rgba(0, 0, 0, 0.95));
 }
 
-/* Efecto de llamas arriba del texto - estilo continuo */
+/* Efecto de llamas realistas arriba del texto */
 .auth-title.fire-title::after {
   content: '';
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-  top: -25px;
-  width: 105%;
-  height: 35px;
+  top: -40px;
+  width: 110%;
+  height: 55px;
   pointer-events: none;
   background:
-    /* Capa de llamas continuas superpuestas */
-    radial-gradient(ellipse 45px 32px at 5% 100%, rgba(255, 210, 140, 1), rgba(255, 180, 90, 0.95) 25%, rgba(255, 140, 60, 0.7) 45%, rgba(255, 100, 30, 0.4) 65%, transparent 85%),
-    radial-gradient(ellipse 50px 35px at 12% 100%, rgba(255, 220, 150, 1), rgba(255, 190, 100, 0.98) 22%, rgba(255, 150, 70, 0.75) 42%, rgba(255, 110, 35, 0.45) 62%, transparent 82%),
-    radial-gradient(ellipse 48px 34px at 20% 100%, rgba(255, 215, 145, 1), rgba(255, 185, 95, 0.96) 24%, rgba(255, 145, 65, 0.72) 44%, rgba(255, 105, 32, 0.42) 64%, transparent 84%),
-    radial-gradient(ellipse 52px 36px at 28% 100%, rgba(255, 225, 155, 1), rgba(255, 195, 105, 0.99) 20%, rgba(255, 155, 75, 0.78) 40%, rgba(255, 115, 38, 0.48) 60%, transparent 80%),
-    radial-gradient(ellipse 50px 35px at 37% 100%, rgba(255, 220, 150, 1), rgba(255, 190, 100, 0.98) 22%, rgba(255, 150, 70, 0.75) 42%, rgba(255, 110, 35, 0.45) 62%, transparent 82%),
-    radial-gradient(ellipse 54px 37px at 46% 100%, rgba(255, 230, 160, 1), rgba(255, 200, 110, 1) 18%, rgba(255, 160, 80, 0.8) 38%, rgba(255, 120, 40, 0.5) 58%, transparent 78%),
-    radial-gradient(ellipse 52px 36px at 54% 100%, rgba(255, 225, 155, 1), rgba(255, 195, 105, 0.99) 20%, rgba(255, 155, 75, 0.78) 40%, rgba(255, 115, 38, 0.48) 60%, transparent 80%),
-    radial-gradient(ellipse 50px 35px at 63% 100%, rgba(255, 220, 150, 1), rgba(255, 190, 100, 0.98) 22%, rgba(255, 150, 70, 0.75) 42%, rgba(255, 110, 35, 0.45) 62%, transparent 82%),
-    radial-gradient(ellipse 48px 34px at 72% 100%, rgba(255, 215, 145, 1), rgba(255, 185, 95, 0.96) 24%, rgba(255, 145, 65, 0.72) 44%, rgba(255, 105, 32, 0.42) 64%, transparent 84%),
-    radial-gradient(ellipse 50px 35px at 80% 100%, rgba(255, 220, 150, 1), rgba(255, 190, 100, 0.98) 22%, rgba(255, 150, 70, 0.75) 42%, rgba(255, 110, 35, 0.45) 62%, transparent 82%),
-    radial-gradient(ellipse 45px 32px at 88% 100%, rgba(255, 210, 140, 1), rgba(255, 180, 90, 0.95) 25%, rgba(255, 140, 60, 0.7) 45%, rgba(255, 100, 30, 0.4) 65%, transparent 85%),
-    radial-gradient(ellipse 48px 34px at 95% 100%, rgba(255, 215, 145, 1), rgba(255, 185, 95, 0.96) 24%, rgba(255, 145, 65, 0.72) 44%, rgba(255, 105, 32, 0.42) 64%, transparent 84%);
-  filter: blur(2px) drop-shadow(0 6px 12px rgba(255, 140, 0, 0.8));
-  animation: flameFlicker 3s ease-in-out infinite;
+    /* Llamas irregulares con formas realistas - múltiples picos */
+    /* Llama izquierda alta */
+    radial-gradient(ellipse 30px 50px at 8% 100%, rgba(255, 240, 100, 1), rgba(255, 180, 60, 0.95) 20%, rgba(255, 120, 30, 0.75) 40%, rgba(255, 80, 15, 0.45) 60%, transparent 80%),
+    /* Llama con punta naranja */
+    radial-gradient(ellipse 35px 45px at 15% 100%, rgba(255, 200, 80, 1), rgba(255, 150, 50, 0.98) 18%, rgba(255, 100, 25, 0.8) 38%, rgba(255, 70, 10, 0.5) 58%, transparent 78%),
+    /* Llama alta central-izquierda */
+    radial-gradient(ellipse 38px 52px at 25% 100%, rgba(255, 235, 90, 1), rgba(255, 170, 55, 0.95) 22%, rgba(255, 110, 28, 0.72) 42%, rgba(250, 75, 12, 0.42) 62%, transparent 82%),
+    /* Llama mediana */
+    radial-gradient(ellipse 32px 42px at 33% 100%, rgba(255, 210, 85, 1), rgba(255, 155, 50, 0.96) 20%, rgba(255, 105, 26, 0.75) 40%, rgba(245, 70, 10, 0.45) 60%, transparent 80%),
+    /* Llama grande central */
+    radial-gradient(ellipse 42px 58px at 43% 100%, rgba(255, 245, 95, 1), rgba(255, 185, 60, 0.99) 16%, rgba(255, 125, 32, 0.82) 36%, rgba(255, 85, 15, 0.55) 56%, transparent 76%),
+    /* Llama central-derecha alta */
+    radial-gradient(ellipse 40px 55px at 50% 100%, rgba(255, 240, 100, 1), rgba(255, 180, 58, 0.97) 18%, rgba(255, 120, 30, 0.78) 38%, rgba(255, 80, 14, 0.48) 58%, transparent 78%),
+    /* Llama mediana derecha */
+    radial-gradient(ellipse 35px 48px at 58% 100%, rgba(255, 225, 88, 1), rgba(255, 165, 54, 0.95) 20%, rgba(255, 115, 29, 0.74) 40%, rgba(252, 76, 12, 0.44) 60%, transparent 80%),
+    /* Llama derecha-centro */
+    radial-gradient(ellipse 38px 50px at 67% 100%, rgba(255, 235, 92, 1), rgba(255, 175, 56, 0.96) 19%, rgba(255, 118, 30, 0.76) 39%, rgba(255, 78, 13, 0.46) 59%, transparent 79%),
+    /* Llama naranja brillante */
+    radial-gradient(ellipse 33px 44px at 75% 100%, rgba(255, 215, 86, 1), rgba(255, 160, 52, 0.97) 20%, rgba(255, 108, 27, 0.77) 40%, rgba(248, 72, 11, 0.47) 60%, transparent 80%),
+    /* Llama alta derecha */
+    radial-gradient(ellipse 36px 52px at 82% 100%, rgba(255, 238, 94, 1), rgba(255, 178, 57, 0.96) 19%, rgba(255, 122, 31, 0.75) 39%, rgba(255, 82, 14, 0.45) 59%, transparent 79%),
+    /* Llama final derecha */
+    radial-gradient(ellipse 30px 46px at 90% 100%, rgba(255, 220, 88, 1), rgba(255, 168, 54, 0.95) 21%, rgba(255, 112, 28, 0.73) 41%, rgba(250, 74, 12, 0.43) 61%, transparent 81%),
+    /* Llama pequeña extremo derecho */
+    radial-gradient(ellipse 28px 40px at 96% 100%, rgba(255, 205, 82, 1), rgba(255, 152, 50, 0.94) 22%, rgba(255, 102, 26, 0.72) 42%, rgba(245, 68, 10, 0.42) 62%, transparent 82%);
+  filter: blur(1.8px) drop-shadow(0 8px 18px rgba(255, 120, 0, 0.85));
+  animation: flameFlicker 2.8s ease-in-out infinite;
 }
 
-/* Animación de parpadeo de llamas */
+/* Animación de parpadeo de llamas realista */
 @keyframes flameFlicker {
   0%, 100% {
-    opacity: 0.92;
-    transform: translateX(-50%) scaleY(1);
+    opacity: 0.94;
+    transform: translateX(-50%) scaleY(1) scaleX(1);
   }
-  25% {
-    opacity: 1;
-    transform: translateX(-50%) scaleY(1.06) translateY(-2px);
+  15% {
+    opacity: 0.98;
+    transform: translateX(-50%) scaleY(1.08) scaleX(1.02) translateY(-3px);
+  }
+  30% {
+    opacity: 0.91;
+    transform: translateX(-50%) scaleY(0.96) scaleX(0.99) translateY(2px);
   }
   50% {
-    opacity: 0.88;
-    transform: translateX(-50%) scaleY(0.98) translateY(1px);
+    opacity: 1;
+    transform: translateX(-50%) scaleY(1.05) scaleX(1.01) translateY(-2px);
   }
-  75% {
+  70% {
+    opacity: 0.89;
+    transform: translateX(-50%) scaleY(0.98) scaleX(0.98) translateY(1px);
+  }
+  85% {
     opacity: 0.96;
-    transform: translateX(-50%) scaleY(1.03) translateY(-1px);
+    transform: translateX(-50%) scaleY(1.03) scaleX(1.01) translateY(-1px);
   }
 }
 /* ============================================
@@ -852,3 +912,11 @@ body.auth-active::after { display: none !important; }
    Fine-tune: lower right hero by 2%
    ============================================ */
 .warrior-hero { top: 52% !important; }
+.auth-title-wrap {
+  height: clamp(100px, 20vw, 160px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  margin: 0 auto 6px auto;
+}

@@ -117,9 +117,10 @@ export class DamageCalculator {
   }
 
   /**
-   * Calculate dodge chance from Agility stat + passive skill modifiers
+   * Calculate dodge chance from Agility stat + passive skill modifiers + weapon modifiers
    * Per GDD Section 12: Agility × 0.1 (cap 95%)
    * Epic 6: +Reflejos Felinos bonus, -Esqueleto de Plomo penalty
+   * Epic 5: Weapon evasion modifiers
    */
   public getDodgeChance(defender: IBrutoCombatant, modifiers: DamageModifiers = {}): number {
     // Base dodge from agility

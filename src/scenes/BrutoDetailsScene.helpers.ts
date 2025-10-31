@@ -1,6 +1,8 @@
 import type { BattleLogEntry } from '../ui/components/BattleLog';
 import type { AugmenterChipData, PetChipData } from '../ui/components/StatsPanel';
 import type { BrutoPetWithCost } from '../database/repositories/BrutoPetRepository';
+import { PetCatalog } from '../engine/pets/PetCatalog'; // Story 7.6: Enhanced pet display
+import { PetType } from '../engine/pets/PetType'; // Story 7.6: Proper pet type handling
 
 const STUB_BATTLE_OPPONENTS = [
   'Clan Lobos',
@@ -45,36 +47,7 @@ const AUGMENTER_SKILL_MAP: Record<
   },
 };
 
-const PET_TYPE_INFO: Record<
-  string,
-  { name: string; description: string; resistanceCost: number }
-> = {
-  dog_a: {
-    name: 'Perro A',
-    description: 'Mascota basica: +14 HP, dano bajo, combo 10%, iniciativa -10.',
-    resistanceCost: 2,
-  },
-  dog_b: {
-    name: 'Perro B',
-    description: 'Mascota basica: +14 HP, dano bajo, combo 10%, iniciativa -10.',
-    resistanceCost: 2,
-  },
-  dog_c: {
-    name: 'Perro C',
-    description: 'Mascota basica: +14 HP, dano bajo, combo 10%, iniciativa -10.',
-    resistanceCost: 2,
-  },
-  panther: {
-    name: 'Pantera',
-    description: 'Mascota ofensiva: 26 HP, velocidad 24, combo 60%, evasion 20%, iniciativa -60.',
-    resistanceCost: 6,
-  },
-  bear: {
-    name: 'Oso',
-    description: 'Tanque: 110 HP, dano alto, velocidad 1, iniciativa -360.',
-    resistanceCost: 8,
-  },
-};
+// Story 7.6: Removed old PET_TYPE_INFO - now using PetCatalog
 
 export function formatWeaponName(weaponId: string): string {
   return weaponId
@@ -147,21 +120,74 @@ export function mapAugmenterSkills(skills: string[] = []): AugmenterChipData[] {
   return result;
 }
 
+/**
+ * Story 7.6: Enhanced pet mapping with stats and slot info
+ * Maps database pet records to UI display format using PetCatalog
+ */
 export function mapPetRecords(pets: BrutoPetWithCost[]): PetChipData[] {
-  return pets
-    .map((pet) => {
-      const info = PET_TYPE_INFO[pet.petType];
-      if (!info) {
-        return null;
-      }
+  const catalog = PetCatalog.getInstance();
 
-      return {
-        id: pet.id,
-        name: info.name,
-        resistanceCost: pet.resistanceCost,
-        description: info.description,
-        acquiredAtLevel: pet.acquiredAtLevel,
-      };
-    })
-    .filter((entry): entry is PetChipData => entry !== null);
+  const mapped: PetChipData[] = [];
+
+  for (const pet of pets) {
+    // Try mapping old format (dog_a, panther, bear) to new format (perro, pantera, oso)
+    let petType: PetType | null = null;
+    let petSlot: 'A' | 'B' | 'C' | null = null;
+
+    if (pet.petType === 'dog_a') {
+      petType = PetType.PERRO;
+      petSlot = 'A';
+    } else if (pet.petType === 'dog_b') {
+      petType = PetType.PERRO;
+      petSlot = 'B';
+    } else if (pet.petType === 'dog_c') {
+      petType = PetType.PERRO;
+      petSlot = 'C';
+    } else if (pet.petType === 'panther' || pet.petType === PetType.PANTERA) {
+      petType = PetType.PANTERA;
+    } else if (pet.petType === 'bear' || pet.petType === PetType.OSO) {
+      petType = PetType.OSO;
+    } else if (pet.petType === PetType.PERRO) {
+      petType = PetType.PERRO;
+      petSlot = null; // Slot should come from database but old format doesn't have it
+    }
+
+    if (!petType) {
+      console.warn(`[mapPetRecords] Unknown pet type: ${pet.petType}`);
+      continue;
+    }
+
+    const petInfo = catalog.getPetByType(petType);
+    if (!petInfo) {
+      console.warn(`[mapPetRecords] Pet not found in catalog: ${petType}`);
+      continue;
+    }
+
+    // Extract name with slot (e.g., "Perro A")
+    let displayName = petInfo.name;
+    if (petType === PetType.PERRO && petSlot) {
+      displayName = `${petInfo.name} ${petSlot}`;
+    }
+
+    // Build description from stats
+    const description = `${petInfo.name}: +${petInfo.stats.hp} HP, Agilidad ${petInfo.stats.agility}, Velocidad ${petInfo.stats.speed}`;
+
+    mapped.push({
+      id: pet.id,
+      name: displayName,
+      resistanceCost: pet.resistanceCost,
+      description,
+      acquiredAtLevel: pet.acquiredAtLevel,
+      petSlot,
+      stats: {
+        hp: petInfo.stats.hp,
+        agility: petInfo.stats.agility,
+        speed: petInfo.stats.speed,
+        multiHitChance: petInfo.stats.multiHitChance,
+        evasionChance: petInfo.stats.evasionChance,
+      },
+    });
+  }
+
+  return mapped;
 }

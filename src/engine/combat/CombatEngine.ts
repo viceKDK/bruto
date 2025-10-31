@@ -9,9 +9,10 @@ import { IBrutoCombatant } from '../../models/Bruto';
 import { CombatAction } from '../../models/Battle';
 import { SeededRandom } from '../../utils/SeededRandom';
 import { CombatStateMachine, CombatState, CombatSide, TurnQueueEntry } from './CombatStateMachine';
-import { DamageCalculator } from './DamageCalculator';
+import { DamageCalculator, DamageModifiers } from './DamageCalculator';
 import { ActiveAbilityManager } from './ActiveAbilityManager';
 import { ActiveAbilityEffects } from './ActiveAbilityEffects';
+import { WeaponCombatService } from './WeaponCombatService';
 import { POCION_TRAGICA_USE_THRESHOLD } from '../../utils/constants';
 
 export interface BattleConfig {
@@ -42,6 +43,7 @@ export class CombatEngine {
   private damageCalculator: DamageCalculator;
   private activeAbilityManager: ActiveAbilityManager;
   private activeAbilityEffects: ActiveAbilityEffects;
+  private weaponCombatService: WeaponCombatService;
   private playerState: CombatantState;
   private opponentState: CombatantState;
   private actions: CombatAction[] = [];
@@ -55,6 +57,7 @@ export class CombatEngine {
     this.damageCalculator = new DamageCalculator();
     this.activeAbilityManager = new ActiveAbilityManager();
     this.activeAbilityEffects = new ActiveAbilityEffects(this.rng);
+    this.weaponCombatService = new WeaponCombatService();
 
     // Initialize combatant states
     this.playerState = {
@@ -170,13 +173,18 @@ export class CombatEngine {
   /**
    * Execute attack using DamageCalculator
    * Story 4.2: Full damage formula implementation with dodge, crit, and resistance
+   * Story 5: Weapon modifiers integration
    */
   private executeAttack(attacker: CombatSide, turnNumber: number): void {
     const attackerState = this.getCombatantState(attacker);
     const defenderState = this.getCombatantState(attacker === 'player' ? 'opponent' : 'player');
 
-    // Check dodge using DamageCalculator
-    const dodgeChance = this.damageCalculator.getDodgeChance(defenderState.combatant);
+    // Story 5: Calculate weapon modifiers for attacker and defender
+    const attackerModifiers = this.getWeaponModifiers(attackerState.combatant);
+    const defenderModifiers = this.getWeaponModifiers(defenderState.combatant);
+
+    // Check dodge using DamageCalculator with weapon modifiers
+    const dodgeChance = this.damageCalculator.getDodgeChance(defenderState.combatant, defenderModifiers);
     const dodged = this.rng.roll(dodgeChance);
 
     if (dodged) {
@@ -194,10 +202,11 @@ export class CombatEngine {
       return;
     }
 
-    // Calculate damage using DamageCalculator
+    // Calculate damage using DamageCalculator with weapon modifiers
     let damage = this.damageCalculator.calculatePhysicalDamage(
       attackerState.combatant,
-      defenderState.combatant
+      defenderState.combatant,
+      attackerModifiers
     );
 
     // Check for Fuerza Bruta active ability
@@ -222,8 +231,8 @@ export class CombatEngine {
       });
     }
 
-    // Check critical hit using DamageCalculator
-    const critChance = this.damageCalculator.calculateCritChance(attackerState.combatant);
+    // Check critical hit using DamageCalculator with weapon modifiers
+    const critChance = this.damageCalculator.calculateCritChance(attackerState.combatant, attackerModifiers);
     const isCrit = this.rng.roll(critChance);
 
     if (isCrit) {
@@ -332,5 +341,24 @@ export class CombatEngine {
    */
   private getCombatantState(side: CombatSide): CombatantState {
     return side === 'player' ? this.playerState : this.opponentState;
+  }
+
+  /**
+   * Calculate weapon modifiers for combatant
+   * Story 5: Weapon integration
+   */
+  private getWeaponModifiers(combatant: IBrutoCombatant): DamageModifiers {
+    if (!combatant.equippedWeapons || combatant.equippedWeapons.length === 0) {
+      return {}; // No weapons equipped
+    }
+
+    // Story 5.4: Disarm mechanics will be added here
+    // For now, all equipped weapons are active
+    const disarmedWeaponIds: string[] = [];
+
+    return this.weaponCombatService.calculateCombatModifiers(
+      combatant.equippedWeapons,
+      disarmedWeaponIds
+    );
   }
 }
