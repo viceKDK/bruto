@@ -37,7 +37,16 @@
       "Grep(*)",
       "Task(*)",
       "Bash(gh:*)",
-      "Bash(git commit -m \"$(cat <<''EOF''\nInitial commit: BMAD Framework setup\n\n- Configured BMAD (Build, Manage, Automate & Deploy) framework\n- Added comprehensive .gitignore for Node.js, Python, and development files\n- Configured Claude Code with expanded permissions\n- Set up MCP servers for Puppeteer, Brave Search, Filesystem, and Fetch\n- Included complete workflow structure for game development\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")"
+      "Bash(git commit -m \"$(cat <<''EOF''\nInitial commit: BMAD Framework setup\n\n- Configured BMAD (Build, Manage, Automate & Deploy) framework\n- Added comprehensive .gitignore for Node.js, Python, and development files\n- Configured Claude Code with expanded permissions\n- Set up MCP servers for Puppeteer, Brave Search, Filesystem, and Fetch\n- Included complete workflow structure for game development\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")",
+      "Bash(test:*)",
+      "mcp__brave-search__brave_web_search",
+      "WebSearch",
+      "WebFetch(domain:phaser.io)",
+      "WebFetch(domain:github.com)",
+      "Bash(sed:*)",
+      "SlashCommand(/bmad:bmm:workflows:code-review)",
+      "mcp__filesystem__list_directory",
+      "mcp__filesystem__directory_tree"
     ],
     "deny": [],
     "ask": []

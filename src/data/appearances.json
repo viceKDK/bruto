@@ -1,0 +1,12 @@
+[
+  { "designId": 1, "name": "Classic Bruiser", "colorVariants": [0, 1, 2] },
+  { "designId": 2, "name": "Silent Blade", "colorVariants": [0, 3, 4] },
+  { "designId": 3, "name": "Iron Guardian", "colorVariants": [1, 2, 5] },
+  { "designId": 4, "name": "Wild Howler", "colorVariants": [0, 2, 3] },
+  { "designId": 5, "name": "Arcane Trickster", "colorVariants": [1, 4, 5] },
+  { "designId": 6, "name": "Blazing Fury", "colorVariants": [0, 1, 5] },
+  { "designId": 7, "name": "Frost Sentinel", "colorVariants": [2, 3, 4] },
+  { "designId": 8, "name": "Stone Colossus", "colorVariants": [0, 4, 5] },
+  { "designId": 9, "name": "Shadow Warden", "colorVariants": [1, 2, 3] },
+  { "designId": 10, "name": "Storm Herald", "colorVariants": [0, 2, 5] }
+]

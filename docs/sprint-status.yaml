@@ -1,0 +1,43 @@
+project:
+  name: bruto
+  type: game
+  level: 3
+  workflow_path: game-design.yaml
+  last_updated: 2025-10-30
+
+status_definitions:
+  backlog: Ready to be drafted into a story document.
+  drafted: Story brief created; awaiting technical context.
+  in-progress: Development underway.
+  review: Implementation complete; under review/testing.
+  done: Accepted and merged into mainline.
+
+development_status:
+  epic-1: ready
+  1-1-project-skeleton-bootstrapped: done
+  1-2-local-database-layer-online: done
+  1-3-ui-shell-and-navigation: done
+
+  epic-2: planned
+  2-1-account-creation-and-login-flow: done
+  2-2-bruto-slot-management: done
+  2-3-daily-fight-limit-tracking: done
+
+  epic-3: planned
+  3-1-bruto-creation-flow: review
+  3-2-casillero-ui-recreation: review
+  3-3-stat-and-upgrade-display-logic: done
+
+  epic-4: planned
+  4-1-turn-scheduler-and-rng-framework: review
+  4-2-stat-based-damage-and-evasion: review
+  4-3-combat-presentation-layer: review
+
+  epic-8: planned
+  8-1-xp-and-level-progression: review
+  8-2-level-up-upgrade-options: review
+  8-3-stat-boost-application: done
+
+  epic-9: planned
+  9-1-opponent-matchmaking-pool: done
+  9-2-opponent-selection-ui: done
