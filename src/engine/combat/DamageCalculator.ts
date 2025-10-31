@@ -1,19 +1,22 @@
 /**
- * DamageCalculator - Combat damage formula calculations
- *
- * Implements all damage calculations per GDD Section 12:
- * - Base damage = STR value directly
- * - Critical hits = 2x damage multiplier
- * - Resistance-based damage reduction
- * - Weapon/skill modifier hooks for Epic 5-6
+ * DamageCalculator - Combat damage calculation engine
+ * 
+ * Pure calculation logic for damage, crits, dodges
+ * Zero game state - calculations only
  */
 
 import { IBrutoCombatant } from '../../models/Bruto';
+import { 
+  ARMOR_CAP_PERCENT, 
+  EVASION_CAP_PERCENT, 
+  CRIT_CHANCE_CAP_PERCENT 
+} from '../../utils/constants';
 
 export interface DamageModifiers {
   weaponDamage?: number; // Epic 5 integration point
   skillDamageBonus?: number; // Epic 6 integration point
   critChanceBonus?: number; // Epic 5-6 integration point
+  critDamageBonus?: number; // Critical damage multiplier bonus (e.g., Meditación: +50%)
   multiHitChance?: number; // Epic 5-6 integration point
   armorBonus?: number; // Epic 6: Passive armor skills (Piel Dura, Esqueleto de Plomo)
   evasionBonus?: number; // Epic 6: Passive evasion skills (Reflejos Felinos)
@@ -64,7 +67,7 @@ export class DamageCalculator {
     
     // Apply armor bonus from passive skills (Piel Dura, Esqueleto de Plomo)
     const totalResistance = defender.stats.resistance + (modifiers.armorBonus || 0);
-    const resistanceReduction = 1 - Math.min(0.75, totalResistance * 0.01);
+    const resistanceReduction = 1 - Math.min(ARMOR_CAP_PERCENT / 100, totalResistance * 0.01);
     
     const totalDamage = (baseDamage + skillDamage) * resistanceReduction;
     return Math.max(1, Math.floor(totalDamage));
@@ -80,14 +83,16 @@ export class DamageCalculator {
 
   /**
    * Calculate critical hit multiplier
-   * Base is 2x, but returns configurable for future expansion
+   * Base is 2x (200%), modifiable by skills like Meditación (+50% = x3)
    */
   public calculateCritMultiplier(attacker: IBrutoCombatant, modifiers: DamageModifiers = {}): number {
-    // Base critical multiplier is 2x
+    // Base critical multiplier is 2x (200%)
     let multiplier = 2.0;
 
-    // Epic 5-6: Weapon/skill crit multipliers can modify this
-    // Sharp weapons have "high critical damage multiplier" per GDD
+    // Apply crit damage bonus from skills (e.g., Meditación: +50%)
+    if (modifiers.critDamageBonus) {
+      multiplier += modifiers.critDamageBonus; // +0.5 = 2.5x, +1.0 = 3.0x
+    }
 
     return multiplier;
   }
@@ -108,7 +113,7 @@ export class DamageCalculator {
     }
 
     // Cap at 95% (same as dodge cap)
-    return Math.min(0.95, critChance);
+    return Math.min(CRIT_CHANCE_CAP_PERCENT / 100, critChance);
   }
 
   /**
@@ -127,7 +132,7 @@ export class DamageCalculator {
     }
 
     // Cap at 95% max dodge
-    return Math.min(0.95, Math.max(0, dodgeChance));
+    return Math.min(EVASION_CAP_PERCENT / 100, Math.max(0, dodgeChance));
   }  /**
    * Calculate multi-hit chance from Speed stat
    * Per GDD: "Speed Advantage - Extra turn probability based on Speed stat"

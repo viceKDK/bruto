@@ -23,6 +23,7 @@ export interface SkillGridConfig {
   cells: SkillCell[];
   columns?: number;
   tooltip?: (cell: SkillCell) => string;
+  onClick?: (cell: SkillCell) => void; // Story 6.7: Click handler for skill details
 }
 
 export class SkillGrid extends Phaser.GameObjects.Container {
@@ -127,6 +128,13 @@ export class SkillGrid extends Phaser.GameObjects.Container {
         );
         label.setColor(cell.state === 'known' ? COLORS.textPrimary : COLORS.textSecondary);
         this.tooltip?.hide();
+      });
+
+      // Story 6.7: Click handler for skill details modal
+      interactionZone.on('pointerdown', () => {
+        if (cell.state === 'known' && config.onClick) {
+          config.onClick(cell);
+        }
       });
 
       this.add(cellContainer);

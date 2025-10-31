@@ -106,6 +106,14 @@ export class DatabaseManager {
         name: '005_battle_snapshots',
         sql: await this.loadMigrationFile('005_battle_snapshots.sql'),
       },
+      {
+        name: '006_skills_system',
+        sql: await this.loadMigrationFile('006_skills_system.sql'),
+      },
+      {
+        name: '007_pets_system',
+        sql: await this.loadMigrationFile('007_pets_system.sql'),
+      },
     ];
 
     for (const migration of migrations) {

@@ -12,6 +12,7 @@
 
 import { IBruto, IBrutoCombatant } from '../../models/Bruto';
 import { SkillCatalog } from '../skills/SkillCatalog';
+import { FUERZA_BRUTA_STR_DIVISOR } from '../../utils/constants';
 
 /**
  * Active ability with usage tracking
@@ -56,12 +57,13 @@ export class ActiveAbilityManager {
     }
 
     const catalog = SkillCatalog.getInstance();
+    const strValue = this.getStrValue(bruto);
 
     // Check for Fuerza Bruta (STR-scaling damage multiplier)
     if (bruto.skills.includes('fuerza_bruta')) {
       const skill = catalog.getSkillById('fuerza_bruta');
       if (skill) {
-        const maxUses = this.calculateFuerzaBrutaUses(bruto.str);
+        const maxUses = this.calculateFuerzaBrutaUses(strValue);
         abilities.push({
           skillId: 'fuerza_bruta',
           name: skill.name,
@@ -93,7 +95,7 @@ export class ActiveAbilityManager {
 
   /**
    * Calculate Fuerza Bruta uses based on STR
-   * Formula: Math.floor(STR / 30) + 1
+   * Formula: Math.floor(STR / FUERZA_BRUTA_STR_DIVISOR) + 1
    * 
    * Examples:
    * - STR 0-29: 1 use
@@ -101,7 +103,7 @@ export class ActiveAbilityManager {
    * - STR 60-89: 3 uses
    */
   private calculateFuerzaBrutaUses(str: number): number {
-    return Math.floor(str / 30) + 1;
+    return Math.floor(str / FUERZA_BRUTA_STR_DIVISOR) + 1;
   }
 
   /**
@@ -157,5 +159,12 @@ export class ActiveAbilityManager {
    */
   public getAbilityState(side: 'player' | 'opponent'): AbilityState {
     return side === 'player' ? this.playerAbilities : this.opponentAbilities;
+  }
+
+  /**
+   * Get STR value from either IBruto or IBrutoCombatant
+   */
+  private getStrValue(bruto: IBruto | IBrutoCombatant): number {
+    return 'str' in bruto ? bruto.str : bruto.stats.str;
   }
 }

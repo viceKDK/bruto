@@ -8,16 +8,32 @@
   --landing-border: rgba(255, 153, 51, 0.35);
 }
 
+/* Normalize layout across browsers */
+html {
+  height: 100%;
+  /* Keep gutter space even when scrollbar appears to avoid horizontal reflow */
+  scrollbar-gutter: stable both-edges;
+  -webkit-text-size-adjust: 100%;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
 body.landing-active {
   background: var(--landing-bg-dark);
   color: var(--landing-text-primary);
   overflow-x: hidden;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  /* Unify font metrics between Edge/Chrome */
+  font-family: 'Segoe UI', 'Segoe UI Variable', Roboto, Arial, 'Helvetica Neue', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
 .landing-screen {
   position: relative;
-  min-height: 100vh;
+  min-height: 100vh;   /* fallback */
+  min-height: 100svh;  /* stable viewport height on Chrome/Edge */
   width: 100%;
   transition: opacity 0.45s ease;
 }
@@ -82,7 +98,8 @@ body.landing-active {
 
 .landing-hero {
   position: relative;
-  min-height: 100vh;
+  min-height: 100vh;   /* fallback */
+  min-height: 100svh;  /* stable viewport height on Chrome/Edge */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -238,7 +255,9 @@ body.landing-active {
   position: relative;
   z-index: 5;
   text-align: center;
-  max-width: 960px;
+  /* Keep exact centering regardless of scrollbar width */
+  max-width: min(960px, calc(100% - 64px));
+  margin-inline: auto;
   padding: 32px;
   backdrop-filter: blur(2px);
 }
@@ -373,6 +392,17 @@ body.landing-active {
   flex-wrap: wrap;
   gap: 24px;
   margin-bottom: 48px;
+}
+
+/* Footer / Derechos reservados */
+.landing-footer,
+.legacy-footer {
+  margin-top: 24px;
+  text-align: center;
+  font-size: 0.85rem;
+  color: rgba(255, 217, 179, 0.8);
+  letter-spacing: 0.8px;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
 }
 
 .landing-cta__button,

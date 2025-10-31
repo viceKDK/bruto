@@ -9,6 +9,10 @@
  */
 
 import { SeededRandom } from '../../utils/SeededRandom';
+import { 
+  POCION_TRAGICA_MIN_HEAL_PERCENT, 
+  POCION_TRAGICA_MAX_HEAL_PERCENT 
+} from '../../utils/constants';
 
 export interface AbilityEffectResult {
   effectApplied: boolean;
@@ -40,7 +44,8 @@ export class ActiveAbilityEffects {
    */
   public applyPocionTragica(currentHp: number, maxHp: number): AbilityEffectResult {
     // Random heal between 25% and 50% of max HP
-    const healPercent = 0.25 + (this.rng.next() * 0.25);
+    const healPercent = POCION_TRAGICA_MIN_HEAL_PERCENT + 
+      (this.rng.next() * (POCION_TRAGICA_MAX_HEAL_PERCENT - POCION_TRAGICA_MIN_HEAL_PERCENT));
     const healAmount = Math.floor(maxHp * healPercent);
     const newHp = Math.min(currentHp + healAmount, maxHp);
     const actualHeal = newHp - currentHp;

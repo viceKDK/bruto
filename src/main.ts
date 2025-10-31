@@ -25,6 +25,13 @@ const startGame = () => {
   console.log('[Main] Initializing El Bruto...');
   console.log('[Main] Game Config:', gameConfig);
 
+  // Ensure viewport is reset to the top so auth UI positions correctly
+  try {
+    window.scrollTo(0, 0);
+    // Safari fallback
+    (document.documentElement || document.body).scrollTop = 0;
+  } catch {}
+
   showGameCanvas();
   document.body.classList.add('game-active');
   game = new Phaser.Game(gameConfig);

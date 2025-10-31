@@ -69,44 +69,40 @@ describe('DamageCalculator', () => {
       const attacker = createCombatant({ stats: { hp: 100, maxHp: 100, str: 20, speed: 5, agility: 3, resistance: 2 } });
       const defender = createCombatant({ stats: { hp: 100, maxHp: 100, str: 10, speed: 5, agility: 3, resistance: 10 } }); // 10% reduction
 
-      const result = calculator.calculatePhysicalDamage(attacker, defender);
+      const damage = calculator.calculatePhysicalDamage(attacker, defender);
 
-      expect(result.raw).toBe(20);
-      expect(result.final).toBeLessThan(20); // Reduced by resistance
-      expect(result.breakdown.length).toBeGreaterThan(0);
+      // Base damage is 20 (STR), with 10% resistance = 18 damage
+      expect(damage).toBe(18);
     });
 
     it('caps resistance reduction at 75%', () => {
       const attacker = createCombatant({ stats: { hp: 100, maxHp: 100, str: 100, speed: 5, agility: 3, resistance: 2 } });
       const defender = createCombatant({ stats: { hp: 100, maxHp: 100, str: 10, speed: 5, agility: 3, resistance: 100 } }); // Would be 100% without cap
 
-      const result = calculator.calculatePhysicalDamage(attacker, defender);
+      const damage = calculator.calculatePhysicalDamage(attacker, defender);
 
       // Maximum 75% reduction means 25% damage gets through
-      expect(result.final).toBeGreaterThan(0);
-      expect(result.final).toBe(Math.floor(100 * 0.25)); // 25 damage
+      expect(damage).toBeGreaterThan(0);
+      expect(damage).toBe(25); // Math.floor(100 * 0.25)
     });
 
     it('handles zero resistance', () => {
       const attacker = createCombatant({ stats: { hp: 100, maxHp: 100, str: 50, speed: 5, agility: 3, resistance: 2 } });
       const defender = createCombatant({ stats: { hp: 100, maxHp: 100, str: 10, speed: 5, agility: 3, resistance: 0 } });
 
-      const result = calculator.calculatePhysicalDamage(attacker, defender);
+      const damage = calculator.calculatePhysicalDamage(attacker, defender);
 
-      expect(result.raw).toBe(50);
-      expect(result.final).toBe(50); // No reduction
+      expect(damage).toBe(50); // No reduction
     });
 
-    it('provides detailed breakdown', () => {
+    it('applies damage with modifiers', () => {
       const attacker = createCombatant({ stats: { hp: 100, maxHp: 100, str: 30, speed: 5, agility: 3, resistance: 2 } });
       const defender = createCombatant({ stats: { hp: 100, maxHp: 100, str: 10, speed: 5, agility: 3, resistance: 20 } });
 
-      const result = calculator.calculatePhysicalDamage(attacker, defender);
+      const damage = calculator.calculatePhysicalDamage(attacker, defender, { weaponDamage: 10 });
 
-      expect(result.breakdown.join(' ')).toContain('Base');
-      expect(result.breakdown.join(' ')).toContain('Resistance');
-      expect(result.breakdown.join(' ')).toContain('Final');
-      expect(result.breakdown.length).toBeGreaterThan(0);
+      // Base = 30 + 10 (weapon) = 40, with 20% resistance = 32
+      expect(damage).toBe(32);
     });
   });
 
@@ -144,11 +140,11 @@ describe('DamageCalculator', () => {
       expect(critChance).toBe(0.25); // 10% + 15%
     });
 
-    it('caps crit chance at 95%', () => {
+    it('caps crit chance at 50% (from skills only)', () => {
       const attacker = createCombatant();
       const modifiers: DamageModifiers = { critChanceBonus: 1.0 }; // +100%
       const critChance = calculator.calculateCritChance(attacker, modifiers);
-      expect(critChance).toBe(0.95); // Capped
+      expect(critChance).toBe(0.50); // Capped at 50% (weapons can add more)
     });
   });
 
@@ -257,12 +253,12 @@ describe('DamageCalculator', () => {
         stats: { hp: 100, maxHp: 100, str: 10, speed: 5, agility: 6, resistance: 15 },
       });
 
-      const damageResult = calculator.calculatePhysicalDamage(attacker, defender);
+      const damage = calculator.calculatePhysicalDamage(attacker, defender);
       const critChance = calculator.calculateCritChance(attacker);
       const dodgeChance = calculator.getDodgeChance(defender);
 
-      expect(damageResult.raw).toBe(25);
-      expect(damageResult.final).toBeLessThan(25); // Reduced by resistance
+      expect(damage).toBeLessThan(25); // Base 25 reduced by 15% resistance
+      expect(damage).toBe(21); // 25 * 0.85 = 21.25 -> floor = 21
       expect(critChance).toBe(0.1); // Base 10%
       expect(dodgeChance).toBeCloseTo(0.6, 1); // 6 agility = 60%
     });
@@ -275,8 +271,8 @@ describe('DamageCalculator', () => {
         stats: { hp: 100, maxHp: 100, str: 10, speed: 5, agility: 0, resistance: 0 },
       });
 
-      const damageResult = calculator.calculatePhysicalDamage(attacker, defender);
-      expect(damageResult.final).toBe(100); // No mitigation
+      const damage = calculator.calculatePhysicalDamage(attacker, defender);
+      expect(damage).toBe(100); // No mitigation
     });
 
     it('handles balanced combatants', () => {
@@ -287,9 +283,9 @@ describe('DamageCalculator', () => {
         stats: { hp: 100, maxHp: 100, str: 20, speed: 8, agility: 5, resistance: 10 },
       });
 
-      const damageResult = calculator.calculatePhysicalDamage(attacker, defender);
-      expect(damageResult.final).toBeGreaterThan(0);
-      expect(damageResult.final).toBeLessThan(20);
+      const damage = calculator.calculatePhysicalDamage(attacker, defender);
+      expect(damage).toBeGreaterThan(0);
+      expect(damage).toBe(18); // 20 * 0.90 = 18
     });
   });
 });

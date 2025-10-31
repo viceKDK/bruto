@@ -529,9 +529,9 @@ describe('ReplayScene', () => {
 
       await scene.create({ battleId: 'battle-1' });
 
-      // Verify banner created
+      // Verify banner created - text is at index 2, check if it's a string
       const bannerCalls = mockPhaserScene.add.text.mock.calls.filter((call: any) =>
-        call[2].includes('REPLAY MODE')
+        typeof call[2] === 'string' && call[2].includes('REPLAY MODE')
       );
       expect(bannerCalls.length).toBeGreaterThan(0);
     });

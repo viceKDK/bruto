@@ -6,6 +6,7 @@
 import { IBruto } from '../../models/Bruto';
 import { Skill, SkillEffect, SkillEffectType, SkillEffectTiming, StatType } from '../../models/Skill';
 import { StatContribution, StatMultiplier } from '../StatsCalculator';
+import { ARMOR_CAP_PERCENT } from '../../utils/constants';
 
 export interface SkillStatModifiers {
   flatModifiers: StatContribution[];
@@ -141,6 +142,7 @@ export class SkillEffectEngine {
   /**
    * Calculate combat modifiers from skills
    * Returns damage bonuses, resistances, evasion bonuses, etc.
+   * Enforces caps: armor max 75%, evasion (handled in DamageCalculator)
    */
   public calculateCombatModifiers(bruto: IBruto, skills: Skill[]): CombatModifiers {
     const modifiers: CombatModifiers = {
@@ -161,6 +163,12 @@ export class SkillEffectEngine {
         this.applyCombatEffect(effect, skill, bruto, modifiers);
       });
     });
+
+    // Story 6.6: Enforce armor cap
+    if (modifiers.armorBonus > ARMOR_CAP_PERCENT) {
+      console.warn(`[SkillEffectEngine] Armor bonus (${modifiers.armorBonus}%) exceeds cap, clamping to ${ARMOR_CAP_PERCENT}%`);
+      modifiers.armorBonus = ARMOR_CAP_PERCENT;
+    }
 
     return modifiers;
   }

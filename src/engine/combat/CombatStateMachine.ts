@@ -1,24 +1,30 @@
 /**
  * CombatStateMachine - Manages combat turn flow and state transitions
  *
- * States: PlayerTurn → OpponentTurn → CheckWin → [PlayerTurn|BattleEnd]
+ * States: PlayerTurn → OpponentTurn → PetTurn → CheckWin → [next turn | BattleEnd]
  * Handles initiative-based turn ordering and extra turn mechanics.
+ * Story 7.3: Extended to support pet combatants
  */
 
 export enum CombatState {
   Initializing = 'initializing',
   PlayerTurn = 'player_turn',
   OpponentTurn = 'opponent_turn',
+  PetTurn = 'pet_turn',                    // Story 7.3: Pet actions
   CheckWinCondition = 'check_win',
   BattleEnd = 'battle_end',
 }
 
 export type CombatSide = 'player' | 'opponent';
+export type CombatantType = 'bruto' | 'pet';   // Story 7.3
 
 export interface TurnQueueEntry {
   side: CombatSide;
   initiative: number;
   isExtraTurn: boolean;
+  // Story 7.3: Pet combat support
+  combatantType: CombatantType;           // 'bruto' or 'pet'
+  petId?: string;                          // Unique identifier for pet (petType + slot)
 }
 
 export interface CombatStateContext {
@@ -77,7 +83,10 @@ export class CombatStateMachine {
     this.context.turnNumber++;
 
     // Transition to appropriate turn state
-    if (nextTurn.side === 'player') {
+    // Story 7.3: Support pet turns
+    if (nextTurn.combatantType === 'pet') {
+      this.context.currentState = CombatState.PetTurn;
+    } else if (nextTurn.side === 'player') {
       this.context.currentState = CombatState.PlayerTurn;
     } else {
       this.context.currentState = CombatState.OpponentTurn;
@@ -87,23 +96,31 @@ export class CombatStateMachine {
   /**
    * Add an extra turn for a combatant (triggered by Speed stat)
    */
-  public addExtraTurn(side: CombatSide, initiative: number): void {
+  public addExtraTurn(side: CombatSide, initiative: number, combatantType: CombatantType = 'bruto'): void {
     // Insert extra turn at front of queue
     this.context.turnQueue.unshift({
       side,
       initiative,
       isExtraTurn: true,
+      combatantType,
     });
   }
 
   /**
    * Enqueue a regular turn
    */
-  public enqueueTurn(side: CombatSide, initiative: number): void {
+  public enqueueTurn(
+    side: CombatSide,
+    initiative: number,
+    combatantType: CombatantType = 'bruto',
+    petId?: string
+  ): void {
     this.context.turnQueue.push({
       side,
       initiative,
       isExtraTurn: false,
+      combatantType,
+      petId,
     });
   }
 

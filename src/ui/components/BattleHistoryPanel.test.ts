@@ -15,6 +15,7 @@ vi.mock('phaser', () => ({
   default: {
     GameObjects: {
       Container: class MockContainer {
+        scene: any;
         x = 0;
         y = 0;
         add = vi.fn();
@@ -22,6 +23,7 @@ vi.mock('phaser', () => ({
         setDepth = vi.fn();
         destroy = vi.fn();
         constructor(scene: any, x: number, y: number) {
+          this.scene = scene; // CRITICAL: Must set scene for child methods to work
           this.x = x;
           this.y = y;
         }
@@ -45,23 +47,29 @@ type BattleHistoryPanelConfig = {
 const mockScene = {
   add: {
     existing: vi.fn(),
-    rectangle: vi.fn(() => ({
-      setStrokeStyle: vi.fn().mockReturnThis(),
-      setOrigin: vi.fn().mockReturnThis(),
-      setInteractive: vi.fn().mockReturnThis(),
-      on: vi.fn().mockReturnThis(),
-      setFillStyle: vi.fn().mockReturnThis(),
-    })),
-    text: vi.fn((x, y, text, style) => ({
-      setOrigin: vi.fn().mockReturnThis(),
-      setInteractive: vi.fn().mockReturnThis(),
-      on: vi.fn().mockReturnThis(),
-      setColor: vi.fn().mockReturnThis(),
-      x,
-      y,
-      text,
-      style,
-    })),
+    rectangle: vi.fn(() => {
+      const onMock = vi.fn().mockReturnThis();
+      return {
+        setStrokeStyle: vi.fn().mockReturnThis(),
+        setOrigin: vi.fn().mockReturnThis(),
+        setInteractive: vi.fn().mockReturnThis(),
+        on: onMock,
+        setFillStyle: vi.fn().mockReturnThis(),
+      };
+    }),
+    text: vi.fn((x, y, text, style) => {
+      const onMock = vi.fn().mockReturnThis();
+      return {
+        setOrigin: vi.fn().mockReturnThis(),
+        setInteractive: vi.fn().mockReturnThis(),
+        on: onMock,
+        setColor: vi.fn().mockReturnThis(),
+        x,
+        y,
+        text,
+        style,
+      };
+    }),
   },
 };
 
@@ -358,17 +366,16 @@ describe('BattleHistoryPanel', () => {
 
       panel = new BattleHistoryPanel(mockScene as any, config);
 
-      // Find the row rectangle that was created
+      // Find the row rectangle (second rectangle created, first is panel bg)
       const rectangles = mockScene.add.rectangle.mock.results;
-      const rowRectangle = rectangles.find((result: any) => {
-        const rect = result.value;
-        return rect.setInteractive && rect.on;
-      });
+      expect(rectangles.length).toBeGreaterThanOrEqual(2);
+      
+      const rowRectangle = rectangles[1]; // Index 1 is the first battle row
 
       expect(rowRectangle).toBeDefined();
 
       // Simulate getting the 'on' calls for this rectangle
-      const rectMock = rowRectangle.value;
+      const rectMock = rowRectangle!.value;
       const onCalls = rectMock.on.mock.calls;
 
       // Find the pointerdown handler
@@ -473,16 +480,15 @@ describe('BattleHistoryPanel', () => {
 
       panel = new BattleHistoryPanel(mockScene as any, config);
 
-      // Find row rectangles
+      // Find row rectangles (second rectangle created, first is panel bg)
       const rectangles = mockScene.add.rectangle.mock.results;
-      const rowRectangle = rectangles.find((result: any) => {
-        const rect = result.value;
-        return rect.setInteractive && rect.on;
-      });
+      expect(rectangles.length).toBeGreaterThanOrEqual(2);
+      
+      const rowRectangle = rectangles[1]; // Index 1 is the first battle row
 
       expect(rowRectangle).toBeDefined();
 
-      const rectMock = rowRectangle.value;
+      const rectMock = rowRectangle!.value;
       const onCalls = rectMock.on.mock.calls;
 
       // Verify hover handlers registered

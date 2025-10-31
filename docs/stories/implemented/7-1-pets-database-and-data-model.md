@@ -31,23 +31,35 @@ so that pets can be assigned to brutos and their stats/effects properly tracked.
 
 ## Tasks / Subtasks
 
-- [ ] Task 1 (AC: 1, 2): Create pets data structure
-  - [ ] Subtask 1.1: Create TypeScript interfaces (Pet, PetType, PetStats)
-  - [ ] Subtask 1.2: Create pets.json catalog with 3 pet types
-  - [ ] Subtask 1.3: Add pet metadata: stats, costs, stacking rules
-  - [ ] Subtask 1.4: Document resistance cost formula variations
+- [ ] Task 1: Create pet data structures and catalog
+  - [ ] Subtask 1.1: Create `src/engine/pets/PetType.ts` with PetType enum
+  - [ ] Subtask 1.2: Create `src/engine/pets/Pet.ts` with Pet and PetStats interfaces
+  - [ ] Subtask 1.3: Create `src/data/pets.json` with all 3 pet types and their stats
+  - [ ] Subtask 1.4: Create `src/engine/pets/PetCatalog.ts` loader class
 
-- [ ] Task 2 (AC: 3): Database schema
-  - [ ] Subtask 2.1: Create bruto_pets migration table
-  - [ ] Subtask 2.2: Add columns: bruto_id, pet_type, pet_slot (A/B/C for dogs), acquired_at
-  - [ ] Subtask 2.3: Create PetRepository with CRUD operations
-  - [ ] Subtask 2.4: Add getBrutoPets(brutoId) query method
+- [ ] Task 2: Database schema and migrations
+  - [ ] Subtask 2.1: Create `src/database/migrations/008_pets_system.sql` 
+  - [ ] Subtask 2.2: Define bruto_pets table (id, bruto_id, pet_type, pet_slot, acquired_at, acquired_level)
+  - [ ] Subtask 2.3: Create `src/database/repositories/PetRepository.ts` with CRUD methods
+  - [ ] Subtask 2.4: Implement getBrutoPets(brutoId), addPetToBruto(), removePetFromBruto()
 
-- [ ] Task 3 (AC: 4, 5): Stacking and cost rules
-  - [ ] Subtask 3.1: Document max 3 Perros (slots A, B, C)
-  - [ ] Subtask 3.2: Document Pantera XOR Oso exclusion
-  - [ ] Subtask 3.3: Create PetCostCalculator for resistance penalties
-  - [ ] Subtask 3.4: Support Vitalidad/Inmortal cost modifiers
+- [ ] Task 3: Pet stacking and validation logic
+  - [ ] Subtask 3.1: Create `src/engine/pets/PetStackingValidator.ts`
+  - [ ] Subtask 3.2: Implement max 3 Perros validation (slots A, B, C)
+  - [ ] Subtask 3.3: Implement Pantera XOR Oso exclusion (cannot have both)
+  - [ ] Subtask 3.4: Validate pet acquisition against current roster
+
+- [ ] Task 4: Resistance cost calculations
+  - [ ] Subtask 4.1: Create `src/engine/pets/PetCostCalculator.ts`
+  - [ ] Subtask 4.2: Implement getResistanceCost(petType, hasVitalidad, hasInmortal)
+  - [ ] Subtask 4.3: Support all 4 modifier combinations (base, +Vitalidad, +Inmortal, +both)
+  - [ ] Subtask 4.4: Ensure no negative resistance (clamped to 0)
+
+- [ ] Task 5: Unit tests
+  - [ ] Subtask 5.1: Create `src/engine/pets/PetCatalog.test.ts` - verify all pets loaded correctly
+  - [ ] Subtask 5.2: Create `src/engine/pets/PetStackingValidator.test.ts` - test stacking rules
+  - [ ] Subtask 5.3: Create `src/engine/pets/PetCostCalculator.test.ts` - test all cost scenarios
+  - [ ] Subtask 5.4: Create `src/database/repositories/PetRepository.test.ts` - database operations
 
 ## Story Body
 
@@ -123,6 +135,33 @@ CREATE TABLE bruto_pets (
   UNIQUE(bruto_id, pet_type, pet_slot)
 );
 ```
+
+## Dev Notes
+
+### Architecture & Patterns
+- Follow the **Strategy Pattern** for PetCostCalculator (different formulas for Vitalidad/Inmortal combinations)
+- Use **Repository Pattern** for database access (PetRepository abstracts SQL)
+- **Immutable Pet Catalog**: Load once on boot, don't modify during play
+- **Enum-based types**: Use PetType enum to prevent string typos
+
+### Project Structure
+- Pet system lives in `src/engine/pets/` (core game logic)
+- Pet data in `src/data/pets.json` (configuration)
+- Database layer in `src/database/repositories/` (persistence)
+- Tests mirror source: `src/engine/pets/*.test.ts`
+
+### References
+- Pet stats definition: [Source: docs/stast.md#Perro-Mascota, lines 71-120]
+- Resistance cost formula: [Source: docs/stast.md#Vida-Complementaria, lines 44-70]
+- Epic 7 breakdown: [Source: docs/epics.md#Epic-7-Pets-System]
+- StatsCalculator pattern: [Source: docs/stories/implemented/4-2-stat-based-damage-and-evasion.md]
+
+### Testing Standards
+- Unit test each calculator function independently
+- Mock database for repository tests
+- Test all 4 resistance cost modifier combinations
+- Verify stacking validation rejects invalid configurations
+- Validate catalog loads all 3 pet types with correct stats
 
 ## References
 - Pet stats in docs/stast.md lines 71-120

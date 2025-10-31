@@ -246,6 +246,32 @@
       "implemented": false
     },
     {
+      "id": "armor",
+      "name": "Armadura",
+      "category": "passive_effect",
+      "description": "+25% Armadura (absorbe el 25% del daño de cada golpe recibido). -25% Velocidad.",
+      "odds": 0.39,
+      "effects": [
+        {
+          "type": "armor_bonus",
+          "timing": "passive",
+          "value": 25,
+          "modifier": "percentage",
+          "description": "Absorbe el 25% del daño de cada golpe recibido"
+        },
+        {
+          "type": "stat_boost",
+          "timing": "passive",
+          "stat": "speed",
+          "value": -25,
+          "modifier": "percentage",
+          "description": "Penalización de -25% a Velocidad"
+        }
+      ],
+      "stackable": false,
+      "implemented": false
+    },
+    {
       "id": "esqueleto_plomo",
       "name": "Esqueleto de Plomo",
       "category": "passive_effect",

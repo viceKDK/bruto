@@ -1,5 +1,7 @@
 import landingTemplate from './landing.html?raw';
 import './landing.css';
+import { apiClient } from '../services/ApiClient';
+import { useStore } from '../state/store';
 
 type LandingOptions = {
   onStart: () => void;
@@ -49,6 +51,13 @@ export function mountLanding(rootId: string, options: LandingOptions): LandingHa
 
   document.body.classList.remove('game-active');
   document.body.classList.add('landing-active');
+
+  // Logout when showing landing (temporary behavior requested)
+  try {
+    apiClient.logout();
+    useStore.getState().logout();
+  } catch {}
+
   root.innerHTML = landingTemplate;
 
   const screen = root.querySelector<HTMLElement>('[data-landing-screen]');
@@ -62,6 +71,7 @@ export function mountLanding(rootId: string, options: LandingOptions): LandingHa
   const playButton = root.querySelector<HTMLButtonElement>('[data-action="play"]');
   const trailerButton = root.querySelector<HTMLButtonElement>('[data-action="trailer"]');
   const logo = root.querySelector<HTMLElement>('[data-landing-logo]');
+  const scrollIndicator = root.querySelector<HTMLElement>('[data-landing-scroll]');
 
   window.setTimeout(() => {
     preloader?.classList.add('is-hidden');
@@ -199,6 +209,23 @@ export function mountLanding(rootId: string, options: LandingOptions): LandingHa
     cleanupFns.push(() => trailerButton.removeEventListener('click', handleTrailer));
   }
 
+  // Scroll indicator: desplazar hacia abajo y luego iniciar cuando se alcanza el final del hero
+  if (scrollIndicator) {
+    const handleScrollIndicator = (event: MouseEvent) => {
+      event.preventDefault();
+      const heroEl = heroSection;
+      if (!heroEl) return startGame();
+      const rect = heroEl.getBoundingClientRect();
+      const heroTop = rect.top + window.scrollY;
+      const heroHeight = heroEl.offsetHeight || window.innerHeight;
+      // Scroll hasta casi el final del hero, el handler de scroll se encargará de disparar
+      const target = Math.max(0, heroTop + heroHeight - window.innerHeight + 40);
+      window.scrollTo({ top: target, behavior: 'smooth' });
+    };
+    scrollIndicator.addEventListener('click', handleScrollIndicator);
+    cleanupFns.push(() => scrollIndicator.removeEventListener('click', handleScrollIndicator));
+  }
+
   if (logo) {
     const handleDoubleClick = () => {
       logo.classList.add('landing-logo--shake');
@@ -210,6 +237,31 @@ export function mountLanding(rootId: string, options: LandingOptions): LandingHa
 
   let lastScroll = 0;
   let ticking = false;
+  let startTriggered = false;
+  const heroSection = root.querySelector<HTMLElement>('.landing-hero');
+  let wheelDownAccum = 0; // acumula desplazamiento hacia abajo con rueda
+  let touchDownAccum = 0; // acumula desplazamiento hacia abajo con touch
+  let lastTouchY = 0;
+
+  const checkScrollProgress = () => {
+    if (startTriggered) return;
+
+    const heroEl = heroSection;
+    if (!heroEl) return;
+
+    const heroRect = heroEl.getBoundingClientRect();
+    const heroTop = heroRect.top + window.scrollY;
+    const heroHeight = heroEl.offsetHeight || window.innerHeight;
+
+    const viewportBottom = window.scrollY + window.innerHeight;
+    const nearHeroBottom = viewportBottom >= heroTop + heroHeight - 50; // ~bottom of hero
+    const scrolledEnough = window.scrollY >= Math.max(400, heroHeight * 0.3); // avoid instant trigger
+
+    if (nearHeroBottom && scrolledEnough) {
+      startTriggered = true;
+      startGame();
+    }
+  };
 
   const handleScroll = () => {
     lastScroll = window.scrollY;
@@ -240,10 +292,51 @@ export function mountLanding(rootId: string, options: LandingOptions): LandingHa
 
       ticking = true;
     }
+
+    // Trigger start only when near the bottom of the hero
+    checkScrollProgress();
   };
 
   window.addEventListener('scroll', handleScroll, { passive: true });
   cleanupFns.push(() => window.removeEventListener('scroll', handleScroll));
+
+  // Also listen to wheel/touch and check progress (no immediate trigger)
+  const handleWheel = (e: WheelEvent) => {
+    // Acumular desplazamiento hacia abajo incluso si la página no puede scrollear más
+    if (e.deltaY > 0 && !startTriggered) {
+      wheelDownAccum += e.deltaY;
+      if (wheelDownAccum >= 500) {
+        startTriggered = true;
+        startGame();
+        return;
+      }
+    }
+    checkScrollProgress();
+  };
+  window.addEventListener('wheel', handleWheel, { passive: true });
+  cleanupFns.push(() => window.removeEventListener('wheel', handleWheel));
+
+  const onTouchStart = (e: TouchEvent) => {
+    lastTouchY = e.touches[0]?.clientY ?? 0;
+  };
+  const onTouchMove = (e: TouchEvent) => {
+    const y = e.touches[0]?.clientY ?? lastTouchY;
+    const dy = lastTouchY - y; // positivo cuando se desplaza hacia arriba (contenido baja)
+    if (dy > 0 && !startTriggered) {
+      touchDownAccum += dy;
+      if (touchDownAccum >= 150) {
+        startTriggered = true;
+        startGame();
+        return;
+      }
+    }
+    lastTouchY = y;
+    checkScrollProgress();
+  };
+  window.addEventListener('touchstart', onTouchStart, { passive: true });
+  window.addEventListener('touchmove', onTouchMove, { passive: true });
+  cleanupFns.push(() => window.removeEventListener('touchstart', onTouchStart));
+  cleanupFns.push(() => window.removeEventListener('touchmove', onTouchMove));
 
   const konamiSequence = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
   let konamiBuffer: string[] = [];

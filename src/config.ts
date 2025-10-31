@@ -8,7 +8,7 @@ import { GAME_CONFIG } from './utils/theme';
 
 // Import scenes (will be created next)
 import { BootScene } from './scenes/BootScene';
-import { LoginScene } from './scenes/LoginScene';
+import { LoginScene as LoginScene2 } from './scenes/auth/LoginScene2';
 import { BrutoCreationScene } from './scenes/BrutoCreationScene';
 import { BrutoSelectionScene } from './scenes/BrutoSelectionScene';
 import { BrutoDetailsScene } from './scenes/BrutoDetailsScene';
@@ -37,7 +37,7 @@ export const gameConfig: Phaser.Types.Core.GameConfig = {
   },
   scene: [
     BootScene,
-    LoginScene,
+    LoginScene2,
     BrutoCreationScene,
     BrutoSelectionScene,
     BrutoDetailsScene,
