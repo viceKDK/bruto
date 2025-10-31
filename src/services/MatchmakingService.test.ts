@@ -90,9 +90,15 @@ describe('MatchmakingService', () => {
       expect(result.success).toBe(true);
       if (!result.success) throw new Error('Test failed');
 
-      // Should return all 7 mock brutos
-      expect(result.data.totalAvailable).toBe(7);
-      expect(result.data.opponents.length).toBe(7); // Less than requested 10, returns all
+      // Should return 7 real brutos + 3 ghosts to reach requested 10
+      expect(result.data.totalAvailable).toBe(10);
+      expect(result.data.opponents.length).toBe(10);
+      
+      // Verify first 7 are real brutos, last 3 are ghosts
+      const realBrutos = result.data.opponents.filter(b => b.userId !== 'ghost');
+      const ghostBrutos = result.data.opponents.filter(b => b.userId === 'ghost');
+      expect(realBrutos.length).toBe(7);
+      expect(ghostBrutos.length).toBe(3);
     });
   });
 
@@ -107,8 +113,8 @@ describe('MatchmakingService', () => {
       expect(result.data.requestedCount).toBe(5);
     });
 
-    it('should return all available opponents if less than requested count', async () => {
-      // Return only 3 brutos
+    it('should fill requested count with ghosts if insufficient real opponents', async () => {
+      // Return only 3 real brutos
       mockRepo.queryMany.mockResolvedValue({
         success: true,
         data: mockBrutos.slice(0, 3),
@@ -119,9 +125,16 @@ describe('MatchmakingService', () => {
       expect(result.success).toBe(true);
       if (!result.success) throw new Error('Test failed');
 
-      expect(result.data.opponents.length).toBe(3);
-      expect(result.data.totalAvailable).toBe(3);
+      // Should return 3 real + 2 ghost opponents
+      expect(result.data.opponents.length).toBe(5);
+      expect(result.data.totalAvailable).toBe(5);
       expect(result.data.requestedCount).toBe(5);
+      
+      // Verify mix of real and ghost opponents
+      const realBrutos = result.data.opponents.filter(b => b.userId !== 'ghost');
+      const ghostBrutos = result.data.opponents.filter(b => b.userId === 'ghost');
+      expect(realBrutos.length).toBe(3);
+      expect(ghostBrutos.length).toBe(2);
     });
 
     it('should support custom opponent count', async () => {
@@ -221,7 +234,7 @@ describe('MatchmakingService', () => {
   });
 
   describe('findOpponents - AC #5: Fallback Logic', () => {
-    it('should return empty array when no opponents available', async () => {
+    it('should generate ghosts when no real opponents available', async () => {
       mockRepo.queryMany.mockResolvedValue({
         success: true,
         data: [],
@@ -232,11 +245,18 @@ describe('MatchmakingService', () => {
       expect(result.success).toBe(true);
       if (!result.success) throw new Error('Test failed');
 
-      expect(result.data.opponents).toEqual([]);
-      expect(result.data.totalAvailable).toBe(0);
+      // Should have 5 ghost opponents
+      expect(result.data.opponents).toHaveLength(5);
+      expect(result.data.totalAvailable).toBe(5);
+      
+      // All should be ghosts at level 99
+      result.data.opponents.forEach(opponent => {
+        expect(opponent.userId).toBe('ghost');
+        expect(opponent.level).toBe(99);
+      });
     });
 
-    it('should log message when no opponents found', async () => {
+    it('should log message about ghost generation when no real opponents found', async () => {
       const consoleSpy = vi.spyOn(console, 'log');
 
       mockRepo.queryMany.mockResolvedValue({
@@ -247,7 +267,7 @@ describe('MatchmakingService', () => {
       await MatchmakingService.findOpponents(99, 'user-current', 5);
 
       expect(consoleSpy).toHaveBeenCalledWith(
-        expect.stringContaining('No opponents found at level 99')
+        expect.stringContaining('Found 0 real opponents, generated 5 ghosts')
       );
     });
   });

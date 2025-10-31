@@ -3,6 +3,8 @@
  * 
  * Finds eligible opponents for battle from local database.
  * Implements ghost battle system with same-level matching.
+ * 
+ * Story 9.3: Enhanced with AI ghost generation to fill matchmaking pool.
  */
 
 import { IBruto } from '../models/Bruto';
@@ -10,11 +12,13 @@ import { BrutoRepository } from '../database/repositories/BrutoRepository';
 import { DatabaseManager } from '../database/DatabaseManager';
 import { Result, ok, err } from '../utils/result';
 import { ErrorCodes } from '../utils/errors';
+import { GhostGenerationService } from './GhostGenerationService';
 
 export interface IOpponentPool {
   opponents: IBruto[];
   totalAvailable: number;
   requestedCount: number;
+  ghostsGenerated: number; // Story 9.3: Track how many ghosts were added
 }
 
 export class MatchmakingService {
@@ -23,11 +27,12 @@ export class MatchmakingService {
    * AC #1: Only show opponents with exact same level, exclude own brutos
    * AC #2: Return up to 5 random opponents
    * AC #4: Query database with filtering
+   * Story 9.3: Fill remaining slots with AI ghosts if needed
    * 
    * @param brutoLevel - Level of player's bruto
    * @param currentUserId - Current user ID to exclude their brutos
    * @param count - Number of opponents to return (default 5)
-   * @returns Opponent pool with randomized selection
+   * @returns Opponent pool with randomized selection + ghosts
    */
   static async findOpponents(
     brutoLevel: number,
@@ -54,33 +59,39 @@ export class MatchmakingService {
 
       const allEligible = result.data;
 
-      // AC #5: Handle case when no opponents available
-      if (allEligible.length === 0) {
-        console.log(`[MatchmakingService] No opponents found at level ${brutoLevel}`);
-        return ok({
-          opponents: [],
-          totalAvailable: 0,
-          requestedCount: count,
-        });
-      }
-
-      // AC #2: Return up to 'count' opponents (default 5)
-      // If less than count available, return all
-      const selectedOpponents = allEligible.slice(0, Math.min(count, allEligible.length));
-
       // AC #3: Attach skills to create complete snapshot (ghost battle system)
-      const opponentsWithSkills = await this.attachSkillsToOpponents(repo, selectedOpponents);
+      const realOpponents = allEligible.slice(0, Math.min(count, allEligible.length));
+      const opponentsWithSkills = await this.attachSkillsToOpponents(repo, realOpponents);
 
       if (!opponentsWithSkills.success) {
         return err(opponentsWithSkills.error, opponentsWithSkills.code);
       }
 
-      console.log(`[MatchmakingService] Found ${allEligible.length} eligible opponents, returning ${selectedOpponents.length}`);
+      // Story 9.3: Fill remaining slots with ghosts
+      const finalOpponents = [...opponentsWithSkills.data];
+      let ghostsGenerated = 0;
+
+      if (finalOpponents.length < count) {
+        const ghostsNeeded = count - finalOpponents.length;
+        const ghosts = GhostGenerationService.generateGhostPool(
+          brutoLevel,
+          ghostsNeeded,
+          currentUserId
+        );
+        finalOpponents.push(...ghosts);
+        ghostsGenerated = ghosts.length;
+      }
+
+      console.log(
+        `[MatchmakingService] Found ${allEligible.length} real opponents, ` +
+        `generated ${ghostsGenerated} ghosts, returning ${finalOpponents.length} total`
+      );
 
       return ok({
-        opponents: opponentsWithSkills.data,
-        totalAvailable: allEligible.length,
+        opponents: finalOpponents,
+        totalAvailable: allEligible.length + ghostsGenerated,
         requestedCount: count,
+        ghostsGenerated,
       });
 
     } catch (error) {

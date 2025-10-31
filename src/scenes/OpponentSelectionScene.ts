@@ -23,7 +23,6 @@ export class OpponentSelectionScene extends Phaser.Scene {
   private opponentCards: OpponentCard[] = [];
   private selectedOpponent: IBruto | null = null;
   private fightButton?: Button;
-  private refreshButton?: Button;
   private titleText?: Phaser.GameObjects.Text;
   private emptyStateText?: Phaser.GameObjects.Text;
   private opponentPool?: IOpponentPool;
@@ -37,9 +36,9 @@ export class OpponentSelectionScene extends Phaser.Scene {
 
     // Load player bruto from state
     const state = useStore.getState();
-    const bruto = state.brutos.find((b) => b.id === data.brutoId);
+    const bruto = state.selectedBruto;
 
-    if (!bruto) {
+    if (!bruto || bruto.id !== data.brutoId) {
       console.error('[OpponentSelectionScene] Bruto not found:', data.brutoId);
       this.scene.start('CasilleroScene');
       return;
@@ -81,7 +80,7 @@ export class OpponentSelectionScene extends Phaser.Scene {
 
   private async loadOpponents(): Promise<void> {
     const state = useStore.getState();
-    const userId = state.user?.id;
+    const userId = state.currentUser?.id;
 
     if (!userId) {
       console.error('[OpponentSelectionScene] No user ID found');
@@ -95,7 +94,7 @@ export class OpponentSelectionScene extends Phaser.Scene {
       5
     );
 
-    if (result.ok) {
+    if (result.success) {
       this.opponentPool = result.data;
       console.log('[OpponentSelectionScene] Loaded opponents:', this.opponentPool);
     } else {
@@ -153,7 +152,7 @@ export class OpponentSelectionScene extends Phaser.Scene {
     });
 
     // AC #4: "Refresh Opponents" button
-    this.refreshButton = new Button(this, {
+    new Button(this, {
       x: width / 2,
       y: height - SPACING.xl - 100,
       text: 'Refresh Opponents',
@@ -167,7 +166,7 @@ export class OpponentSelectionScene extends Phaser.Scene {
 
   private renderEmptyState(width: number, height: number): void {
     // AC #6: Empty state when no opponents available
-    const panel = new Panel(this, {
+    new Panel(this, {
       x: width / 2,
       y: height / 2,
       width: 500,
@@ -191,9 +190,9 @@ export class OpponentSelectionScene extends Phaser.Scene {
     this.emptyStateText.setOrigin(0.5, 0);
   }
 
-  private renderBackButton(width: number, height: number): void {
+  private renderBackButton(_width: number, _height: number): void {
     // AC #6: Option to return to Casillero
-    const backButton = new Button(this, {
+    new Button(this, {
       x: SPACING.xl,
       y: SPACING.xl,
       text: '← Back',

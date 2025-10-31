@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>El Bruto - Dungeon Warriors</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow-x: hidden;
+            background: #000;
+        }
+
+        /* Hero Section Principal */
+        .hero-landing {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            background: linear-gradient(135deg, #0a0000 0%, #1a0500 30%, #2a0a00 70%, #0a0000 100%);
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Video Background Effect */
+        .background-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(ellipse at 20% 30%, rgba(255, 100, 0, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 70%, rgba(139, 69, 19, 0.15) 0%, transparent 50%);
+            z-index: 1;
+        }
+
+        /* Partículas Atmosféricas */
+        .particles-bg {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+        }
+
+        .particle-ember {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: radial-gradient(circle, #ff6600 0%, #ff9933 50%, transparent 100%);
+            border-radius: 50%;
+            animation: riseUp 8s infinite ease-in;
+            opacity: 0;
+        }
+
+        @keyframes riseUp {
+            0% { 
+                transform: translateY(0) translateX(0) scale(0);
+                opacity: 0;
+            }
+            10% { 
+                opacity: 1;
+                transform: scale(1);
+            }
+            90% { 
+                opacity: 0.8;
+            }
+            100% { 
+                transform: translateY(-100vh) translateX(30px) scale(0.5);
+                opacity: 0;
+            }
+        }
+
+        /* Contenedor Principal Centrado */
+        .hero-content {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            max-width: 1200px;
+            padding: 40px 20px;
+            animation: fadeInScale 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        @keyframes fadeInScale {
+            0% {
+                opacity: 0;
+                transform: scale(0.9) translateY(30px);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        /* Logo Principal con Efecto 3D */
+        .main-logo {
+            position: relative;
+            margin-bottom: 30px;
+            filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.8));
+        }
+
+        .main-logo img {
+            width: 100%;
+            max-width: 700px;
+            height: auto;
+            animation: logoFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes logoFloat {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-15px);
+            }
+        }
+
+        /* Título Alternativo si no hay imagen */
+        .title-text {
+            font-size: clamp(3.5rem, 10vw, 7rem);
+            font-weight: 900;
+            color: #ff9933;
+            text-transform: uppercase;
+            letter-spacing: 12px;
+            margin-bottom: 20px;
+            text-shadow: 
+                0 0 30px rgba(255, 100, 0, 0.9),
+                0 0 60px rgba(255, 100, 0, 0.6),
+                5px 5px 0px #8B4513,
+                10px 10px 20px rgba(0, 0, 0, 0.9);
+            animation: titlePulse 2.5s ease-in-out infinite;
+            font-family: Impact, 'Arial Black', sans-serif;
+        }
+
+        @keyframes titlePulse {
+            0%, 100% {
+                text-shadow: 
+                    0 0 30px rgba(255, 100, 0, 0.9),
+                    0 0 60px rgba(255, 100, 0, 0.6),
+                    5px 5px 0px #8B4513,
+                    10px 10px 20px rgba(0, 0, 0, 0.9);
+            }
+            50% {
+                text-shadow: 
+                    0 0 50px rgba(255, 150, 0, 1),
+                    0 0 90px rgba(255, 100, 0, 0.8),
+                    5px 5px 0px #8B4513,
+                    10px 10px 25px rgba(0, 0, 0, 0.9);
+            }
+        }
+
+        /* Subtítulo */
+        .subtitle {
+            font-size: clamp(1.2rem, 3vw, 2rem);
+            color: #ffcc99;
+            text-transform: uppercase;
+            letter-spacing: 8px;
+            margin-bottom: 40px;
+            text-shadow: 
+                0 0 20px rgba(255, 100, 0, 0.5),
+                3px 3px 8px rgba(0, 0, 0, 0.9);
+            font-weight: 700;
+        }
+
+        /* Descripción del Juego */
+        .game-description {
+            font-size: clamp(1rem, 2vw, 1.3rem);
+            color: #ffd9b3;
+            max-width: 700px;
+            margin: 0 auto 50px auto;
+            line-height: 1.8;
+            text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.9);
+            opacity: 0.95;
+        }
+
+        /* Contenedor de Botones CTA */
+        .cta-container {
+            display: flex;
+            gap: 25px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 50px;
+        }
+
+        .cta-button {
+            position: relative;
+            padding: 22px 55px;
+            font-size: clamp(1.1rem, 2vw, 1.4rem);
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            font-family: 'Arial Black', sans-serif;
+        }
+
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.25);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .cta-button:hover::before {
+            width: 400px;
+            height: 400px;
+        }
+
+        .cta-button span {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #ff6600 0%, #ff9933 50%, #ffaa44 100%);
+            color: #fff;
+            border: 4px solid #ff9933;
+            box-shadow: 
+                0 0 30px rgba(255, 100, 0, 0.6),
+                0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-5px) scale(1.08);
+            box-shadow: 
+                0 0 50px rgba(255, 100, 0, 0.9),
+                0 15px 40px rgba(255, 100, 0, 0.4);
+            border-color: #ffcc66;
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, rgba(139, 69, 19, 0.9) 0%, rgba(160, 82, 45, 0.9) 100%);
+            color: #fff;
+            border: 4px solid #A0522D;
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-secondary:hover {
+            transform: translateY(-5px) scale(1.08);
+            box-shadow: 
+                0 0 30px rgba(160, 82, 45, 0.6),
+                0 15px 40px rgba(139, 69, 19, 0.4);
+            border-color: #D2691E;
+        }
+
+        /* Badges de Plataformas */
+        .platforms {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-top: 40px;
+        }
+
+        .platform-badge {
+            padding: 12px 25px;
+            background: rgba(40, 20, 10, 0.8);
+            border: 2px solid #8B4513;
+            border-radius: 30px;
+            color: #ffcc99;
+            font-size: 0.95rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+
+        .platform-badge:hover {
+            background: rgba(60, 30, 15, 0.9);
+            border-color: #ff9933;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(255, 100, 0, 0.3);
+        }
+
+        /* Scroll Indicator */
+        .scroll-indicator {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+            animation: bounce 2s infinite;
+        }
+
+        .scroll-indicator::before {
+            content: '▼';
+            display: block;
+            font-size: 2rem;
+            color: #ff9933;
+            text-shadow: 0 0 20px rgba(255, 100, 0, 0.8);
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateX(-50%) translateY(0);
+            }
+            40% {
+                transform: translateX(-50%) translateY(-20px);
+            }
+            60% {
+                transform: translateX(-50%) translateY(-10px);
+            }
+        }
+
+        /* Efecto de resplandor en el fondo */
+        .glow-bottom {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 400px;
+            background: radial-gradient(ellipse at bottom, rgba(255, 100, 0, 0.25) 0%, transparent 70%);
+            animation: glowPulse 4s ease-in-out infinite;
+            z-index: 3;
+        }
+
+        @keyframes glowPulse {
+            0%, 100% {
+                opacity: 0.5;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.8;
+                transform: scale(1.1);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .title-text {
+                font-size: 2.5rem;
+                letter-spacing: 6px;
+            }
+
+            .subtitle {
+                font-size: 1rem;
+                letter-spacing: 4px;
+            }
+
+            .game-description {
+                font-size: 0.95rem;
+                padding: 0 20px;
+            }
+
+            .cta-button {
+                padding: 18px 40px;
+                font-size: 1rem;
+            }
+
+            .cta-container {
+                gap: 15px;
+            }
+
+            .main-logo img {
+                max-width: 90%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .cta-container {
+                flex-direction: column;
+                width: 100%;
+                padding: 0 20px;
+            }
+
+            .cta-button {
+                width: 100%;
+                max-width: 350px;
+            }
+        }
+
+        /* Preloader opcional */
+        .preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            animation: fadeOutPreloader 0.5s ease-out 1.5s forwards;
+        }
+
+        @keyframes fadeOutPreloader {
+            to {
+                opacity: 0;
+                visibility: hidden;
+            }
+        }
+
+        .loader {
+            width: 80px;
+            height: 80px;
+            border: 5px solid rgba(255, 153, 51, 0.3);
+            border-top-color: #ff9933;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Preloader -->
+    <div class="preloader">
+        <div class="loader"></div>
+    </div>
+
+    <!-- Hero Landing Section -->
+    <section class="hero-landing">
+        <!-- Background Effects -->
+        <div class="background-overlay"></div>
+        <div class="particles-bg" id="particlesBg"></div>
+        <div class="glow-bottom"></div>
+
+        <!-- Main Content -->
+        <div class="hero-content">
+            <!-- Logo -->
+            <div class="main-logo">
+                <!-- Puedes usar tu imagen de logo aquí -->
+                <!-- <img src="path/to/el-bruto-logo.png" alt="El Bruto Logo"> -->
+                <h1 class="title-text">EL BRUTO</h1>
+            </div>
+
+            <!-- Subtitle -->
+            <h2 class="subtitle">Dungeon Warriors Unleashed</h2>
+
+            <!-- Game Description -->
+            <p class="game-description">
+                Adéntrate en las profundidades de las mazmorras más oscuras. 
+                Enfrenta hordas de enemigos brutales, desbloquea guerreros legendarios 
+                y conviértete en la leyenda definitiva del combate.
+            </p>
+
+            <!-- CTA Buttons -->
+            <div class="cta-container">
+                <button class="cta-button btn-primary" onclick="window.location.href='#login'">
+                    <span>
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <polygon points="10 8 16 12 10 16 10 8"/>
+                        </svg>
+                        Jugar Ahora
+                    </span>
+                </button>
+                <button class="cta-button btn-secondary" onclick="window.location.href='#trailer'">
+                    <span>
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"/>
+                            <line x1="7" y1="2" x2="7" y2="22"/>
+                            <line x1="17" y1="2" x2="17" y2="22"/>
+                            <line x1="2" y1="12" x2="22" y2="12"/>
+                            <line x1="2" y1="7" x2="7" y2="7"/>
+                            <line x1="2" y1="17" x2="7" y2="17"/>
+                            <line x1="17" y1="17" x2="22" y2="17"/>
+                            <line x1="17" y1="7" x2="22" y2="7"/>
+                        </svg>
+                        Ver Tráiler
+                    </span>
+                </button>
+            </div>
+
+            <!-- Platform Badges -->
+            <div class="platforms">
+                <div class="platform-badge">🖥️ PC</div>
+                <div class="platform-badge">📱 Mobile</div>
+                <div class="platform-badge">🎮 Consolas</div>
+                <div class="platform-badge">☁️ Cloud Gaming</div>
+            </div>
+        </div>
+
+        <!-- Scroll Indicator -->
+        <div class="scroll-indicator"></div>
+    </section>
+
+    <script>
+        // Generar partículas de fuego animadas
+        const particlesBg = document.getElementById('particlesBg');
+        const particleCount = 60;
+
+        for (let i = 0; i < particleCount; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle-ember';
+            
+            // Posicionamiento aleatorio
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.bottom = '-10px';
+            
+            // Retardo y duración aleatorios
+            particle.style.animationDelay = Math.random() * 8 + 's';
+            particle.style.animationDuration = (Math.random() * 4 + 6) + 's';
+            
+            particlesBg.appendChild(particle);
+        }
+
+        // Smooth scroll para los botones
+        document.querySelectorAll('.cta-button').forEach(button => {
+            button.addEventListener('click', function(e) {
+                // Crear efecto de ripple
+                const ripple = document.createElement('div');
+                const rect = this.getBoundingClientRect();
+                const size = Math.max(rect.width, rect.height);
+                const x = e.clientX - rect.left - size / 2;
+                const y = e.clientY - rect.top - size / 2;
+                
+                ripple.style.cssText = `
+                    position: absolute;
+                    width: ${size}px;
+                    height: ${size}px;
+                    border-radius: 50%;
+                    background: rgba(255, 255, 255, 0.5);
+                    left: ${x}px;
+                    top: ${y}px;
+                    pointer-events: none;
+                    animation: rippleEffect 0.6s ease-out;
+                `;
+                
+                this.appendChild(ripple);
+                setTimeout(() => ripple.remove(), 600);
+            });
+        });
+
+        // Añadir animación de ripple
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes rippleEffect {
+                from {
+                    transform: scale(0);
+                    opacity: 1;
+                }
+                to {
+                    transform: scale(4);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Parallax effect en scroll
+        let ticking = false;
+        
+        window.addEventListener('scroll', () => {
+            if (!ticking) {
+                window.requestAnimationFrame(() => {
+                    const scrolled = window.pageYOffset;
+                    const glowElement = document.querySelector('.glow-bottom');
+                    const heroContent = document.querySelector('.hero-content');
+                    
+                    if (glowElement) {
+                        glowElement.style.transform = `translateY(${scrolled * 0.5}px)`;
+                    }
+                    if (heroContent) {
+                        heroContent.style.opacity = 1 - (scrolled / 600);
+                    }
+                    
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        });
+
+        // Easter egg: Konami code
+        let konamiCode = [];
+        const konamiSequence = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
+        
+        document.addEventListener('keydown', (e) => {
+            konamiCode.push(e.key);
+            konamiCode = konamiCode.slice(-10);
+            
+            if (konamiCode.join('') === konamiSequence.join('')) {
+                document.body.style.animation = 'rainbow 2s linear infinite';
+                setTimeout(() => {
+                    document.body.style.animation = '';
+                }, 5000);
+            }
+        });
+    </script>
+</body>
+</html>

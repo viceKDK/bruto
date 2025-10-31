@@ -5,20 +5,48 @@
 
 import Phaser from 'phaser';
 import { gameConfig } from './config';
+import { mountLanding } from './landing';
 
-console.log('[Main] Initializing El Bruto...');
-console.log('[Main] Game Config:', gameConfig);
+let game: Phaser.Game | null = null;
 
-// Initialize Phaser game
-const game = new Phaser.Game(gameConfig);
+const showGameCanvas = () => {
+  const app = document.getElementById('app');
 
-// Log successful initialization
-console.log('[Main] Phaser game initialized successfully');
+  if (app) {
+    app.classList.remove('is-hidden');
+  }
+};
 
-// Expose game instance for debugging (dev mode only)
-if (import.meta.env.DEV) {
-  (window as any).game = game;
-  console.log('[Main] Game instance exposed as window.game (dev mode)');
+const startGame = () => {
+  if (game) {
+    return;
+  }
+
+  console.log('[Main] Initializing El Bruto...');
+  console.log('[Main] Game Config:', gameConfig);
+
+  showGameCanvas();
+  game = new Phaser.Game(gameConfig);
+
+  console.log('[Main] Phaser game initialized successfully');
+
+  if (import.meta.env.DEV) {
+    (window as any).game = game;
+    console.log('[Main] Game instance exposed as window.game (dev mode)');
+  }
+};
+
+try {
+  mountLanding('landing-root', {
+    onStart: startGame,
+    onShowTrailer: () => {
+      console.log('[Landing] Trailer CTA pressed');
+      window.location.hash = 'trailer';
+    },
+  });
+} catch (error) {
+  console.error('[Landing] Error mounting landing screen. Booting game directly.', error);
+  startGame();
 }
 
 export default game;
