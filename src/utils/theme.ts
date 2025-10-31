@@ -16,6 +16,7 @@ export const COLORS = {
   surface: '#2d2d2d',      // Surface/panel color
   border: '#404040',       // Border color
   inputBg: '#2d2d2d',      // Input field background
+  overlay: '#000000',      // Modal overlay backdrop
 
   // Text colors
   textPrimary: '#ffffff',

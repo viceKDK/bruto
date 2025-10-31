@@ -44,6 +44,6 @@ export class BootScene extends Phaser.Scene {
     this.scene.launch('UIScene');
 
     // Navigate to LoginScene after initialization
-    this.scene.start('LoginScene');
+    this.scene.start('LoginScene', { startTab: 'register' });
   }
 }

@@ -12,6 +12,7 @@ import { CombatStateMachine, CombatState, CombatSide, TurnQueueEntry } from './C
 import { DamageCalculator } from './DamageCalculator';
 import { ActiveAbilityManager } from './ActiveAbilityManager';
 import { ActiveAbilityEffects } from './ActiveAbilityEffects';
+import { POCION_TRAGICA_USE_THRESHOLD } from '../../utils/constants';
 
 export interface BattleConfig {
   player: IBrutoCombatant;
@@ -33,7 +34,7 @@ interface CombatantState {
 }
 
 /**
- * Main combat engine orchestrating battle flow
+ * Main combat engine that orchestrates battle logic
  */
 export class CombatEngine {
   private stateMachine: CombatStateMachine;
@@ -132,6 +133,9 @@ export class CombatEngine {
     const currentSide = this.stateMachine.getCurrentSide()!;
     const turnNumber = this.stateMachine.getTurnNumber();
 
+    // Check for healing abilities before attack
+    this.checkHealingAbilities(currentSide, turnNumber);
+
     // Execute attack
     this.executeAttack(currentSide, turnNumber);
 
@@ -208,8 +212,9 @@ export class CombatEngine {
       this.actions.push({
         turn: turnNumber,
         attacker,
-        action: 'ability' as any, // TODO: Extend CombatAction type
+        action: 'ability',
         damage: 0,
+        abilityUsed: 'fuerza_bruta',
         hpRemaining: {
           player: this.playerState.currentHp,
           opponent: this.opponentState.currentHp,
@@ -262,6 +267,54 @@ export class CombatEngine {
       return 'opponent';
     }
     return null;
+  }
+
+  /**
+   * Check and apply healing abilities (Poción Trágica)
+   * Story 6.5: Active ability integration
+   */
+  private checkHealingAbilities(side: CombatSide, turnNumber: number): void {
+    const pocionTragicaId = 'pocion_tragica';
+    
+    if (!this.activeAbilityManager.isAbilityAvailable(side, pocionTragicaId)) {
+      return;
+    }
+
+    const combatantState = this.getCombatantState(side);
+    const maxHp = combatantState.combatant.stats.maxHp || combatantState.combatant.stats.hp;
+    
+    // Only use if HP is below threshold (strategic AI decision)
+    const hpPercent = combatantState.currentHp / maxHp;
+    if (hpPercent > POCION_TRAGICA_USE_THRESHOLD) {
+      return; // Don't waste heal at high HP
+    }
+
+    // Apply healing
+    const healResult = this.activeAbilityEffects.applyPocionTragica(
+      combatantState.currentHp,
+      maxHp
+    );
+
+    if (healResult.healAmount && healResult.healAmount > 0) {
+      combatantState.currentHp = Math.min(
+        combatantState.currentHp + healResult.healAmount,
+        maxHp
+      );
+
+      this.activeAbilityManager.useAbility(side, pocionTragicaId);
+
+      this.actions.push({
+        turn: turnNumber,
+        attacker: side,
+        action: 'heal',
+        healAmount: healResult.healAmount,
+        abilityUsed: 'pocion_tragica',
+        hpRemaining: {
+          player: this.playerState.currentHp,
+          opponent: this.opponentState.currentHp,
+        },
+      });
+    }
   }
 
   /**

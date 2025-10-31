@@ -375,6 +375,17 @@ body.landing-active {
   margin-bottom: 48px;
 }
 
+/* Footer / Derechos reservados */
+.landing-footer,
+.legacy-footer {
+  margin-top: 24px;
+  text-align: center;
+  font-size: 0.85rem;
+  color: rgba(255, 217, 179, 0.8);
+  letter-spacing: 0.8px;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
+}
+
 .landing-cta__button,
 .cta-button {
   position: relative;

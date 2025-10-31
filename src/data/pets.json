@@ -1,0 +1,76 @@
+{
+  "pets": [
+    {
+      "id": "perro",
+      "name": "Perro",
+      "type": "perro",
+      "stats": {
+        "hp": 14,
+        "damage": "low",
+        "agility": 5,
+        "speed": 3,
+        "multiHitChance": 10,
+        "evasionChance": 0,
+        "initiative": -10
+      },
+      "stackable": true,
+      "maxStacks": 3,
+      "mutuallyExclusiveWith": [],
+      "resistanceCost": {
+        "base": 2,
+        "withVitalidad": 3,
+        "withInmortal": 7,
+        "withBoth": 8
+      },
+      "specialAbilities": []
+    },
+    {
+      "id": "pantera",
+      "name": "Pantera",
+      "type": "pantera",
+      "stats": {
+        "hp": 26,
+        "damage": "medium",
+        "agility": 16,
+        "speed": 24,
+        "multiHitChance": 60,
+        "evasionChance": 20,
+        "initiative": -60
+      },
+      "stackable": false,
+      "maxStacks": 1,
+      "mutuallyExclusiveWith": ["oso"],
+      "resistanceCost": {
+        "base": 6,
+        "withVitalidad": 9,
+        "withInmortal": 15,
+        "withBoth": 22
+      },
+      "specialAbilities": []
+    },
+    {
+      "id": "oso",
+      "name": "Oso",
+      "type": "oso",
+      "stats": {
+        "hp": 110,
+        "damage": "high",
+        "agility": 2,
+        "speed": 1,
+        "multiHitChance": -20,
+        "evasionChance": 0,
+        "initiative": -360
+      },
+      "stackable": false,
+      "maxStacks": 1,
+      "mutuallyExclusiveWith": ["pantera"],
+      "resistanceCost": {
+        "base": 8,
+        "withVitalidad": 12,
+        "withInmortal": 28,
+        "withBoth": 42
+      },
+      "specialAbilities": ["disarm"]
+    }
+  ]
+}

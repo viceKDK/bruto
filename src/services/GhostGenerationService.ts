@@ -224,20 +224,22 @@ export class GhostGenerationService {
       if (boosts.agility) counts.agility++;
     });
     
-    const total = history.length;
-    
     // Calculate percentages for tank and agile builds
     const tankBoosts = counts.hp + counts.str;
     const agileBoosts = counts.speed + counts.agility;
-    const maxPossibleBoosts = total * 2; // Each level can boost 2 stats max
+    const totalBoosts = tankBoosts + agileBoosts;
     
-    const tankPercent = tankBoosts / maxPossibleBoosts;
-    const agilePercent = agileBoosts / maxPossibleBoosts;
+    if (totalBoosts === 0) {
+      return 'balanced';
+    }
+    
+    const tankPercent = tankBoosts / totalBoosts;
+    const agilePercent = agileBoosts / totalBoosts;
     
     // Classification thresholds
-    if (tankPercent > 0.6) return 'tank';
-    if (agilePercent > 0.6) return 'agile';
-    if (Math.abs(tankPercent - agilePercent) < 0.15) return 'balanced';
+    if (tankPercent > 0.7) return 'tank';
+    if (agilePercent > 0.7) return 'agile';
+    if (Math.abs(tankPercent - agilePercent) < 0.2) return 'balanced';
     return 'hybrid';
   }
 

@@ -9,6 +9,7 @@ import { Panel } from '../ui/components/Panel';
 import { Button } from '../ui/components/Button';
 import { WeaponRack, WeaponSlot } from '../ui/components/WeaponRack';
 import { SkillGrid, SkillCell } from '../ui/components/SkillGrid';
+import { SkillDetailsModal } from '../ui/components/SkillDetailsModal';
 import { BattleHistoryPanel } from '../ui/components/BattleHistoryPanel';
 import { StatsPanel as StatsPanelDisplay, type ModifierSummary, type PetChipData } from '../ui/components/StatsPanel';
 import {
@@ -17,6 +18,7 @@ import {
 } from '../ui/components/LevelUpHistoryPanel';
 import { XPBar } from '../components/XPBar';
 import { StatsCalculator } from '../engine/StatsCalculator';
+import { SkillCatalog } from '../engine/skills/SkillCatalog';
 import { useStore } from '../state/store';
 import { DatabaseManager } from '../database/DatabaseManager';
 import { BrutoRepository } from '../database/repositories/BrutoRepository';
@@ -69,6 +71,7 @@ export class BrutoDetailsScene extends Phaser.Scene {
   private battleHistory: IBattleLog[] = [];
   private statsDisplay?: StatsPanelDisplay;
   private readonly statsCalculator = new StatsCalculator();
+  private readonly skillCatalog = SkillCatalog.getInstance();
   private brutoRepo?: BrutoRepository;
   private brutoPetRepo?: BrutoPetRepository;
   private levelUpHistoryRepo?: LevelUpHistoryRepository;
@@ -78,6 +81,7 @@ export class BrutoDetailsScene extends Phaser.Scene {
   private levelUpHistoryPanel?: LevelUpHistoryPanel;
   private levelUpHistoryEntries: LevelUpHistoryEntry[] = [];
   private xpBar?: XPBar;
+  private skillDetailsModal?: SkillDetailsModal; // Story 6.7
 
   constructor() {
     super({ key: 'BrutoDetailsScene' });
@@ -560,6 +564,7 @@ export class BrutoDetailsScene extends Phaser.Scene {
       height: gridHeight,
       cells,
       tooltip: (cell) => this.getSkillTooltip(cell),
+      onClick: (cell) => this.onSkillCellClick(cell), // Story 6.7
     });
 
     this.skillGrid.setDepth((this.skillPanel.depth ?? 0) + 1);
@@ -645,7 +650,7 @@ export class BrutoDetailsScene extends Phaser.Scene {
   }
 
   private resolveSkillCells(): SkillCell[] {
-    const totalSlots = 49;
+    const totalSlots = 56; // 7 columns × 8 rows (Story 6.7)
     const cells: SkillCell[] = [...this.skillCells.slice(0, totalSlots)];
 
     while (cells.length < totalSlots) {
@@ -670,11 +675,95 @@ export class BrutoDetailsScene extends Phaser.Scene {
   }
 
   private getSkillTooltip(cell: SkillCell): string {
-    if (cell.state === 'known' && cell.name) {
-      return `${cell.name}\nConsulta docs/habilidades-catalogo.md para detalles de la habilidad.`;
+    if (cell.state === 'known' && cell.id) {
+      // Try to get skill from catalog by ID
+      const skill = this.skillCatalog.getSkillById(cell.id);
+      
+      if (skill) {
+        // Build rich tooltip with skill details
+        const lines: string[] = [skill.name];
+        
+        // Add category info
+        const categoryLabels: Record<string, string> = {
+          stat_buff: '📈 Mejora de Stats',
+          armor: '🛡️ Armadura',
+          active_ability: '⚡ Habilidad Activa',
+          combat_modifier: '⚔️ Modificador de Combate',
+          healing: '💚 Curación',
+          poison: '☠️ Veneno',
+        };
+        
+        if (categoryLabels[skill.category]) {
+          lines.push(categoryLabels[skill.category]);
+        }
+        
+        // Add description if available
+        if (skill.description) {
+          lines.push('');
+          lines.push(skill.description);
+        }
+        
+        // Add quick effect summary
+        if (skill.effects && skill.effects.length > 0) {
+          lines.push('');
+          const effectSummaries = skill.effects.slice(0, 3).map(effect => {
+            // Show stat bonuses
+            if (effect.stat && effect.value !== undefined) {
+              const sign = effect.value >= 0 ? '+' : '';
+              const unit = effect.modifier === 'percentage' ? '%' : '';
+              return `${effect.stat.toUpperCase()}: ${sign}${effect.value}${unit}`;
+            }
+            return null;
+          }).filter(Boolean);
+          
+          if (effectSummaries.length > 0) {
+            lines.push(...effectSummaries as string[]);
+          }
+        }
+        
+        lines.push('');
+        lines.push('Click para ver detalles completos');
+        
+        return lines.join('\n');
+      }
+      
+      // Fallback if skill not found in catalog
+      return `${cell.name ?? 'Habilidad Desconocida'}\nClick para ver detalles`;
     }
 
-    return 'Espacio disponible.\nLas habilidades se documentan en docs/habilidades-catalogo.md.';
+    return 'Espacio disponible.\nDesbloquea habilidades ganando batallas.';
+  }
+
+  /**
+   * Story 6.7: Handle skill cell click to show details modal
+   */
+  private onSkillCellClick(cell: SkillCell): void {
+    if (cell.state !== 'known' || !cell.id) {
+      return;
+    }
+
+    // Get skill from catalog
+    const skill = this.skillCatalog.getSkillById(cell.id);
+    
+    if (!skill) {
+      console.warn(`[BrutoDetailsScene] Skill not found in catalog: ${cell.id}`);
+      return;
+    }
+
+    // Close existing modal if any
+    if (this.skillDetailsModal) {
+      this.skillDetailsModal.destroy();
+      this.skillDetailsModal = undefined;
+    }
+
+    // Create and show modal
+    this.skillDetailsModal = new SkillDetailsModal(this, {
+      skill,
+      onClose: () => {
+        this.skillDetailsModal?.destroy();
+        this.skillDetailsModal = undefined;
+      },
+    });
   }
 
   private loadWeaponData(): void {
