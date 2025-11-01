@@ -71,21 +71,31 @@ describe('WeaponCombatService - Story 5 Combat Integration', () => {
     });
 
     it('should calculate evasion bonus from weapons', () => {
-      // Sword: +20% evasion
+      // Sword: only evasion modifier from JSON
       const modifiers = service.calculateCombatModifiers(['sword']);
-      expect(modifiers.evasionBonus).toBe(0.20); // 20% as decimal
+      const sword = service.getWeapon('sword');
+      const expectedEvasion = (sword?.modifiers?.evasion || 0) / 100;
+      expect(modifiers.evasionBonus).toBe(expectedEvasion);
     });
 
-    it('should stack modifiers from multiple weapons', () => {
-      // Sword: +5% crit +20% evasion, Mace: +20% crit -30% evasion
-      const modifiers = service.calculateCombatModifiers(['sword', 'mace']);
-      expect(modifiers.critChanceBonus).toBe(0.25); // 5% + 20% = 25%
-      expect(modifiers.evasionBonus).toBeCloseTo(-0.10, 2); // 20% + (-30%) = -10%
+    it('should calculate modifiers for Mace correctly', () => {
+      // Mace: only crit and evasion modifiers from JSON
+      const modifiers = service.calculateCombatModifiers(['mace']);
+      const mace = service.getWeapon('mace');
+      const expectedCrit = (mace?.modifiers?.criticalChance || 0) / 100;
+      const expectedEvasion = (mace?.modifiers?.evasion || 0) / 100;
+      
+      expect(modifiers.critChanceBonus).toBe(expectedCrit);
+      expect(modifiers.evasionBonus).toBe(expectedEvasion);
     });
 
-    it('should include weapon damage in modifiers', () => {
-      const modifiers = service.calculateCombatModifiers(['sword', 'spear']);
-      expect(modifiers.weaponDamage).toBe(40); // 28 + 12
+    it('should calculate weapon damage for a single weapon', () => {
+      // Solo 1 arma a la vez - no se suman daños
+      const swordMods = service.calculateCombatModifiers(['sword']);
+      expect(swordMods.weaponDamage).toBe(28); // Sword damage only
+      
+      const spearMods = service.calculateCombatModifiers(['spear']);
+      expect(spearMods.weaponDamage).toBe(12); // Spear damage only
     });
 
     it('should return empty modifiers when no weapons', () => {

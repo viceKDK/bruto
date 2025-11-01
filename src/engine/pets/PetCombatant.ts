@@ -68,10 +68,13 @@ export function createPetCombatant(
  * Get pet display name for combat log
  */
 export function getPetDisplayName(pet: IPetCombatant): string {
+  // Capitalize first letter of pet type
+  const capitalizedType = pet.petType.charAt(0).toUpperCase() + pet.petType.slice(1);
+  
   if (pet.petSlot) {
-    return `${pet.petType} ${pet.petSlot}`;
+    return `${capitalizedType} ${pet.petSlot}`;
   }
-  return pet.petType;
+  return capitalizedType;
 }
 
 /**

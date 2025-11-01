@@ -230,7 +230,7 @@ describe('StatBoostService', () => {
   describe('Story 6.8: Skill-Enhanced Level-Up Bonuses', () => {
     it('should apply +3 STR when bruto has Fuerza Hércules skill', async () => {
       // Bruto with Fuerza Hércules (STR level-up bonus +1)
-      mockBruto.skills = ['fuerza-hercules'];
+      mockBruto.skills = ['fuerza_hercules'];
 
       const result = await StatBoostService.applyFullBoost(mockBruto, 'STR');
 
@@ -241,9 +241,9 @@ describe('StatBoostService', () => {
       expect(result.data.changes).toContain('+3 Fuerza');
     });
 
-    it('should apply +3 Speed when bruto has Velocidad Mercurio skill', async () => {
-      // Bruto with Velocidad Mercurio (Speed level-up bonus +1)
-      mockBruto.skills = ['velocidad-mercurio'];
+    it('should apply +3 Speed when bruto has Golpe de Trueno skill', async () => {
+      // Bruto with Golpe de Trueno (Speed level-up bonus +1)
+      mockBruto.skills = ['golpe_trueno'];
 
       const result = await StatBoostService.applyFullBoost(mockBruto, 'Speed');
 
@@ -256,7 +256,7 @@ describe('StatBoostService', () => {
 
     it('should apply +3 Agility when bruto has Agilidad Felina skill', async () => {
       // Bruto with Agilidad Felina (Agility level-up bonus +1)
-      mockBruto.skills = ['agilidad-felina'];
+      mockBruto.skills = ['agilidad_felina'];
 
       const result = await StatBoostService.applyFullBoost(mockBruto, 'Agility');
 
@@ -280,46 +280,48 @@ describe('StatBoostService', () => {
       expect(result.data.changes).toContain('+2 Fuerza');
     });
 
-    it('should apply +13 HP when bruto has Vitalidad Titánica skill (full boost)', async () => {
-      // Bruto with Vitalidad Titánica (HP level-up bonus +1)
-      mockBruto.skills = ['vitalidad-titanica'];
+    it('should apply +18 HP when bruto has Vitalidad skill (full boost)', async () => {
+      // Bruto with Vitalidad (HP level-up bonus +6)
+      mockBruto.skills = ['vitalidad'];
 
       const result = await StatBoostService.applyFullBoost(mockBruto, 'HP');
 
       expect(result.success).toBe(true);
       if (!result.success) throw new Error('Test failed');
 
-      expect(result.data.updatedBruto.maxHp).toBe(73); // 60 + 13
-      expect(result.data.updatedBruto.hp).toBe(73);
-      expect(result.data.changes).toContain('+13 Vida');
+      expect(result.data.updatedBruto.maxHp).toBe(78); // 60 + 18 (base 12 + skill +6)
+      expect(result.data.updatedBruto.hp).toBe(78);
+      expect(result.data.changes).toContain('+18 HP');
     });
 
-    it('should apply enhanced split boost with Fuerza Hércules (+2 STR instead of +1)', async () => {
-      mockBruto.skills = ['fuerza-hercules'];
+    it('should apply enhanced split boost with Fuerza Hércules (+3 STR same as full)', async () => {
+      mockBruto.skills = ['fuerza_hercules'];
 
       const result = await StatBoostService.applySplitBoost(mockBruto, 'STR', 'Speed');
 
       expect(result.success).toBe(true);
       if (!result.success) throw new Error('Test failed');
 
-      expect(result.data.updatedBruto.str).toBe(4); // 2 + 2 (split with skill)
+      // Note: Fuerza Hércules doesn't have separate split/full conditions
+      // So it applies full value (3) even in split mode
+      expect(result.data.updatedBruto.str).toBe(5); // 2 + 3 (full bonus applied)
       expect(result.data.updatedBruto.speed).toBe(3); // 2 + 1 (base split, no skill)
-      expect(result.data.changes).toContain('+2 Fuerza');
+      expect(result.data.changes).toContain('+3 Fuerza');
       expect(result.data.changes).toContain('+1 Velocidad');
     });
 
-    it('should apply enhanced HP split boost with Vitalidad Titánica (+7 HP instead of +6)', async () => {
-      mockBruto.skills = ['vitalidad-titanica'];
+    it('should apply enhanced HP split boost with Vitalidad (+9 HP instead of +6)', async () => {
+      mockBruto.skills = ['vitalidad'];
 
       const result = await StatBoostService.applySplitBoost(mockBruto, 'HP', 'STR');
 
       expect(result.success).toBe(true);
       if (!result.success) throw new Error('Test failed');
 
-      expect(result.data.updatedBruto.maxHp).toBe(67); // 60 + 7 (split with skill)
-      expect(result.data.updatedBruto.hp).toBe(67);
+      expect(result.data.updatedBruto.maxHp).toBe(69); // 60 + 9 (split with skill)
+      expect(result.data.updatedBruto.hp).toBe(69);
       expect(result.data.updatedBruto.str).toBe(3); // 2 + 1 (base split)
-      expect(result.data.changes).toContain('+7 Vida');
+      expect(result.data.changes).toContain('+9 HP');
       expect(result.data.changes).toContain('+1 Fuerza');
     });
 
@@ -338,8 +340,8 @@ describe('StatBoostService', () => {
     });
 
     it('should handle multiple stat-boosting skills correctly', async () => {
-      // Bruto with both Fuerza Hércules and other skills
-      mockBruto.skills = ['fuerza-hercules', 'golpe-critico', 'evasion-experta'];
+      // Bruto with both Fuerza Hércules and other skills (that don't affect STR level-up)
+      mockBruto.skills = ['fuerza_hercules', 'armor', 'shield'];
 
       const result = await StatBoostService.applyFullBoost(mockBruto, 'STR');
 

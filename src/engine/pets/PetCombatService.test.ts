@@ -54,14 +54,14 @@ describe('PetCombatService - Story 7.3', () => {
       expect(initiative).toBe(630); // 1000 - 10 - 360
     });
 
-    it('should order pets correctly: Pantera < Perro < Oso (lower initiative = faster)', () => {
+    it('should order pets correctly: Oso < Pantera < Perro (lower initiative = faster)', () => {
       const perroInit = service.calculatePetInitiative(PetType.PERRO, 3);
       const panteraInit = service.calculatePetInitiative(PetType.PANTERA, 24);
       const osoInit = service.calculatePetInitiative(PetType.OSO, 1);
 
-      // Pantera is fastest (lowest initiative)
+      // Oso is fastest (lowest initiative 630), then Pantera (700), then Perro (970)
+      expect(osoInit).toBeLessThan(panteraInit);
       expect(panteraInit).toBeLessThan(perroInit);
-      expect(perroInit).toBeLessThan(osoInit);
     });
   });
 

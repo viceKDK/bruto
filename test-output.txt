@@ -1,0 +1,459 @@
+
+> bruto@1.0.0 test
+> vitest run --config vitest.config.ts
+
+
+[7m[1m[36m RUN [39m[22m[27m [36mv1.6.1[39m [90mC:/Users/vicen/OneDrive/Escritorio/apps/Juegos/bruto[39m
+
+ [32m✓[39m src/engine/combat/DamageCalculator.test.ts [2m ([22m[2m30 tests[22m[2m)[22m[90m 6[2mms[22m[39m
+ [33m❯[39m src/engine/pets/PetCombatService.test.ts [2m ([22m[2m26 tests[22m [2m|[22m [31m4 failed[39m[2m)[22m[90m 15[2mms[22m[39m
+[31m   [33m❯[31m src/engine/pets/PetCombatService.test.ts[2m > [22mPetCombatService - Story 7.3[2m > [22mAC1: Pets scheduled in turn order based on initiative[2m > [22mshould order pets correctly: Pantera < Perro < Oso (lower initiative = faster)[39m
+[31m     → expected 960 to be less than 630[39m
+[31m   [33m❯[31m src/engine/pets/PetCombatService.test.ts[2m > [22mPetCombatService - Story 7.3[2m > [22mAC5: Combat log shows pet actions distinctly[2m > [22mshould format Perro display name with slot[39m
+[31m     → expected 'perro A' to be 'Perro A' // Object.is equality[39m
+[31m   [33m❯[31m src/engine/pets/PetCombatService.test.ts[2m > [22mPetCombatService - Story 7.3[2m > [22mAC5: Combat log shows pet actions distinctly[2m > [22mshould format Pantera display name without slot[39m
+[31m     → expected 'pantera' to be 'Pantera' // Object.is equality[39m
+[31m   [33m❯[31m src/engine/pets/PetCombatService.test.ts[2m > [22mPetCombatService - Story 7.3[2m > [22mAC5: Combat log shows pet actions distinctly[2m > [22mshould format Oso display name without slot[39m
+[31m     → expected 'oso' to be 'Oso' // Object.is equality[39m
+ [32m✓[39m src/engine/pets/PetStackingValidator.test.ts [2m ([22m[2m29 tests[22m[2m)[22m[90m 7[2mms[22m[39m
+ [32m✓[39m src/engine/pets/PetStatsService.test.ts [2m ([22m[2m33 tests[22m[2m)[22m[90m 11[2mms[22m[39m
+ [32m✓[39m src/engine/pets/PetRewardService.test.ts [2m ([22m[2m15 tests[22m[2m)[22m[90m 17[2mms[22m[39m
+[90mstdout[2m | SkillCatalog.loadSkills (C:\Users\vicen\OneDrive\Escritorio\apps\Juegos\bruto\src\engine\skills\SkillCatalog.ts:45:13)[22m[39m
+✅ Skill Catalog loaded: 48 skills
+
+[90mstdout[2m | SkillCatalog.loadSkills (C:\Users\vicen\OneDrive\Escritorio\apps\Juegos\bruto\src\engine\skills\SkillCatalog.ts:45:13)[22m[39m
+✅ Skill Catalog loaded: 48 skills
+
+[90mstdout[2m | SkillCatalog.loadSkills (C:\Users\vicen\OneDrive\Escritorio\apps\Juegos\bruto\src\engine\skills\SkillCatalog.ts:45:13)[22m[39m
+✅ Skill Catalog loaded: 48 skills
+
+ [32m✓[39m src/ui/components/BattleHistoryPanel.test.ts [2m ([22m[2m19 tests[22m[2m)[22m[90m 104[2mms[22m[39m
+[90mstdout[2m | SkillCatalog.loadSkills (C:\Users\vicen\OneDrive\Escritorio\apps\Juegos\bruto\src\engine\skills\SkillCatalog.ts:45:13)[22m[39m
+✅ Skill Catalog loaded: 48 skills
+
+[90mstdout[2m | SkillCatalog.loadSkills (C:\Users\vicen\OneDrive\Escritorio\apps\Juegos\bruto\src\engine\skills\SkillCatalog.ts:45:13)[22m[39m
+✅ Skill Catalog loaded: 48 skills
+
+[90mstdout[2m | src/engine/skills/SkillRewardService.test.ts[2m > [22m[2mSkillRewardService[2m > [22m[2macquireStarterSkills[2m > [22m[2mshould acquire multiple starter skills[22m[39m
+First skill error: {
+  success: [33mfalse[39m,
+  error: [32m'Skill not found: fuerza-hercules'[39m,
+  code: [32m'SKILL_NOT_FOUND'[39m
+}
+Second skill error: {
+  success: [33mfalse[39m,
+  error: [32m'Skill not found: agilidad-felina'[39m,
+  code: [32m'SKILL_NOT_FOUND'[39m
+}
+
+ [32m✓[39m src/engine/skills/SkillRewardService.test.ts [2m ([22m[2m22 tests[22m[2m)[22m[90m 21[2mms[22m[39m
+ [32m✓[39m src/engine/combat/CombatEngine.disarm.test.ts [2m ([22m[2m12 tests[22m[2m)[22m[90m 21[2mms[22m[39m
+ [32m✓[39m src/engine/skills/SkillEffectEngine.test.ts [2m ([22m[2m21 tests[22m[2m)[22m[90m 14[2mms[22m[39m
+ [32m✓[39m src/engine/combat/CombatEngine.test.ts [2m ([22m[2m16 tests[22m[2m)[22m[90m 28[2mms[22m[39m
+[90mstdout[2m | SkillCatalog.loadSkills (C:\Users\vicen\OneDrive\Escritorio\apps\Juegos\bruto\src\engine\skills\SkillCatalog.ts:45:13)[22m[39m
+✅ Skill Catalog loaded: 48 skills
+
+[90mstdout[2m | src/services/StatBoostService.test.ts[2m > [22m[2mStatBoostService[2m > [22m[2mapplyFullBoost - AC #1[2m > [22m[2mshould apply +2 STR boost correctly[22m[39m
+[StatBoostService] Applied full boost: STR (+2) for bruto test-bruto-123
+
+[90mstdout[2m | src/services/StatBoostService.test.ts[2m > [22m[2mStatBoostService[2m > [22m[2mapplyFullBoost - AC #1[2m > [22m[2mshould apply +2 Speed boost correctly[22m[39m
+[StatBoostService] Applied full boost: Speed (+2) for bruto test-bruto-123
+
+[90mstdout[2m | src/services/StatBoostService.test.ts[2m > [22m[2mStatBoostService[2m > [22m[2mapplyFullBoost - AC #1[2m > [22m[2mshould apply +2 Agility boost correctly[22m[39m
+[StatBoostService] Applied full boost: Agility (+2) for bruto test-bruto-123
+
+[90mstdout[2m | src/services/StatBoostService.test.ts[2m > [22m[2mStatBoostService[2m > [22m[2mapplyFullBoost - AC #1[2m > [22m[2mshould apply +12 HP boost correctly and update both hp and maxHp (AC #1)[22m[39m
+[StatBoostService] Applied full boost: HP (+12) for bruto test-bruto-123
+
+[90mstdout[2m | src/services/StatBoostService.test.ts[2m > [22m[2mStatBoostService[2m > [22m[2mapplySplitBoost - AC #2[2m > [22m[2mshould apply +1/+1 boost to STR and Speed correctly[22m[39m
+[StatBoostService] Applied split boost: STR+Speed for bruto test-bruto-123
+
+[90mstdout[2m | src/services/StatBoostService.test.ts[2m > [22m[2mStatBoostService[2m > [22m[2mapplySplitBoost - AC #2[2m > [22m[2mshould apply +6 HP + +1 STR correctly (AC #2)[22m[39m
+[StatBoostService] Applied split boost: HP+STR for bruto test-bruto-123
+
+[90mstdout[2m | src/services/StatBoostService.test.ts[2m > [22m[2mStatBoostService[2m > [22m[2mapplySplitBoost - AC #2[2m > [22m[2mshould apply +1 Agility + +6 HP correctly (reversed order)[22m[39m
+[StatBoostService] Applied split boost: Agility+HP for bruto test-bruto-123
+
+[90mstdout[2m | src/services/StatBoostService.test.ts[2m > [22m[2mStatBoostService[2m > [22m[2mDatabase Persistence - AC #3[2m > [22m[2mshould persist stat changes immediately to database[22m[39m
+[StatBoostService] Applied full boost: Speed (+2) for bruto test-bruto-123
+
+[90mstdout[2m | src/services/StatBoostService.test.ts[2m > [22m[2mStatBoostService[2m > [22m[2mUI Feedback - AC #4[2m > [22m[2mshould provide human-readable change descriptions for UI[22m[39m
+[StatBoostService] Applied full boost: STR (+2) for bruto test-bruto-123
+
+[90mstdout[2m | src/services/StatBoostService.test.ts[2m > [22m[2mStatBoostService[2m > [22m[2mUI Feedback - AC #4[2m > [22m[2mshould provide multiple changes for split boosts[22m[39m
+[StatBoostService] Applied split boost: HP+Agility for bruto test-bruto-123
+
+[90mstdout[2m | src/services/StatBoostService.test.ts[2m > [22m[2mStatBoostService[2m > [22m[2mValidation - AC #5[2m > [22m[2mshould allow stats to increase infinitely (no cap)[22m[39m
+[StatBoostService] Applied full boost: STR (+2) for bruto test-bruto-123
+
+[90mstdout[2m | src/services/StatBoostService.test.ts[2m > [22m[2mStatBoostService[2m > [22m[2mValidation - AC #5[2m > [22m[2mshould not modify original bruto object (immutability)[22m[39m
+[StatBoostService] Applied full boost: STR (+2) for bruto test-bruto-123
+
+[90mstdout[2m | src/services/StatBoostService.test.ts[2m > [22m[2mStatBoostService[2m > [22m[2mValidation - AC #5[2m > [22m[2mshould preserve all other bruto properties[22m[39m
+[StatBoostService] Applied full boost: STR (+2) for bruto test-bruto-123
+
+[90mstdout[2m | src/services/StatBoostService.test.ts[2m > [22m[2mStatBoostService[2m > [22m[2mStory 6.8: Skill-Enhanced Level-Up Bonuses[2m > [22m[2mshould apply base +2 STR when bruto has NO skills[22m[39m
+[StatBoostService] Applied full boost: STR (+2) for bruto test-bruto-123
+
+[90mstdout[2m | src/services/StatBoostService.test.ts[2m > [22m[2mStatBoostService[2m > [22m[2mStory 6.8: Skill-Enhanced Level-Up Bonuses[2m > [22m[2mshould apply base +1/+1 split boost when bruto has NO skills[22m[39m
+[StatBoostService] Applied split boost: STR+Agility for bruto test-bruto-123
+
+ [33m❯[39m src/services/StatBoostService.test.ts [2m ([22m[2m23 tests[22m [2m|[22m [31m7 failed[39m[2m)[22m[90m 36[2mms[22m[39m
+[31m   [33m❯[31m src/services/StatBoostService.test.ts[2m > [22mStatBoostService[2m > [22mStory 6.8: Skill-Enhanced Level-Up Bonuses[2m > [22mshould apply +3 STR when bruto has Fuerza Hércules skill[39m
+[31m     → Cannot read properties of undefined (reading 'effects')[39m
+[31m   [33m❯[31m src/services/StatBoostService.test.ts[2m > [22mStatBoostService[2m > [22mStory 6.8: Skill-Enhanced Level-Up Bonuses[2m > [22mshould apply +3 Speed when bruto has Velocidad Mercurio skill[39m
+[31m     → Cannot read properties of undefined (reading 'effects')[39m
+[31m   [33m❯[31m src/services/StatBoostService.test.ts[2m > [22mStatBoostService[2m > [22mStory 6.8: Skill-Enhanced Level-Up Bonuses[2m > [22mshould apply +3 Agility when bruto has Agilidad Felina skill[39m
+[31m     → Cannot read properties of undefined (reading 'effects')[39m
+[31m   [33m❯[31m src/services/StatBoostService.test.ts[2m > [22mStatBoostService[2m > [22mStory 6.8: Skill-Enhanced Level-Up Bonuses[2m > [22mshould apply +13 HP when bruto has Vitalidad Titánica skill (full boost)[39m
+[31m     → Cannot read properties of undefined (reading 'effects')[39m
+[31m   [33m❯[31m src/services/StatBoostService.test.ts[2m > [22mStatBoostService[2m > [22mStory 6.8: Skill-Enhanced Level-Up Bonuses[2m > [22mshould apply enhanced split boost with Fuerza Hércules (+2 STR instead of +1)[39m
+[31m     → Cannot read properties of undefined (reading 'effects')[39m
+[31m   [33m❯[31m src/services/StatBoostService.test.ts[2m > [22mStatBoostService[2m > [22mStory 6.8: Skill-Enhanced Level-Up Bonuses[2m > [22mshould apply enhanced HP split boost with Vitalidad Titánica (+7 HP instead of +6)[39m
+[31m     → Cannot read properties of undefined (reading 'effects')[39m
+[31m   [33m❯[31m src/services/StatBoostService.test.ts[2m > [22mStatBoostService[2m > [22mStory 6.8: Skill-Enhanced Level-Up Bonuses[2m > [22mshould handle multiple stat-boosting skills correctly[39m
+[31m     → Cannot read properties of undefined (reading 'effects')[39m
+[90mstdout[2m | src/services/MatchmakingService.test.ts[2m > [22m[2mMatchmakingService[2m > [22m[2mfindOpponents - AC #1: Same-Level Matching[2m > [22m[2mshould query for opponents with exact same level[22m[39m
+[MatchmakingService] Found 7 real opponents, generated 0 ghosts, returning 5 total
+
+[90mstdout[2m | src/services/MatchmakingService.test.ts[2m > [22m[2mMatchmakingService[2m > [22m[2mfindOpponents - AC #1: Same-Level Matching[2m > [22m[2mshould exclude current user's brutos from results[22m[39m
+[MatchmakingService] Found 7 real opponents, generated 0 ghosts, returning 5 total
+
+[90mstdout[2m | src/services/MatchmakingService.test.ts[2m > [22m[2mMatchmakingService[2m > [22m[2mfindOpponents - AC #1: Same-Level Matching[2m > [22m[2mshould include all eligible brutos from local database[22m[39m
+[MatchmakingService] Found 7 real opponents, generated 3 ghosts, returning 10 total
+
+[90mstdout[2m | src/services/MatchmakingService.test.ts[2m > [22m[2mMatchmakingService[2m > [22m[2mfindOpponents - AC #2: Opponent Pool Size[2m > [22m[2mshould return up to 5 opponents by default[22m[39m
+[MatchmakingService] Found 7 real opponents, generated 0 ghosts, returning 5 total
+
+[90mstdout[2m | src/services/MatchmakingService.test.ts[2m > [22m[2mMatchmakingService[2m > [22m[2mfindOpponents - AC #2: Opponent Pool Size[2m > [22m[2mshould fill requested count with ghosts if insufficient real opponents[22m[39m
+[MatchmakingService] Found 3 real opponents, generated 2 ghosts, returning 5 total
+
+[90mstdout[2m | src/services/MatchmakingService.test.ts[2m > [22m[2mMatchmakingService[2m > [22m[2mfindOpponents - AC #2: Opponent Pool Size[2m > [22m[2mshould support custom opponent count[22m[39m
+[MatchmakingService] Found 7 real opponents, generated 0 ghosts, returning 3 total
+
+[90mstdout[2m | src/services/MatchmakingService.test.ts[2m > [22m[2mMatchmakingService[2m > [22m[2mfindOpponents - AC #2: Opponent Pool Size[2m > [22m[2mshould refresh pool each time (randomized query)[22m[39m
+[MatchmakingService] Found 7 real opponents, generated 0 ghosts, returning 5 total
+
+[90mstdout[2m | src/services/MatchmakingService.test.ts[2m > [22m[2mMatchmakingService[2m > [22m[2mfindOpponents - AC #3: Ghost Battle System[2m > [22m[2mshould attach skills to create complete opponent snapshot[22m[39m
+[MatchmakingService] Found 7 real opponents, generated 0 ghosts, returning 5 total
+
+[90mstdout[2m | src/services/MatchmakingService.test.ts[2m > [22m[2mMatchmakingService[2m > [22m[2mfindOpponents - AC #3: Ghost Battle System[2m > [22m[2mshould return opponents with frozen stats and skills[22m[39m
+[MatchmakingService] Found 1 real opponents, generated 0 ghosts, returning 1 total
+
+[90mstdout[2m | src/services/MatchmakingService.test.ts[2m > [22m[2mMatchmakingService[2m > [22m[2mfindOpponents - AC #4: Database Query[2m > [22m[2mshould execute correct SQL query with parameters[22m[39m
+[MatchmakingService] Found 7 real opponents, generated 0 ghosts, returning 5 total
+
+[90mstdout[2m | src/services/MatchmakingService.test.ts[2m > [22m[2mMatchmakingService[2m > [22m[2mfindOpponents - AC #5: Fallback Logic[2m > [22m[2mshould generate ghosts when no real opponents available[22m[39m
+[MatchmakingService] Found 0 real opponents, generated 5 ghosts, returning 5 total
+
+[90mstdout[2m | src/services/MatchmakingService.test.ts[2m > [22m[2mMatchmakingService[2m > [22m[2mfindOpponents - AC #5: Fallback Logic[2m > [22m[2mshould log message about ghost generation when no real opponents found[22m[39m
+[MatchmakingService] Found 0 real opponents, generated 5 ghosts, returning 5 total
+
+[90mstdout[2m | src/services/MatchmakingService.test.ts[2m > [22m[2mMatchmakingService[2m > [22m[2mPerformance - AC #7[2m > [22m[2mshould handle 100+ brutos efficiently[22m[39m
+[MatchmakingService] Found 100 real opponents, generated 0 ghosts, returning 5 total
+
+ [32m✓[39m src/services/MatchmakingService.test.ts [2m ([22m[2m18 tests[22m[2m)[22m[90m 40[2mms[22m[39m
+[90mstdout[2m | src/services/BattleLoggerService.test.ts[2m > [22m[2mBattleLoggerService[2m > [22m[2msaveBattle[2m > [22m[2mshould save complete battle log to database[22m[39m
+[BattleLoggerService] Battle saved: {
+  battleId: [32m'3d7d0040-9734-4a8b-8389-b72dc83d86a5'[39m,
+  playerBruto: [32m'Player'[39m,
+  opponentBruto: [32m'Opponent'[39m,
+  winner: [32m'bruto-1'[39m
+}
+
+[90mstdout[2m | src/services/BattleLoggerService.test.ts[2m > [22m[2mBattleLoggerService[2m > [22m[2msaveBattle[2m > [22m[2mshould trigger cleanup after saving[22m[39m
+[BattleLoggerService] Battle saved: {
+  battleId: [32m'a4108fa5-11de-42c0-865d-702d2d8d3755'[39m,
+  playerBruto: [90mundefined[39m,
+  opponentBruto: [90mundefined[39m,
+  winner: [32m'bruto-1'[39m
+}
+
+[90mstdout[2m | src/services/BattleLoggerService.test.ts[2m > [22m[2mBattleLoggerService[2m > [22m[2mcleanupOldBattles[2m > [22m[2mshould delete battles beyond 8 most recent[22m[39m
+[BattleLoggerService] Cleaned up old battles: { brutoId: [32m'bruto-1'[39m, deleted: [33m2[39m, kept: [33m8[39m }
+
+[90mstdout[2m | src/services/BattleLoggerService.test.ts[2m > [22m[2mBattleLoggerService[2m > [22m[2mIntegration: Full Battle Logging Flow[2m > [22m[2mshould save 10 battles and keep only last 8[22m[39m
+[BattleLoggerService] Battle saved: {
+  battleId: [32m'b64f9766-3b04-4263-85b2-40efdaeab571'[39m,
+  playerBruto: [32m'Player'[39m,
+  opponentBruto: [32m'Opponent'[39m,
+  winner: [32m'bruto-1'[39m
+}
+[BattleLoggerService] Battle saved: {
+  battleId: [32m'c94301ea-8aaf-45a7-bfea-2fd75c684cbc'[39m,
+  playerBruto: [32m'Player'[39m,
+  opponentBruto: [32m'Opponent'[39m,
+  winner: [32m'bruto-1'[39m
+}
+[BattleLoggerService] Battle saved: {
+  battleId: [32m'fa4a9315-014d-45b8-b503-271304cb4872'[39m,
+  playerBruto: [32m'Player'[39m,
+  opponentBruto: [32m'Opponent'[39m,
+  winner: [32m'bruto-1'[39m
+}
+[BattleLoggerService] Battle saved: {
+  battleId: [32m'820ea6ac-caf7-42ad-85fe-887dc85dfcfe'[39m,
+  playerBruto: [32m'Player'[39m,
+  opponentBruto: [32m'Opponent'[39m,
+  winner: [32m'bruto-1'[39m
+}
+[BattleLoggerService] Battle saved: {
+  battleId: [32m'3f1ff254-379b-471e-8499-6ebf0c87ceec'[39m,
+  playerBruto: [32m'Player'[39m,
+  opponentBruto: [32m'Opponent'[39m,
+  winner: [32m'bruto-1'[39m
+}
+[BattleLoggerService] Battle saved: {
+  battleId: [32m'f786e52e-edb5-4c35-88ce-1c0f1f2c7559'[39m,
+  playerBruto: [32m'Player'[39m,
+  opponentBruto: [32m'Opponent'[39m,
+  winner: [32m'bruto-1'[39m
+}
+[BattleLoggerService] Battle saved: {
+  battleId: [32m'e097805b-ef8f-480d-8dbf-5f96a77e1b79'[39m,
+  playerBruto: [32m'Player'[39m,
+  opponentBruto: [32m'Opponent'[39m,
+  winner: [32m'bruto-1'[39m
+}
+[BattleLoggerService] Battle saved: {
+  battleId: [32m'7534a7d3-475e-4f9b-8d68-955507b988e6'[39m,
+  playerBruto: [32m'Player'[39m,
+  opponentBruto: [32m'Opponent'[39m,
+  winner: [32m'bruto-1'[39m
+}
+[BattleLoggerService] Cleaned up old battles: { brutoId: [32m'bruto-1'[39m, deleted: [33m1[39m, kept: [33m8[39m }
+[BattleLoggerService] Battle saved: {
+  battleId: [32m'13c68217-b9ab-481c-9c73-1f6cbfb9915a'[39m,
+  playerBruto: [32m'Player'[39m,
+  opponentBruto: [32m'Opponent'[39m,
+  winner: [32m'bruto-1'[39m
+}
+[BattleLoggerService] Cleaned up old battles: { brutoId: [32m'bruto-1'[39m, deleted: [33m2[39m, kept: [33m8[39m }
+[BattleLoggerService] Battle saved: {
+  battleId: [32m'2f36e7e4-8bd9-4255-8ff5-15a33f7cbb07'[39m,
+  playerBruto: [32m'Player'[39m,
+  opponentBruto: [32m'Opponent'[39m,
+  winner: [32m'bruto-1'[39m
+}
+
+ [32m✓[39m src/services/BattleLoggerService.test.ts [2m ([22m[2m18 tests[22m[2m)[22m[90m 41[2mms[22m[39m
+[90mstdout[2m | src/services/CoinService.test.ts[2m > [22m[2mCoinService[2m > [22m[2mawardCoins[2m > [22m[2mshould award coins and return new balance[22m[39m
+[CoinService] Coins awarded: {
+  userId: [32m'user-1'[39m,
+  amount: [33m50[39m,
+  reason: [32m'LEVEL_10_REWARD'[39m,
+  brutoId: [32m'bruto-1'[39m,
+  newBalance: [33m150[39m
+}
+
+[90mstdout[2m | src/services/CoinService.test.ts[2m > [22m[2mCoinService[2m > [22m[2mawardCoins[2m > [22m[2mshould log transaction when awarding coins[22m[39m
+[CoinService] Coins awarded: {
+  userId: [32m'user-1'[39m,
+  amount: [33m100[39m,
+  reason: [32m'LEVEL_10_REWARD'[39m,
+  brutoId: [32m'bruto-1'[39m,
+  newBalance: [33m200[39m
+}
+
+[90mstdout[2m | src/services/CoinService.test.ts[2m > [22m[2mCoinService[2m > [22m[2mawardCoins[2m > [22m[2mshould update store when awarding coins to current user[22m[39m
+[CoinService] Coins awarded: {
+  userId: [32m'user-1'[39m,
+  amount: [33m50[39m,
+  reason: [32m'LEVEL_10_REWARD'[39m,
+  brutoId: [90mundefined[39m,
+  newBalance: [33m150[39m
+}
+
+[90mstdout[2m | src/services/CoinService.test.ts[2m > [22m[2mCoinService[2m > [22m[2mawardCoins[2m > [22m[2mshould not update store when awarding coins to different user[22m[39m
+[CoinService] Coins awarded: {
+  userId: [32m'user-1'[39m,
+  amount: [33m50[39m,
+  reason: [32m'LEVEL_10_REWARD'[39m,
+  brutoId: [90mundefined[39m,
+  newBalance: [33m150[39m
+}
+
+[90mstdout[2m | src/services/CoinService.test.ts[2m > [22m[2mCoinService[2m > [22m[2mspendCoins[2m > [22m[2mshould spend coins when user has sufficient balance[22m[39m
+[CoinService] Coins spent: {
+  userId: [32m'user-1'[39m,
+  amount: [33m100[39m,
+  reason: [32m'SLOT_PURCHASE'[39m,
+  newBalance: [33m400[39m
+}
+
+[90mstdout[2m | src/services/CoinService.test.ts[2m > [22m[2mCoinService[2m > [22m[2mspendCoins[2m > [22m[2mshould log negative transaction when spending coins[22m[39m
+[CoinService] Coins spent: {
+  userId: [32m'user-1'[39m,
+  amount: [33m100[39m,
+  reason: [32m'SLOT_PURCHASE'[39m,
+  newBalance: [33m400[39m
+}
+
+[90mstdout[2m | src/services/CoinService.test.ts[2m > [22m[2mCoinService[2m > [22m[2mspendCoins[2m > [22m[2mshould update store when spending coins for current user[22m[39m
+[CoinService] Coins spent: {
+  userId: [32m'user-1'[39m,
+  amount: [33m100[39m,
+  reason: [32m'SLOT_PURCHASE'[39m,
+  newBalance: [33m400[39m
+}
+
+[90mstdout[2m | src/services/CoinService.test.ts[2m > [22m[2mCoinService[2m > [22m[2mmarkLevel10RewardGiven[2m > [22m[2mshould mark bruto as having received level 10 reward[22m[39m
+[CoinService] Level 10 reward marked for bruto: bruto-1
+
+[90mstdout[2m | src/services/CoinService.test.ts[2m > [22m[2mCoinService[2m > [22m[2mIntegration: Level 10 Reward Flow[2m > [22m[2mshould complete full level 10 reward flow[22m[39m
+[CoinService] Coins awarded: {
+  userId: [32m'user-1'[39m,
+  amount: [33m100[39m,
+  reason: [32m'LEVEL_10_REWARD'[39m,
+  brutoId: [32m'bruto-1'[39m,
+  newBalance: [33m100[39m
+}
+[CoinService] Level 10 reward marked for bruto: bruto-1
+
+ [32m✓[39m src/services/CoinService.test.ts [2m ([22m[2m23 tests[22m[2m)[22m[90m 48[2mms[22m[39m
+[90mstdout[2m | src/scenes/ReplayScene.test.ts[2m > [22m[2mReplayScene[2m > [22m[2mInitialization[2m > [22m[2mshould initialize with correct default values[22m[39m
+[ReplayScene] Initializing with battle: test-battle-123
+
+[90mstdout[2m | src/scenes/ReplayScene.test.ts[2m > [22m[2mReplayScene[2m > [22m[2mInitialization[2m > [22m[2mshould reset state on each init[22m[39m
+[ReplayScene] Initializing with battle: new-battle
+
+[90mstdout[2m | src/scenes/ReplayScene.test.ts[2m > [22m[2mReplayScene[2m > [22m[2mBattle Loading[2m > [22m[2mshould load battle data successfully[22m[39m
+[ReplayScene] Ready to replay: { player: [32m'TestBruto'[39m, opponent: [32m'Opponent'[39m, events: [33m2[39m }
+
+[90mstdout[2m | src/scenes/ReplayScene.test.ts[2m > [22m[2mReplayScene[2m > [22m[2mScene Lifecycle[2m > [22m[2mshould create replay banner with correct styling[22m[39m
+[ReplayScene] Ready to replay: { player: [90mundefined[39m, opponent: [90mundefined[39m, events: [33m0[39m }
+
+[90mstdout[2m | src/scenes/ReplayScene.test.ts[2m > [22m[2mReplayScene[2m > [22m[2mScene Lifecycle[2m > [22m[2mshould create all control buttons[22m[39m
+[ReplayScene] Ready to replay: { player: [90mundefined[39m, opponent: [90mundefined[39m, events: [33m0[39m }
+
+ [32m✓[39m src/scenes/ReplayScene.test.ts [2m ([22m[2m25 tests[22m[2m)[22m[90m 51[2mms[22m[39m
+[90mstdout[2m | SkillCatalog.loadSkills (C:\Users\vicen\OneDrive\Escritorio\apps\Juegos\bruto\src\engine\skills\SkillCatalog.ts:45:13)[22m[39m
+✅ Skill Catalog loaded: 48 skills
+
+[90mstdout[2m | SkillCatalog.loadSkills (C:\Users\vicen\OneDrive\Escritorio\apps\Juegos\bruto\src\engine\skills\SkillCatalog.ts:45:13)[22m[39m
+✅ Skill Catalog loaded: 48 skills
+
+ [32m✓[39m src/engine/skills/SkillCatalog.test.ts [2m ([22m[2m22 tests[22m[2m)[22m[90m 9[2mms[22m[39m
+ [32m✓[39m src/engine/combat/ActiveAbilityManager.test.ts [2m ([22m[2m21 tests[22m[2m)[22m[90m 10[2mms[22m[39m
+[90mstdout[2m | SkillCatalog.loadSkills (C:\Users\vicen\OneDrive\Escritorio\apps\Juegos\bruto\src\engine\skills\SkillCatalog.ts:45:13)[22m[39m
+✅ Skill Catalog loaded: 48 skills
+
+[90mstdout[2m | src/services/SlotPurchaseService.test.ts[2m > [22m[2mSlotPurchaseService[2m > [22m[2mpurchaseSlot[2m > [22m[2mshould successfully purchase slot when eligible[22m[39m
+[SlotPurchaseService] Slot purchased successfully: { userId: [32m'user-1'[39m, oldSlots: [33m3[39m, newSlots: [33m4[39m, coinsSpent: [33m500[39m }
+
+[90mstdout[2m | src/services/SlotPurchaseService.test.ts[2m > [22m[2mSlotPurchaseService[2m > [22m[2mpurchaseSlot[2m > [22m[2mshould update store when purchasing for current user[22m[39m
+[SlotPurchaseService] Slot purchased successfully: { userId: [32m'user-1'[39m, oldSlots: [33m3[39m, newSlots: [33m4[39m, coinsSpent: [33m500[39m }
+
+[90mstdout[2m | src/services/SlotPurchaseService.test.ts[2m > [22m[2mSlotPurchaseService[2m > [22m[2mpurchaseSlot[2m > [22m[2mshould not update store when purchasing for different user[22m[39m
+[SlotPurchaseService] Slot purchased successfully: { userId: [32m'user-1'[39m, oldSlots: [33m3[39m, newSlots: [33m4[39m, coinsSpent: [33m500[39m }
+
+[90mstdout[2m | src/services/SlotPurchaseService.test.ts[2m > [22m[2mSlotPurchaseService[2m > [22m[2mpurchaseSlot[2m > [22m[2mshould handle purchasing multiple slots sequentially[22m[39m
+[SlotPurchaseService] Slot purchased successfully: { userId: [32m'user-1'[39m, oldSlots: [33m3[39m, newSlots: [33m4[39m, coinsSpent: [33m500[39m }
+[SlotPurchaseService] Slot purchased successfully: { userId: [32m'user-1'[39m, oldSlots: [33m4[39m, newSlots: [33m5[39m, coinsSpent: [33m500[39m }
+[SlotPurchaseService] Slot purchased successfully: { userId: [32m'user-1'[39m, oldSlots: [33m5[39m, newSlots: [33m6[39m, coinsSpent: [33m500[39m }
+
+[90mstdout[2m | src/services/SlotPurchaseService.test.ts[2m > [22m[2mSlotPurchaseService[2m > [22m[2mIntegration: Full Slot Purchase Flow[2m > [22m[2mshould complete full purchase flow from 3 to 10 slots[22m[39m
+[SlotPurchaseService] Slot purchased successfully: { userId: [32m'user-1'[39m, oldSlots: [33m3[39m, newSlots: [33m4[39m, coinsSpent: [33m500[39m }
+[SlotPurchaseService] Slot purchased successfully: { userId: [32m'user-1'[39m, oldSlots: [33m4[39m, newSlots: [33m5[39m, coinsSpent: [33m500[39m }
+[SlotPurchaseService] Slot purchased successfully: { userId: [32m'user-1'[39m, oldSlots: [33m5[39m, newSlots: [33m6[39m, coinsSpent: [33m500[39m }
+[SlotPurchaseService] Slot purchased successfully: { userId: [32m'user-1'[39m, oldSlots: [33m6[39m, newSlots: [33m7[39m, coinsSpent: [33m500[39m }
+[SlotPurchaseService] Slot purchased successfully: { userId: [32m'user-1'[39m, oldSlots: [33m7[39m, newSlots: [33m8[39m, coinsSpent: [33m500[39m }
+[SlotPurchaseService] Slot purchased successfully: { userId: [32m'user-1'[39m, oldSlots: [33m8[39m, newSlots: [33m9[39m, coinsSpent: [33m500[39m }
+[SlotPurchaseService] Slot purchased successfully: { userId: [32m'user-1'[39m, oldSlots: [33m9[39m, newSlots: [33m10[39m, coinsSpent: [33m500[39m }
+
+ [32m✓[39m src/services/SlotPurchaseService.test.ts [2m ([22m[2m20 tests[22m[2m)[22m[90m 19[2mms[22m[39m
+[90mstdout[2m | SkillCatalog.loadSkills (C:\Users\vicen\OneDrive\Escritorio\apps\Juegos\bruto\src\engine\skills\SkillCatalog.ts:45:13)[22m[39m
+✅ Skill Catalog loaded: 48 skills
+
+[90mstdout[2m | SkillCatalog.loadSkills (C:\Users\vicen\OneDrive\Escritorio\apps\Juegos\bruto\src\engine\skills\SkillCatalog.ts:45:13)[22m[39m
+✅ Skill Catalog loaded: 48 skills
+
+ [32m✓[39m src/engine/WeaponStatsService.test.ts [2m ([22m[2m21 tests[22m[2m)[22m[90m 10[2mms[22m[39m
+ [32m✓[39m src/engine/skills/SkillStackingValidator.test.ts [2m ([22m[2m19 tests[22m[2m)[22m[90m 10[2mms[22m[39m
+ [33m❯[39m src/engine/combat/WeaponCombatService.test.ts [2m ([22m[2m24 tests[22m [2m|[22m [31m2 failed[39m[2m)[22m[90m 22[2mms[22m[39m
+[31m   [33m❯[31m src/engine/combat/WeaponCombatService.test.ts[2m > [22mWeaponCombatService - Story 5 Combat Integration[2m > [22mAC2: Combat Modifiers Aggregation[2m > [22mshould calculate evasion bonus from weapons[39m
+[31m     → expected 0.35 to be 0.2 // Object.is equality[39m
+[31m   [33m❯[31m src/engine/combat/WeaponCombatService.test.ts[2m > [22mWeaponCombatService - Story 5 Combat Integration[2m > [22mAC2: Combat Modifiers Aggregation[2m > [22mshould stack modifiers from multiple weapons[39m
+[31m     → expected -0.12499999999999997 to be close to -0.1, received difference is 0.024999999999999967, but expected 0.005[39m
+ [32m✓[39m src/engine/weapons/DisarmService.test.ts [2m ([22m[2m28 tests[22m[2m)[22m[90m 20[2mms[22m[39m
+[90mstdout[2m | SkillCatalog.loadSkills (C:\Users\vicen\OneDrive\Escritorio\apps\Juegos\bruto\src\engine\skills\SkillCatalog.ts:45:13)[22m[39m
+✅ Skill Catalog loaded: 48 skills
+
+ [32m✓[39m src/models/Weapon.test.ts [2m ([22m[2m18 tests[22m[2m)[22m[90m 22[2mms[22m[39m
+ [32m✓[39m src/engine/weapons/WeaponRewardService.test.ts [2m ([22m[2m20 tests[22m[2m)[22m[90m 23[2mms[22m[39m
+ [32m✓[39m src/engine/pets/PetAcquisitionService.test.ts [2m ([22m[2m9 tests[22m[2m)[22m[90m 13[2mms[22m[39m
+[90mstdout[2m | SkillCatalog.loadSkills (C:\Users\vicen\OneDrive\Escritorio\apps\Juegos\bruto\src\engine\skills\SkillCatalog.ts:45:13)[22m[39m
+✅ Skill Catalog loaded: 48 skills
+
+ [32m✓[39m src/engine/UpgradeGenerator.test.ts [2m ([22m[2m13 tests[22m[2m)[22m[90m 22[2mms[22m[39m
+ [32m✓[39m src/engine/combat/PassiveSkillCombatService.test.ts [2m ([22m[2m19 tests[22m[2m)[22m[90m 8[2mms[22m[39m
+ [32m✓[39m src/scenes/OpponentSelectionScene.test.ts [2m ([22m[2m11 tests[22m[2m)[22m[90m 14[2mms[22m[39m
+ [32m✓[39m src/services/GhostGenerationService.test.ts [2m ([22m[2m20 tests[22m[2m)[22m[90m 43[2mms[22m[39m
+ [32m✓[39m src/services/ProgressionService.test.ts [2m ([22m[2m13 tests[22m[2m)[22m[90m 25[2mms[22m[39m
+[90mstdout[2m | src/services/ProgressionService.test.ts[2m > [22m[2mProgressionService[2m > [22m[2mawardXP[2m > [22m[2mshould award +2 XP for wins and update database[22m[39m
+[ProgressionService] XP Awarded: {
+  brutoId: [32m'bruto-1'[39m,
+  xpGained: [33m2[39m,
+  newXP: [33m7[39m,
+  newLevel: [33m1[39m,
+  leveledUp: [33mfalse[39m
+}
+
+[90mstdout[2m | src/services/ProgressionService.test.ts[2m > [22m[2mProgressionService[2m > [22m[2mawardXP[2m > [22m[2mshould award +1 XP for losses and update database[22m[39m
+[ProgressionService] XP Awarded: {
+  brutoId: [32m'bruto-1'[39m,
+  xpGained: [33m1[39m,
+  newXP: [33m6[39m,
+  newLevel: [33m1[39m,
+  leveledUp: [33mfalse[39m
+}
+
+[90mstdout[2m | src/services/ProgressionService.test.ts[2m > [22m[2mProgressionService[2m > [22m[2mawardXP[2m > [22m[2mshould trigger level up when XP threshold is reached[22m[39m
+[ProgressionService] XP Awarded: {
+  brutoId: [32m'bruto-1'[39m,
+  xpGained: [33m1[39m,
+  newXP: [33m10[39m,
+  newLevel: [33m2[39m,
+  leveledUp: [33mtrue[39m
+}
+
+[90mstdout[2m | src/services/ProgressionService.test.ts[2m > [22m[2mProgressionService[2m > [22m[2mawardXP[2m > [22m[2mshould support infinite progression across many levels[22m[39m
+[ProgressionService] XP Awarded: {
+  brutoId: [32m'bruto-1'[39m,
+  xpGained: [33m1[39m,
+  newXP: [33m990[39m,
+  newLevel: [33m100[39m,
+  leveledUp: [33mtrue[39m
+}
+
+ [32m✓[39m src/engine/combat/CombatStateMachine.test.ts [2m ([22m[2m13 tests[22m[2m)[22m[90m 9[2mms[22m[39m
+ [32m✓[39m src/engine/pets/PetCatalog.test.ts [2m ([22m[2m17 tests[22m[2m)[22m[90m 10[2mms[22m[39m
+ [32m✓[39m src/ui/components/SkillDetailsModal.test.ts [2m ([22m[2m10 tests[22m[2m)[22m[90m 8[2mms[22m[39m
+ [32m✓[39m src/engine/pets/PetCostCalculator.test.ts [2m ([22m[2m25 tests[22m[2m)[22m[90m 8[2mms[22m[39m
+ [32m✓[39m src/engine/combat/TurnProcessor.test.ts [2m ([22m[2m5 tests[22m[2m)[22m[90m 7[2mms[22m[39m
+ [32m✓[39m src/engine/skills/handlers/DamageModifierHandler.test.ts [2m ([22m[2m8 tests[22m[2m)[22m[90m 5[2mms[22m[39m
+ [32m✓[39m src/engine/DailyFightsService.test.ts [2m ([22m[2m3 tests[22m[2m)[22m[90m 7[2mms[22m[39m
+[90mstdout[2m | SkillCatalog.loadSkills (C:\Users\vicen\OneDrive\Escritorio\apps\Juegos\bruto\src\engine\skills\SkillCatalog.ts:45:13)[22m[39m
+✅ Skill Catalog loaded: 48 skills
+
+ [32m✓[39m src/engine/skills/handlers/EvasionModifierHandler.test.ts [2m ([22m[2m3 tests[22m[2m)[22m[90m 3[2mms[22m[39m
+ [32m✓[39m src/engine/combat/ActiveAbilityEffects.test.ts [2m ([22m[2m11 tests[22m[2m)[22m[90m 8[2mms[22m[39m
+ [32m✓[39m src/engine/pets/PetCombatStats.test.ts [2m ([22m[2m20 tests[22m[2m)[22m[90m 11[2mms[22m[39m
+ [32m✓[39m src/utils/SeededRandom.test.ts [2m ([22m[2m16 tests[22m[2m)[22m[90m 21[2mms[22m[39m
+ [32m✓[39m src/engine/combat/CombatAbilityService.test.ts [2m ([22m[2m7 tests[22m[2m)[22m[90m 12[2mms[22m[39m
+ [32m✓[39m src/engine/DerivedStatsCalculator.test.ts [2m ([22m[2m12 tests[22m[2m)[22m[90m 18[2mms[22m[39m
+ [32m✓[39m src/scenes/BrutoDetailsScene.helpers.test.ts [2m ([22m[2m6 tests[22m[2m)[22m[90m 13[2mms[22m[39m
+ [32m✓[39m src/engine/StatsCalculator.test.ts [2m ([22m[2m3 tests[22m[2m)[22m[90m 9[2mms[22m[39m
+ [32m✓[39m src/engine/skills/handlers/MultiHitBonusHandler.test.ts [2m ([22m[2m3 tests[22m[2m)[22m[90m 5[2mms[22m[39m
+ [32m✓[39m src/engine/skills/handlers/CriticalBonusHandler.test.ts [2m ([22m[2m3 tests[22m[2m)[22m[90m 4[2mms[22m[39m
+ [32m✓[39m src/engine/skills/handlers/ArmorBonusHandler.test.ts [2m ([22m[2m3 tests[22m[2m)[22m[90m 5[2mms[22m[39m
+ [32m✓[39m src/engine/AppearanceGenerator.test.ts [2m ([22m[2m2 tests[22m[2m)[22m[90m 4[2mms[22m[39m
+ [32m✓[39m src/engine/BrutoNameValidator.test.ts [2m ([22m[2m2 tests[22m[2m)[22m[90m 4[2mms[22m[39m
+ [32m✓[39m src/engine/progression/ProgressionService.test.ts [2m ([22m[2m1 test[22m[2m)[22m[90m 5[2mms[22m[39m
+ [32m✓[39m src/engine/BrutoFactory.test.ts [2m ([22m[2m1 test[22m[2m)[22m[90m 8[2mms[22m[39m
+
+[2m Test Files [22m [1m[31m3 failed[39m[22m[2m | [22m[1m[32m49 passed[39m[22m[90m (52)[39m
+[2m      Tests [22m [1m[31m13 failed[39m[22m[2m | [22m[1m[32m769 passed[39m[22m[90m (782)[39m
+[2m   Start at [22m 00:10:11
+[2m   Duration [22m 2.96s[2m (transform 7.26s, setup 8ms, collect 11.99s, tests 914ms, environment 15ms, prepare 14.15s)[22m
+

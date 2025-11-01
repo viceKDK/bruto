@@ -156,16 +156,9 @@ export class WeaponCombatService implements IWeaponCombatService {
       modifiers.armorBonus = armorBonus;
     }
 
-    // Store additional modifiers for future use (combo, deflect, etc.)
+    // TODO: Store additional modifiers for future use (combo, deflect, accuracy, dexterity, block)
     // These will be used when implementing advanced combat mechanics
-    if (blockBonus !== 0 || accuracyBonus !== 0 || dexterityBonus !== 0) {
-      // For now, these contribute to evasion/armor calculations
-      // Future: Implement dedicated block/accuracy systems
-      const additionalEvasion = (dexterityBonus + accuracyBonus) / 200; // Convert to decimal
-      if (additionalEvasion !== 0) {
-        modifiers.evasionBonus = (modifiers.evasionBonus || 0) + additionalEvasion;
-      }
-    }
+    // For now, only evasion, crit, and armor are active
 
     return modifiers;
   }

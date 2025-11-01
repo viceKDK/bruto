@@ -166,7 +166,8 @@ export class StatBoostService {
         skillStatType = SkillStatType.AGILITY;
         break;
       case 'HP':
-        skillStatType = SkillStatType.HP;
+        // HP level-ups in skills.json are tracked as "resistance" stat
+        skillStatType = SkillStatType.RESISTANCE;
         break;
       default:
         // Default base values: full (2/12) vs split (1/6)

@@ -285,7 +285,9 @@ export class SkillEffectEngine {
    * Returns the bonus amount for a specific stat when leveling up
    */
   public getLevelUpBonus(skills: Skill[], stat: StatType, isSplit: boolean = false): number {
-    let baseBonus = isSplit ? 1 : 2; // Default: 2 for full, 1 for split
+    // Base bonuses: HP uses 12/6, other stats use 2/1
+    const isHPStat = stat === StatType.RESISTANCE || stat === StatType.HP;
+    let baseBonus = isSplit ? (isHPStat ? 6 : 1) : (isHPStat ? 12 : 2);
     let totalBonus = baseBonus;
 
     skills.forEach(skill => {
@@ -298,7 +300,7 @@ export class SkillEffectEngine {
               // Percentage bonus (e.g., +150% means 2 → 5)
               totalBonus = baseBonus * (1 + effect.value / 100);
             } else {
-              // Flat bonus (e.g., 2 → 3)
+              // Flat bonus (e.g., 2 → 3 or 12 → 18)
               totalBonus = effect.value;
             }
           }

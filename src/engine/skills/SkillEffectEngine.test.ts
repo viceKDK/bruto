@@ -221,13 +221,13 @@ describe('SkillEffectEngine', () => {
       const skill = skillCatalog.getSkillById('vitalidad');
       expect(skill).toBeDefined();
 
-      // Normal split gives 1 resistance
+      // Normal split gives 6 HP (base for resistance/HP stats)
       const normalBonus = engine.getLevelUpBonus([], StatType.RESISTANCE, true);
-      expect(normalBonus).toBe(1);
+      expect(normalBonus).toBe(6);
 
-      // With Vitalidad, split should give more (9 HP = ~1.5 resistance)
+      // With Vitalidad, split should give 9 HP
       const bonusWithSkill = engine.getLevelUpBonus([skill!], StatType.RESISTANCE, true);
-      expect(bonusWithSkill).toBeGreaterThan(1);
+      expect(bonusWithSkill).toBe(9);
     });
 
     it('should apply Meditación speed bonus (+150%)', () => {

@@ -248,12 +248,15 @@ Location: SkillEffectEngine.ts:292
 - ✅ 6.7: Skills UI
 - ⏳ 6.8: Level-up Bonuses (tests fallidos)
 
-### Epic 7: Pets ✅ (100%)
+### Epic 7: Pets ✅ (88% - Logic Complete)
 - ✅ 7.1: Pets Database
 - ✅ 7.2: Pet Stats
 - ✅ 7.3: Pet Combat AI
 - ✅ 7.4: Stacking Rules
 - ✅ 7.5: Resistance Cost
+- ⏳ 7.6: Pets UI Casillero (UI only - not planned)
+- ✅ 7.7: Pet Acquisition Logic (PetAcquisitionService - 9/9 tests ✅)
+- ⏳ 7.8: Pet Combat Integration (UI animations - not planned)
 
 ### Epic 8: Progresión ✅ (100%)
 - ✅ 8.1: XP System
