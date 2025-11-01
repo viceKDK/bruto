@@ -6,6 +6,8 @@
 import Phaser from 'phaser';
 import { gameConfig } from './config';
 import { mountLanding } from './landing';
+// Import landing CSS to ensure preloader styles are available
+import './landing/landing.css';
 
 let game: Phaser.Game | null = null;
 

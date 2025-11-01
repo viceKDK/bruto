@@ -44,6 +44,7 @@ export class BootScene extends Phaser.Scene {
     this.scene.launch('UIScene');
 
     // Navigate to LoginScene after initialization
+    // LoginScene ocultará el preloader cuando esté realmente lista
     this.scene.start('LoginScene', { startTab: 'register' });
   }
 }

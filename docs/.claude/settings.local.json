@@ -1,0 +1,14 @@
+{
+  "enableAllProjectMcpServers": true,
+  "enabledMcpjsonServers": [
+    "puppeteer",
+    "brave-search",
+    "filesystem",
+    "fetch"
+  ],
+  "permissions": {
+    "allow": [
+      "Bash(cat:*)"
+    ]
+  }
+}

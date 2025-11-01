@@ -47,45 +47,53 @@ describe('DisarmService - Story 5.4', () => {
     modifiers: {}, // No disarm modifier
   };
 
-  describe('AC1: Disarm chance checked per weapon hit', () => {
+  describe('AC1: Disarm chance is ONLY weapon-based (no base, no dexterity)', () => {
     describe('calculateDisarmChance', () => {
-      it('should use base disarm chance with no weapon', () => {
-        const chance = DisarmService.calculateDisarmChance(null, 0);
-        expect(chance).toBe(5); // BASE_DISARM_CHANCE
+      it('should return 0% with no weapon (no base disarm chance)', () => {
+        const chance = DisarmService.calculateDisarmChance(null);
+        expect(chance).toBe(0); // NO base disarm chance
       });
 
-      it('should add weapon disarm modifier to base chance', () => {
-        const chance = DisarmService.calculateDisarmChance(sword, 0);
-        expect(chance).toBe(15); // 5 (base) + 10 (sword)
+      it('should return ONLY weapon disarm modifier', () => {
+        const chance = DisarmService.calculateDisarmChance(sword);
+        expect(chance).toBe(10); // Only sword modifier (no base)
       });
 
-      it('should calculate high disarm chance with Sai', () => {
-        const chance = DisarmService.calculateDisarmChance(sai, 0);
-        expect(chance).toBe(80); // 5 (base) + 75 (sai)
+      it('should calculate high disarm chance with Sai (75%)', () => {
+        const chance = DisarmService.calculateDisarmChance(sai);
+        expect(chance).toBe(75); // Only sai modifier (no base)
       });
 
-      it('should add dexterity bonus (every 10 dex = +1% disarm)', () => {
-        const chance = DisarmService.calculateDisarmChance(sword, 50);
-        expect(chance).toBe(20); // 5 (base) + 10 (sword) + 5 (50 dex / 10)
+      it('should return 0% for weapons without disarm modifier', () => {
+        const chance = DisarmService.calculateDisarmChance(noDisarmWeapon);
+        expect(chance).toBe(0); // Weapon has no disarm modifier
       });
 
-      it('should handle high dexterity correctly', () => {
-        const chance = DisarmService.calculateDisarmChance(sai, 100);
-        expect(chance).toBe(90); // 5 (base) + 75 (sai) + 10 (100 dex / 10)
+      it('should allow 100% disarm chance with the right weapon', () => {
+        const superDisarmWeapon: Weapon = {
+          id: 'super-disarm',
+          name: 'Super Disarm Weapon',
+          nameEs: 'Arma Super Desarme',
+          types: [WeaponType.Fast],
+          odds: 1,
+          hitSpeed: 100,
+          damage: 1,
+          drawChance: 1,
+          reach: 1,
+          modifiers: { disarm: 100 }, // 100% disarm
+        };
+        
+        const chance = DisarmService.calculateDisarmChance(superDisarmWeapon);
+        expect(chance).toBe(100); // Can reach 100%
       });
 
-      it('should cap disarm chance at 95%', () => {
-        const chance = DisarmService.calculateDisarmChance(sai, 200);
-        expect(chance).toBe(95); // Capped at 95
-      });
-
-      it('should handle negative disarm modifiers', () => {
+      it('should handle negative disarm modifiers (clamped to 0)', () => {
         const negativeWeapon: Weapon = {
           ...sword,
           modifiers: { disarm: -20 },
         };
-        const chance = DisarmService.calculateDisarmChance(negativeWeapon, 0);
-        expect(chance).toBe(0); // 5 (base) - 20 (weapon) = -15, clamped to 0
+        const chance = DisarmService.calculateDisarmChance(negativeWeapon);
+        expect(chance).toBe(0); // -20 clamped to 0
       });
 
       it('should never go below 0%', () => {
@@ -93,7 +101,7 @@ describe('DisarmService - Story 5.4', () => {
           ...sword,
           modifiers: { disarm: -50 },
         };
-        const chance = DisarmService.calculateDisarmChance(veryNegativeWeapon, 0);
+        const chance = DisarmService.calculateDisarmChance(veryNegativeWeapon);
         expect(chance).toBe(0);
       });
     });

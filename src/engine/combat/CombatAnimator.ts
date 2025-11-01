@@ -17,6 +17,7 @@ export interface CombatSprite {
   healthBar: HealthBar;
   maxHp: number;
   currentHp: number;
+  equippedWeapons?: string[]; // Array of weapon IDs
 }
 
 export interface CombatAnimatorConfig {
@@ -94,6 +95,7 @@ export class CombatAnimator {
 
   /**
    * Play attack animation (normal or critical)
+   * Now includes weapon-specific visual effects
    */
   private async playAttackAnimation(
     attacker: CombatSprite,
@@ -101,27 +103,24 @@ export class CombatAnimator {
     damage: number,
     isCritical: boolean
   ): Promise<void> {
+    // Get primary weapon for visual effects
+    const weaponId = this.getPrimaryWeapon(attacker);
+    const weaponEffect = this.getWeaponVisualEffect(weaponId);
+
     // Attacker: move forward, attack, return
     const attackerOriginalX = attacker.sprite.x;
-    const moveDistance = attacker === this.playerSprite ? 50 : -50;
+    const moveDistance = attacker === this.playerSprite ? weaponEffect.attackDistance : -weaponEffect.attackDistance;
 
-    // Move forward
+    // Move forward with weapon-specific speed
     await this.tweenPromise({
       targets: attacker.sprite,
       x: attackerOriginalX + moveDistance,
-      duration: 200,
-      ease: 'Power2',
+      duration: weaponEffect.attackSpeed,
+      ease: weaponEffect.easing,
     });
 
-    // Attack animation (if sprite has attack animation, play it here)
-    // For now, just a quick scale animation
-    await this.tweenPromise({
-      targets: attacker.sprite,
-      scaleX: 1.2,
-      scaleY: 0.9,
-      duration: 100,
-      yoyo: true,
-    });
+    // Weapon-specific attack animation
+    await this.playWeaponAttackMotion(attacker, weaponEffect);
 
     // Hit effect on defender
     this.playHitEffect(defender);
@@ -135,18 +134,176 @@ export class CombatAnimator {
       type: damageType,
     });
 
-    // Screen shake for crits
-    if (isCritical) {
-      this.scene.cameras.main.shake(200, 0.005);
-    }
-
     // Return to original position
     await this.tweenPromise({
       targets: attacker.sprite,
       x: attackerOriginalX,
-      duration: 200,
+      duration: weaponEffect.returnSpeed,
       ease: 'Power2',
     });
+  }
+
+  /**
+   * Get primary weapon ID from combatant
+   */
+  private getPrimaryWeapon(combatant: CombatSprite): string {
+    if (combatant.equippedWeapons && combatant.equippedWeapons.length > 0) {
+      return combatant.equippedWeapons[0];
+    }
+    return 'bare-hands';
+  }
+
+  /**
+   * Get weapon-specific visual effect configuration
+   */
+  private getWeaponVisualEffect(weaponId: string): {
+    attackDistance: number;
+    attackSpeed: number;
+    returnSpeed: number;
+    easing: string;
+    effectType: 'slash' | 'thrust' | 'smash' | 'swing' | 'punch';
+  } {
+    // Weapon-specific configurations based on weapons.json
+    const weaponEffects: Record<string, any> = {
+      'bare-hands': {
+        attackDistance: 40,
+        attackSpeed: 150,
+        returnSpeed: 150,
+        easing: 'Power2',
+        effectType: 'punch',
+      },
+      'sword': {
+        attackDistance: 60,
+        attackSpeed: 180,
+        returnSpeed: 200,
+        easing: 'Sine.easeInOut',
+        effectType: 'slash',
+      },
+      'spear': {
+        attackDistance: 80,
+        attackSpeed: 160,
+        returnSpeed: 180,
+        easing: 'Power1',
+        effectType: 'thrust',
+      },
+      'axe': {
+        attackDistance: 50,
+        attackSpeed: 250,
+        returnSpeed: 280,
+        easing: 'Power3',
+        effectType: 'smash',
+      },
+      'hammer': {
+        attackDistance: 45,
+        attackSpeed: 280,
+        returnSpeed: 300,
+        easing: 'Bounce.easeOut',
+        effectType: 'smash',
+      },
+      'knife': {
+        attackDistance: 35,
+        attackSpeed: 120,
+        returnSpeed: 120,
+        easing: 'Power2',
+        effectType: 'slash',
+      },
+      'dagger': {
+        attackDistance: 35,
+        attackSpeed: 110,
+        returnSpeed: 110,
+        easing: 'Power2',
+        effectType: 'thrust',
+      },
+      'mace': {
+        attackDistance: 50,
+        attackSpeed: 220,
+        returnSpeed: 240,
+        easing: 'Power3',
+        effectType: 'smash',
+      },
+      'staff': {
+        attackDistance: 70,
+        attackSpeed: 190,
+        returnSpeed: 200,
+        easing: 'Sine.easeInOut',
+        effectType: 'swing',
+      },
+    };
+
+    return weaponEffects[weaponId] || weaponEffects['bare-hands'];
+  }
+
+  /**
+   * Play weapon-specific attack motion
+   */
+  private async playWeaponAttackMotion(
+    attacker: CombatSprite,
+    weaponEffect: any
+  ): Promise<void> {
+    switch (weaponEffect.effectType) {
+      case 'slash':
+        // Slash motion: horizontal swipe with rotation
+        await this.tweenPromise({
+          targets: attacker.sprite,
+          angle: attacker === this.playerSprite ? 15 : -15,
+          scaleX: 1.2,
+          duration: 80,
+          yoyo: true,
+        });
+        break;
+
+      case 'thrust':
+        // Thrust motion: quick forward jab
+        await this.tweenPromise({
+          targets: attacker.sprite,
+          scaleX: 1.3,
+          scaleY: 0.95,
+          duration: 60,
+          yoyo: true,
+        });
+        break;
+
+      case 'smash':
+        // Smash motion: overhead slam
+        await this.tweenPromise({
+          targets: attacker.sprite,
+          y: attacker.sprite.y - 15,
+          scaleY: 1.2,
+          duration: 100,
+        });
+        await this.tweenPromise({
+          targets: attacker.sprite,
+          y: attacker.sprite.y,
+          scaleY: 0.9,
+          duration: 80,
+          ease: 'Power3',
+        });
+        break;
+
+      case 'swing':
+        // Swing motion: wide arc
+        await this.tweenPromise({
+          targets: attacker.sprite,
+          angle: attacker === this.playerSprite ? 25 : -25,
+          scaleX: 1.15,
+          scaleY: 1.1,
+          duration: 100,
+          yoyo: true,
+        });
+        break;
+
+      case 'punch':
+      default:
+        // Punch motion: quick scale
+        await this.tweenPromise({
+          targets: attacker.sprite,
+          scaleX: 1.2,
+          scaleY: 0.9,
+          duration: 100,
+          yoyo: true,
+        });
+        break;
+    }
   }
 
   /**

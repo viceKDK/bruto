@@ -1,6 +1,7 @@
 import { IBruto, BrutoStats } from '../models/Bruto';
 import { Skill } from '../models/Skill';
 import { skillEffectEngine } from './skills/SkillEffectEngine';
+import { derivedStatsCalculator, IDerivedStatsCalculator, DerivedStatSummary } from './DerivedStatsCalculator';
 
 export type StatSource = 'skill' | 'weapon' | 'pet' | 'progression' | 'equipment' | 'other';
 
@@ -32,13 +33,8 @@ export interface StatValueSummary {
   breakdown: string[];
 }
 
-export interface DerivedStatSummary {
-  key: 'dodgeChance' | 'extraTurnChance';
-  label: string;
-  value: number;
-  unit: '%';
-  description: string;
-}
+// Re-export DerivedStatSummary for backward compatibility
+export type { DerivedStatSummary } from './DerivedStatsCalculator';
 
 export interface StatsSummary {
   level: number;
@@ -56,6 +52,8 @@ const STAT_LABELS: Record<keyof BrutoStats, string> = {
 };
 
 export class StatsCalculator {
+  constructor(private derivedCalculator: IDerivedStatsCalculator = derivedStatsCalculator) {}
+
   /**
    * Build summary with skill modifiers applied
    */
@@ -66,7 +64,7 @@ export class StatsCalculator {
 
   public buildSummary(bruto: IBruto, context: StatsCalculationContext = {}): StatsSummary {
     const primary = this.buildPrimaryStats(bruto, context);
-    const derived = this.buildDerivedStats(bruto);
+    const derived = this.derivedCalculator.buildDerivedStats(bruto);
 
     return {
       level: bruto.level,
@@ -114,32 +112,6 @@ export class StatsCalculator {
     });
 
     return summaries;
-  }
-
-  private buildDerivedStats(bruto: IBruto): DerivedStatSummary[] {
-    const rawDodgeChance = Math.min(0.95, bruto.agility * 0.1);
-    const dodgeChancePercent = Number((rawDodgeChance * 100).toFixed(1));
-
-    const rawExtraTurnChance = Math.min(0.6, bruto.speed * 0.05);
-    const extraTurnChancePercent = Number((rawExtraTurnChance * 100).toFixed(1));
-
-    return [
-      {
-        key: 'dodgeChance',
-        label: 'Dodge Chance',
-        value: dodgeChancePercent,
-        unit: '%',
-        description: 'Computed as Agility × 0.1 per architecture guidelines.',
-      },
-      {
-        key: 'extraTurnChance',
-        label: 'Extra Turn Chance',
-        value: extraTurnChancePercent,
-        unit: '%',
-        description:
-          'Approximation based on Speed × 0.05. Capped at 60% until combat engine defines exact curve.',
-      },
-    ];
   }
 
   private roundStatValue(key: keyof BrutoStats, value: number): number {

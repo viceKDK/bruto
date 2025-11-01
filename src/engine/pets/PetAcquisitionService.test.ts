@@ -15,7 +15,7 @@ import { PetType } from './PetType';
 import { BrutoPet } from './Pet';
 import { IBruto } from '../../models/Bruto';
 import { SeededRandom } from '../../utils/SeededRandom';
-import { ok, err } from '../../utils/result';
+import { ok } from '../../utils/result';
 
 // Mock repositories
 class MockPetRepository {

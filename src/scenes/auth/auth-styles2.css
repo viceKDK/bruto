@@ -459,7 +459,7 @@ body.auth-active::after {
 /* Warrior on the right */
 .warrior-hero {
   bottom: -5%;
-  right: -5%;
+  right: -12%; /* Movido 10% más hacia la derecha (era -5%) */
   width: clamp(300px, 35vw, 500px);
   height: auto;
   transform-origin: bottom right;
@@ -474,12 +474,12 @@ body.auth-active::after {
 
 /* Bruto/Character on the left */
 .bruto-left {
-  bottom: -5%;
-  left: -5%;
+  left: -15%; /* Movido 10% más hacia la izquierda (era -5%) */
   width: clamp(300px, 35vw, 500px);
   height: auto;
   transform-origin: bottom left;
   animation-delay: 2s;
+  /* NO poner bottom aquí - se define en las subclases específicas */
 }
 
 .bruto-left img {
@@ -487,6 +487,38 @@ body.auth-active::after {
   height: auto;
   display: block;
   filter: brightness(0.85) contrast(1.1);
+}
+
+/* ============================================
+   MODO LOGIN - Posiciones específicas
+   ============================================ */
+/* Bruto izquierda - LOGIN */
+.bruto-left.bruto-login-left {
+  bottom: -12% !important; /* 1% más abajo (era -13%) */
+  left: 3% !important; /* 2% menos hacia la derecha */
+  width: clamp(315px, 36.75vw, 525px) !important; /* 5% más grande */
+}
+
+/* Guerrero derecha - LOGIN */
+.warrior-login-right {
+  right: -15%; /* 10% más hacia la derecha */
+  bottom: -2% !important; /* Bajado a -2% */
+}
+
+/* ============================================
+   MODO REGISTRO - Posiciones específicas
+   ============================================ */
+/* Chef izquierda - REGISTRO - SUPER ESPECIFICIDAD */
+.auth-container .bruto-left.chef.chef-register-left {
+  bottom: 100px !important; /* Padding desde el piso */
+  left: -15% !important;
+}
+
+/* Zombie derecha - REGISTRO */
+.warrior-hero.zombie.zombie-register-right {
+  bottom: 2%; /* Ligeramente levantado del suelo */
+  right: 6.5%; /* Posición hacia la derecha */
+  width: 419px !important; /* 10% más grande total (era 380px) */
 }
 
 @keyframes characterFloat {
@@ -502,6 +534,11 @@ body.auth-active::after {
 .warrior-hero.zombie img,
 .bruto-left.chef img {
   filter: brightness(0.9) contrast(1.15) saturate(1.1);
+}
+
+/* MODO REGISTRO - Chef altura */
+.bruto-left.chef {
+  bottom: -10% !important; /* Valor negativo para que SUBA */
 }
 
 /* ============================================
@@ -909,9 +946,12 @@ body.auth-active::after { display: none !important; }
    ============================================ */
 .auth-container { animation: none !important; }
 /* ============================================
-   Fine-tune: lower right hero by 2%
+   Fine-tune: adjust right hero position
    ============================================ */
-.warrior-hero { top: 52% !important; }
+.warrior-hero {
+  top: 50% !important; /* 2% más arriba (era 52%) */
+  right: 8% !important; /* 2% más hacia la izquierda (era 6%) */
+}
 .auth-title-wrap {
   height: clamp(100px, 20vw, 160px);
   display: flex;

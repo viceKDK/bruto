@@ -38,7 +38,7 @@ export function mountLanding(rootId: string, options: LandingOptions): LandingHa
   const cleanupFns: CleanupFn[] = [];
   let destroyed = false;
 
-  const cleanup = () => {
+  const cleanup = (keepPreloader = false) => {
     if (destroyed) {
       return;
     }
@@ -46,7 +46,11 @@ export function mountLanding(rootId: string, options: LandingOptions): LandingHa
     cleanupFns.forEach((fn) => fn());
     document.body.classList.remove('landing-active', 'landing-konami');
     document.body.classList.add('game-active');
-    root.innerHTML = '';
+
+    if (!keepPreloader) {
+      root.innerHTML = '';
+      delete (window as any).hideLandingPreloader;
+    }
   };
 
   document.body.classList.remove('game-active');
@@ -76,6 +80,23 @@ export function mountLanding(rootId: string, options: LandingOptions): LandingHa
   window.setTimeout(() => {
     preloader?.classList.add('is-hidden');
   }, 1200);
+
+  // Exponer función global para ocultar el preloader cuando el juego esté listo
+  (window as any).hideLandingPreloader = () => {
+    if (preloader) {
+      preloader.style.opacity = '0';
+      preloader.style.zIndex = '-1'; // Bajar z-index inmediatamente para no tapar el formulario
+      preloader.style.pointerEvents = 'none';
+      window.setTimeout(() => {
+        // Limpiar completamente el DOM del landing ahora
+        root.innerHTML = '';
+        delete (window as any).hideLandingPreloader;
+      }, 400); // Tiempo de la transición de opacity
+    } else {
+      root.innerHTML = '';
+      delete (window as any).hideLandingPreloader;
+    }
+  };
 
   if (charactersContainer) {
     CHARACTER_IMAGES.forEach(({ src, position }, index) => {
@@ -180,11 +201,28 @@ export function mountLanding(rootId: string, options: LandingOptions): LandingHa
       return;
     }
 
-    screen.classList.add('landing-screen--leaving');
-    window.setTimeout(() => {
-      cleanup();
-      options.onStart();
-    }, 450);
+    // Mostrar solo el preloader, ocultar todo lo demás
+    if (preloader) {
+      preloader.classList.remove('is-hidden');
+      preloader.style.animation = 'none';
+      preloader.style.opacity = '1';
+      preloader.style.visibility = 'visible';
+      preloader.style.pointerEvents = 'auto';
+    }
+
+    // Ocultar el resto del contenido del landing
+    if (heroContent) heroContent.style.display = 'none';
+    if (charactersContainer) charactersContainer.style.display = 'none';
+    if (particlesContainer) particlesContainer.style.display = 'none';
+    if (fireOverlay) fireOverlay.style.display = 'none';
+    if (glowElement) glowElement.style.display = 'none';
+    if (scrollIndicator) scrollIndicator.style.display = 'none';
+
+    // Limpiar clases del body pero mantener el preloader
+    cleanup(true);
+
+    // Iniciar el juego inmediatamente
+    options.onStart();
   };
 
   if (playButton) {

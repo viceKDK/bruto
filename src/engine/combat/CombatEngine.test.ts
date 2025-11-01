@@ -179,8 +179,19 @@ describe('CombatEngine', () => {
       const result1 = engine1.executeBattle();
       const result2 = engine2.executeBattle();
 
-      // High resistance opponent should take longer to defeat (more turns)
-      expect(result1.actions.length).toBeGreaterThan(result2.actions.length);
+      // High resistance opponent should take less damage per hit
+      const damageActions1 = result1.actions.filter((a) => a.action === 'attack' && a.damage !== undefined && a.damage > 0);
+      const damageActions2 = result2.actions.filter((a) => a.action === 'attack' && a.damage !== undefined && a.damage > 0);
+
+      // Both should have damage actions
+      expect(damageActions1.length).toBeGreaterThan(0);
+      expect(damageActions2.length).toBeGreaterThan(0);
+
+      // Average damage against high resistance should be lower
+      const avgDamage1 = damageActions1.reduce((sum, a) => sum + (a.damage || 0), 0) / damageActions1.length;
+      const avgDamage2 = damageActions2.reduce((sum, a) => sum + (a.damage || 0), 0) / damageActions2.length;
+
+      expect(avgDamage1).toBeLessThan(avgDamage2);
     });
 
     it('generates critical hits', () => {

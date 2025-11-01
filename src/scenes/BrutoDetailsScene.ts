@@ -32,7 +32,6 @@ import { IBruto } from '../models/Bruto';
 import {
   formatWeaponName,
   formatSkillName,
-  generateStubBattleLogEntries,
   mapAugmenterSkills,
   mapPetRecords,
 } from './BrutoDetailsScene.helpers';
@@ -61,7 +60,7 @@ export class BrutoDetailsScene extends Phaser.Scene {
   private skillPanel!: Panel;
   private battleLogPanel!: Panel;
   private appearanceContainer?: Phaser.GameObjects.Container;
-  private appearanceSprite?: Phaser.GameObjects.Sprite;
+  private _appearanceSprite?: Phaser.GameObjects.Sprite;
   private weaponRack?: WeaponRack;
   private skillGrid?: SkillGrid;
   private battleHistoryPanel?: BattleHistoryPanel;
@@ -509,7 +508,7 @@ export class BrutoDetailsScene extends Phaser.Scene {
     }));
   }
 
-  private renderWeaponRack(scale: number): void {
+  private renderWeaponRack(_scale: number): void {
     if (!this.weaponPanel) {
       return;
     }
@@ -584,7 +583,7 @@ export class BrutoDetailsScene extends Phaser.Scene {
     this.syncLevelUpHistoryPanelState();
   }
 
-  private renderBattleLog(scale: number): void {
+  private renderBattleLog(_scale: number): void {
     if (!this.battleLogPanel) {
       return;
     }
@@ -840,7 +839,7 @@ export class BrutoDetailsScene extends Phaser.Scene {
     const sprite = this.createAppearanceSprite(scale);
     sprite.setY(120 * scale);
     container.add(sprite);
-    this.appearanceSprite = sprite;
+    this._appearanceSprite = sprite;
     this.createIdleTween(sprite, scale);
 
     const glow = this.add.rectangle(

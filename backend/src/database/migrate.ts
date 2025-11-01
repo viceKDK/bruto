@@ -86,27 +86,6 @@ export function runMigrations(): void {
         CREATE INDEX IF NOT EXISTS idx_battles_bruto1_created ON battles(bruto1_id, created_at DESC);
         CREATE INDEX IF NOT EXISTS idx_battles_bruto2_created ON battles(bruto2_id, created_at DESC);
       `
-    },
-    {
-      name: '005_create_level_upgrades_table',
-      sql: `
-        CREATE TABLE IF NOT EXISTS level_upgrades (
-          id TEXT PRIMARY KEY,
-          bruto_id TEXT NOT NULL,
-          level_number INTEGER NOT NULL,
-          option_a_type TEXT NOT NULL,
-          option_a_description TEXT NOT NULL,
-          option_a_stats TEXT,
-          option_b_type TEXT NOT NULL,
-          option_b_description TEXT NOT NULL,
-          option_b_stats TEXT,
-          chosen_option TEXT NOT NULL CHECK(chosen_option IN ('A', 'B')),
-          created_at INTEGER NOT NULL DEFAULT (strftime('%s', 'now')),
-          FOREIGN KEY (bruto_id) REFERENCES brutos(id) ON DELETE CASCADE
-        );
-        CREATE INDEX IF NOT EXISTS idx_level_upgrades_bruto_id ON level_upgrades(bruto_id);
-        CREATE INDEX IF NOT EXISTS idx_level_upgrades_level_number ON level_upgrades(bruto_id, level_number);
-      `
     }
   ];
 

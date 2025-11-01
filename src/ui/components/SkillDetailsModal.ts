@@ -59,9 +59,7 @@ export class SkillDetailsModal extends Phaser.GameObjects.Container {
       width: 100,
       height: 36,
       text: 'Cerrar',
-      backgroundColor: COLORS.danger,
-      hoverColor: COLORS.dangerLight,
-      textColor: COLORS.textPrimary,
+      style: 'danger',
       onClick: () => config.onClose(),
     });
     this.closeButton.setDepth(LAYOUT.zIndex.modal + 1);
@@ -118,7 +116,7 @@ export class SkillDetailsModal extends Phaser.GameObjects.Container {
     // Description
     if (skill.description) {
       const descText = scene.add.text(contentX, currentY, skill.description, {
-        fontSize: `${TYPOGRAPHY.fontSize.md}px`,
+        fontSize: `${TYPOGRAPHY.fontSize.base}px`,
         color: COLORS.textPrimary,
         fontFamily: TYPOGRAPHY.fontFamily.primary,
         wordWrap: { width: contentWidth },

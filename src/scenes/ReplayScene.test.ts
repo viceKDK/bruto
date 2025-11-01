@@ -19,7 +19,7 @@ vi.mock('phaser', () => ({
         text: vi.fn(() => ({ setOrigin: vi.fn().mockReturnThis(), setAlpha: vi.fn().mockReturnThis(), setColor: vi.fn().mockReturnThis(), setFontSize: vi.fn().mockReturnThis(), setText: vi.fn().mockReturnThis() })),
         rectangle: vi.fn(() => ({ setStrokeStyle: vi.fn().mockReturnThis(), setOrigin: vi.fn().mockReturnThis() })),
       };
-      time = { delayedCall: vi.fn((delay, callback) => callback()) };
+      time = { delayedCall: vi.fn((_delay, callback) => callback()) };
       scene = { start: vi.fn() };
     },
   },
@@ -38,7 +38,7 @@ vi.mock('../services/BattleLoggerService', async () => {
 
 // Mock Button component
 vi.mock('../ui/components/Button', () => ({
-  Button: vi.fn().mockImplementation((scene, config) => {
+  Button: vi.fn().mockImplementation((_scene, config) => {
     return {
       updateText: vi.fn(),
       destroy: vi.fn(),
@@ -54,7 +54,7 @@ vi.mock('../ui/components/Button', () => ({
 const { ReplayScene } = await import('./ReplayScene');
 
 describe('ReplayScene', () => {
-  let scene: ReplayScene;
+  let scene: any;
   let mockPhaserScene: any;
 
   beforeEach(() => {
@@ -70,7 +70,7 @@ describe('ReplayScene', () => {
         },
       },
       add: {
-        text: vi.fn((x, y, text, style) => ({
+        text: vi.fn((x, y, text, _style) => ({
           setOrigin: vi.fn().mockReturnThis(),
           setAlpha: vi.fn().mockReturnThis(),
           setColor: vi.fn().mockReturnThis(),
@@ -86,7 +86,7 @@ describe('ReplayScene', () => {
         })),
       },
       time: {
-        delayedCall: vi.fn((delay, callback) => {
+        delayedCall: vi.fn((_delay, callback) => {
           callback();
         }),
       },

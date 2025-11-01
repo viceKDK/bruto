@@ -4,7 +4,7 @@ import { Weapon } from '../../models/Weapon';
  * Story 5.4: Disarm Mechanic
  * 
  * Handles weapon disarm mechanics during combat:
- * - AC1: Disarm chance checked per weapon hit
+ * - AC1: Disarm chance is ONLY based on weapon modifiers (can reach 100%)
  * - AC2: Disarmed opponent deals reduced damage (bare hands only)
  * - AC3: Weapon returns after combat or after X turns
  */
@@ -21,34 +21,26 @@ export interface DisarmState {
 }
 
 export class DisarmService {
-  private static readonly BASE_DISARM_CHANCE = 5; // Base 5% chance
   private static readonly DISARM_DURATION_TURNS = 3; // Weapons return after 3 turns
 
   /**
-   * Calculate total disarm chance for an attack
-   * AC1: Disarm chance checked per weapon hit
+   * Calculate disarm chance for an attack
+   * AC1: Disarm chance is PURELY weapon-based (no base, no dexterity/agility)
    * 
    * @param attackerWeapon - Weapon being used to attack (can be null for bare hands)
-   * @param attackerStats - Bruto stats (dexterity affects disarm)
    * @returns Disarm chance percentage (0-100)
    */
-  static calculateDisarmChance(
-    attackerWeapon: Weapon | null,
-    attackerDexterity: number
-  ): number {
-    let disarmChance = this.BASE_DISARM_CHANCE;
+  static calculateDisarmChance(attackerWeapon: Weapon | null): number {
+    // NO base disarm chance - only weapon modifiers count
+    let disarmChance = 0;
 
-    // Add weapon's disarm modifier
+    // Add weapon's disarm modifier (this is the ONLY factor)
     if (attackerWeapon?.modifiers?.disarm) {
-      disarmChance += attackerWeapon.modifiers.disarm;
+      disarmChance = attackerWeapon.modifiers.disarm;
     }
 
-    // Dexterity affects disarm chance (every 10 points of dexterity = +1% disarm)
-    const dexterityBonus = Math.floor(attackerDexterity / 10);
-    disarmChance += dexterityBonus;
-
-    // Clamp between 0 and 95 (never 100% guaranteed)
-    return Math.max(0, Math.min(95, disarmChance));
+    // Can reach 100% with the right weapon
+    return Math.max(0, Math.min(100, disarmChance));
   }
 
   /**

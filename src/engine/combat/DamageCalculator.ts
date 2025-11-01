@@ -30,9 +30,25 @@ export interface DamageResult {
 }
 
 /**
+ * Interface for damage calculator (Dependency Inversion Principle)
+ * Allows CombatEngine to depend on abstraction, not concrete implementation
+ */
+export interface IDamageCalculator {
+  calculatePhysicalDamage(
+    attacker: IBrutoCombatant,
+    defender: IBrutoCombatant,
+    modifiers?: DamageModifiers
+  ): number;
+  calculateCritChance(attacker: IBrutoCombatant, modifiers?: DamageModifiers): number;
+  calculateCritMultiplier(attacker: IBrutoCombatant, modifiers?: DamageModifiers): number;
+  applyCriticalMultiplier(baseDamage: number): number;
+  getDodgeChance(defender: IBrutoCombatant, modifiers?: DamageModifiers): number;
+}
+
+/**
  * Calculates damage values using combat formulas from GDD
  */
-export class DamageCalculator {
+export class DamageCalculator implements IDamageCalculator {
   /**
    * Calculate base attack damage (STR value)
    * Per GDD: "damage = STR value" (STR 5 = 5 damage)
@@ -85,7 +101,7 @@ export class DamageCalculator {
    * Calculate critical hit multiplier
    * Base is 2x (200%), modifiable by skills like Meditación (+50% = x3)
    */
-  public calculateCritMultiplier(attacker: IBrutoCombatant, modifiers: DamageModifiers = {}): number {
+  public calculateCritMultiplier(_attacker: IBrutoCombatant, modifiers: DamageModifiers = {}): number {
     // Base critical multiplier is 2x (200%)
     let multiplier = 2.0;
 
@@ -103,7 +119,7 @@ export class DamageCalculator {
    *
    * Base is 10%, modifiable by weapons/skills in Epic 5-6
    */
-  public calculateCritChance(attacker: IBrutoCombatant, modifiers: DamageModifiers = {}): number {
+  public calculateCritChance(_attacker: IBrutoCombatant, modifiers: DamageModifiers = {}): number {
     // Base 10% crit chance
     let critChance = 0.1;
 
@@ -160,7 +176,7 @@ export class DamageCalculator {
    *
    * Stub for Epic 5 - returns 0 for now (no weapons)
    */
-  public calculateWeaponTriggerChance(attacker: IBrutoCombatant): number {
+  public calculateWeaponTriggerChance(_attacker: IBrutoCombatant): number {
     // Epic 5: Will use weapon's "Odds" attribute
     // For now, no weapons equipped = 0% chance
     return 0;
@@ -172,7 +188,7 @@ export class DamageCalculator {
    *
    * Stub for Epic 6 - returns 0 for now (no skills in combat yet)
    */
-  public calculateSkillActivationChance(attacker: IBrutoCombatant): number {
+  public calculateSkillActivationChance(_attacker: IBrutoCombatant): number {
     // Epic 6: Will check equipped skills and their activation probabilities
     // For now, no skills in combat = 0% chance
     return 0;

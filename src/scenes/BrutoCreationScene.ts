@@ -14,7 +14,7 @@ export class BrutoCreationScene extends Phaser.Scene {
   private brutoFactory!: BrutoFactory;
   private appearanceGenerator!: AppearanceGenerator;
   private container: HTMLDivElement | null = null;
-  private previewBruto: IBruto | null = null;
+  private _previewBruto: IBruto | null = null;
 
   constructor() {
     super({ key: 'BrutoCreationScene' });
@@ -27,13 +27,13 @@ export class BrutoCreationScene extends Phaser.Scene {
     this.appearanceGenerator = new AppearanceGenerator();
     this.brutoFactory = new BrutoFactory(this.appearanceGenerator);
 
-    // Set vintage background color
-    this.cameras.main.setBackgroundColor('#E8D4A0');
+    // Add body class for styling
+    document.body.classList.add('creation-active');
 
-    // Draw background elements
-    this.createBackground();
+    // Set dark background color
+    this.cameras.main.setBackgroundColor('#050100');
 
-    // Create HTML overlay
+    // Create HTML overlay with new epic design
     this.createHTML();
   }
 
@@ -45,7 +45,7 @@ export class BrutoCreationScene extends Phaser.Scene {
     banner.setStrokeStyle(4, 0x8B7355);
 
     // Title text - "MY BRUTE"
-    const title = this.add.text(width / 2, 70, 'MY BRUTE', {
+    const _title = this.add.text(width / 2, 70, 'MY BRUTE', {
       fontSize: '72px',
       fontFamily: 'Impact, Arial Black, sans-serif',
       color: '#8B4513',
@@ -87,13 +87,13 @@ export class BrutoCreationScene extends Phaser.Scene {
 
   private createCharacterDecoration(x: number, y: number, isLeft: boolean): void {
     // Simple brute silhouette decoration
-    const body = this.add.ellipse(x, y, 80, 100, 0x8B4513);
+    const _body = this.add.ellipse(x, y, 80, 100, 0x8B4513);
     const head = this.add.circle(x, y - 60, 35, 0xD2B48C);
     head.setStrokeStyle(2, 0x8B4513);
 
     // Add some character details
-    const eye1 = this.add.circle(x - 10, y - 65, 3, 0x000000);
-    const eye2 = this.add.circle(x + 10, y - 65, 3, 0x000000);
+    const _eye1 = this.add.circle(x - 10, y - 65, 3, 0x000000);
+    const _eye2 = this.add.circle(x + 10, y - 65, 3, 0x000000);
 
     // Weapon or shield
     if (isLeft) {
@@ -107,199 +107,76 @@ export class BrutoCreationScene extends Phaser.Scene {
 
   private createHTML(): void {
     this.container = document.createElement('div');
-    this.container.style.cssText = `
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      margin-top: 60px;
-      width: 90%;
-      max-width: 900px;
-      background: linear-gradient(to bottom, #F5E6D3 0%, #E8D4A0 100%);
-      border: 4px solid #8B7355;
-      border-radius: 16px;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.3), inset 0 2px 0 rgba(255,255,255,0.3);
-      padding: 40px;
-      font-family: Arial, sans-serif;
-      z-index: 1000;
-    `;
+    this.container.className = 'creation-container';
 
     this.container.innerHTML = `
-      <div style="display: grid; grid-template-columns: 300px 1fr; gap: 40px;">
-        <!-- Left panel: Name input and preview -->
-        <div style="background: rgba(255,255,255,0.4); padding: 20px; border: 3px solid #8B7355; border-radius: 12px;">
-          <h3 style="margin: 0 0 15px 0; color: #8B4513; font-size: 16px; text-transform: uppercase; border-bottom: 2px solid #8B7355; padding-bottom: 8px;">
-            Choose a name ✓
-          </h3>
-          
-          <input 
-            type="text" 
-            id="brutoNameInput" 
-            placeholder="Enter bruto name..."
-            maxlength="20"
-            style="
-              width: 100%;
-              padding: 12px;
-              font-size: 16px;
-              border: 3px solid #8B7355;
-              border-radius: 6px;
-              background: #FFF;
-              font-family: Arial, sans-serif;
-              margin-bottom: 20px;
-            "
-          />
-
-          <!-- Preview silhouette -->
-          <div style="text-align: center; margin: 20px 0;">
-            <div style="
-              width: 120px;
-              height: 150px;
-              margin: 0 auto;
-              background: linear-gradient(135deg, #8B4513 0%, #5C3317 100%);
-              border-radius: 50% 50% 40% 40%;
-              position: relative;
-              box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-            ">
-              <div style="
-                width: 60px;
-                height: 60px;
-                background: #D2B48C;
-                border-radius: 50%;
-                position: absolute;
-                top: -30px;
-                left: 30px;
-                border: 3px solid #8B4513;
-              ">
-                <div style="
-                  position: absolute;
-                  top: 20px;
-                  left: 15px;
-                  font-size: 32px;
-                ">❓</div>
-              </div>
-            </div>
-            <p style="margin: 15px 0 0 0; color: #8B4513; font-size: 12px; font-style: italic;">
-              Your bruto will appear here
-            </p>
-          </div>
-
-          <!-- Appearance options (locked for now) -->
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 20px 0;">
-            <div style="
-              background: #D4B896;
-              border: 2px solid #8B7355;
-              border-radius: 8px;
-              padding: 15px;
-              text-align: center;
-              opacity: 0.5;
-            ">
-              <span style="font-size: 24px;">🎨</span>
-              <p style="margin: 5px 0 0 0; font-size: 11px; color: #8B4513;">Colors</p>
-              <div style="
-                width: 30px;
-                height: 30px;
-                background: #8B4513;
-                border: 2px solid #FFF;
-                border-radius: 50%;
-                margin: 8px auto 0;
-              "></div>
-            </div>
-            <div style="
-              background: #D4B896;
-              border: 2px solid #8B7355;
-              border-radius: 8px;
-              padding: 15px;
-              text-align: center;
-              opacity: 0.5;
-            ">
-              <span style="font-size: 24px;">🚀</span>
-              <p style="margin: 5px 0 0 0; font-size: 11px; color: #8B4513;">Special</p>
-              <div style="
-                width: 30px;
-                height: 30px;
-                background: linear-gradient(45deg, #FF6B35, #F7931E);
-                border: 2px solid #FFF;
-                border-radius: 50%;
-                margin: 8px auto 0;
-              "></div>
-            </div>
-          </div>
-
-          <div id="nameError" style="
-            color: #D32F2F;
-            font-size: 13px;
-            min-height: 20px;
-            margin: 10px 0;
-            font-weight: bold;
-            text-align: center;
-          "></div>
-
-          <button id="validateBtn" style="
-            width: 100%;
-            padding: 14px;
-            background: linear-gradient(to bottom, #A8E6CF 0%, #7BC8A4 100%);
-            border: 3px solid #4A7C59;
-            border-radius: 8px;
-            color: #FFF;
-            font-size: 16px;
-            font-weight: bold;
-            text-transform: uppercase;
-            cursor: pointer;
-            box-shadow: 0 4px 0 #3D6647, 0 6px 8px rgba(0,0,0,0.3);
-            transition: all 0.1s;
-            text-shadow: 0 2px 2px rgba(0,0,0,0.3);
-          " onmousedown="this.style.transform='translateY(4px)'; this.style.boxShadow='0 0 0 #3D6647, 0 2px 4px rgba(0,0,0,0.3)';" onmouseup="this.style.transform=''; this.style.boxShadow='0 4px 0 #3D6647, 0 6px 8px rgba(0,0,0,0.3)';">
-            Validate
-          </button>
-
-          <button id="connectBtn" style="
-            width: 100%;
-            padding: 14px;
-            margin-top: 10px;
-            background: linear-gradient(to bottom, #4CAF50 0%, #388E3C 100%);
-            border: 3px solid #2E7D32;
-            border-radius: 8px;
-            color: #FFF;
-            font-size: 16px;
-            font-weight: bold;
-            text-transform: uppercase;
-            cursor: pointer;
-            box-shadow: 0 4px 0 #1B5E20, 0 6px 8px rgba(0,0,0,0.3);
-            transition: all 0.1s;
-            text-shadow: 0 2px 2px rgba(0,0,0,0.3);
-          " onmousedown="this.style.transform='translateY(4px)'; this.style.boxShadow='0 0 0 #1B5E20, 0 2px 4px rgba(0,0,0,0.3)';" onmouseup="this.style.transform=''; this.style.boxShadow='0 4px 0 #1B5E20, 0 6px 8px rgba(0,0,0,0.3)';">
-            Connect
-          </button>
-        </div>
-
-        <!-- Right panel: Instructions -->
-        <div>
-          <div style="
-            background: rgba(255,255,255,0.6);
-            border: 3px solid #8B7355;
-            border-radius: 12px;
-            padding: 25px;
-            margin-bottom: 20px;
-          ">
-            <h2 style="
-              margin: 0 0 15px 0;
-              color: #8B4513;
-              font-size: 24px;
-              font-family: Impact, Arial Black, sans-serif;
-            ">TO BE A BRUTE...</h2>
+      <!-- Fire glow effect -->
+      <div class="creation-fire-glow"></div>
+      
+      <!-- Main card -->
+      <div class="creation-card">
+        <h1 class="creation-title">⚔️ CREATE YOUR BRUTO ⚔️</h1>
+        
+        <div class="creation-grid">
+          <!-- Left Panel: Character Preview & Name -->
+          <div class="creation-preview-panel">
+            <h3 class="creation-preview-title">🔥 Your Warrior</h3>
             
-            <p style="
-              color: #8B4513;
-              font-size: 15px;
-              line-height: 1.6;
-              margin: 0;
-            ">
-              Insert a name to create your own Brute. You will be able to fight against other Brutes in the arena and recruit new pupils. Gain experience and fight tough in the ranking to become...<br>
-              <strong style="font-size: 16px; color: #D32F2F;">THE BRUTE!</strong>
-            </p>
+            <div class="creation-preview-display">
+              <div class="creation-bruto-silhouette">
+                <div class="creation-bruto-head">❓</div>
+              </div>
+              <p class="creation-preview-text">Your mighty bruto will appear here</p>
+            </div>
+
+            <div class="creation-input-group">
+              <input 
+                type="text" 
+                id="brutoNameInput" 
+                class="creation-input"
+                placeholder="Enter warrior name..."
+                maxlength="20"
+                autocomplete="off"
+              />
+            </div>
+
+            <div id="nameError" class="creation-message"></div>
+
+            <button id="validateBtn" class="creation-btn creation-btn-primary">
+              🔍 Validate Name
+            </button>
+
+            <button id="createBtn" class="creation-btn creation-btn-success">
+              ⚔️ Create Bruto
+            </button>
           </div>
 
+          <!-- Right Panel: Instructions -->
+          <div class="creation-info-panel">
+            <h2 class="creation-info-title">🔥 TO BE A BRUTO...</h2>
+            
+            <p class="creation-info-text">
+              Choose a legendary name for your warrior. You will enter the arena to fight against other fierce Brutos, 
+              recruit pupils, and climb the ranks through blood and glory.
+            </p>
 
+            <p class="creation-info-text">
+              Gain experience in brutal combat, unlock devastating skills, and prove your worth in the arena. 
+              Only the strongest will rise to become...
+            </p>
+
+            <p class="creation-info-highlight" style="text-align: center; font-size: 1.8rem; margin: 30px 0;">
+              🏆 THE ULTIMATE BRUTO! 🏆
+            </p>
+
+            <ul class="creation-features">
+              <li class="creation-feature-item">Fight in the legendary arena</li>
+              <li class="creation-feature-item">Recruit and train pupils</li>
+              <li class="creation-feature-item">Unlock powerful weapons & skills</li>
+              <li class="creation-feature-item">Dominate the global rankings</li>
+              <li class="creation-feature-item">Forge your warrior legacy</li>
+            </ul>
+          </div>
         </div>
       </div>
     `;
@@ -309,10 +186,10 @@ export class BrutoCreationScene extends Phaser.Scene {
     // Event listeners
     const nameInput = document.getElementById('brutoNameInput') as HTMLInputElement;
     const validateBtn = document.getElementById('validateBtn') as HTMLButtonElement;
-    const connectBtn = document.getElementById('connectBtn') as HTMLButtonElement;
+    const createBtn = document.getElementById('createBtn') as HTMLButtonElement;
 
     validateBtn.addEventListener('click', () => this.validateName());
-    connectBtn.addEventListener('click', () => this.createBruto());
+    createBtn.addEventListener('click', () => this.createBruto());
     nameInput.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') {
         this.createBruto();
@@ -329,10 +206,11 @@ export class BrutoCreationScene extends Phaser.Scene {
     const name = nameInput.value.trim();
 
     errorDiv.textContent = '';
-    errorDiv.style.color = '#D32F2F';
+    errorDiv.className = 'creation-message';
 
     if (!name) {
-      errorDiv.textContent = 'Please enter a name';
+      errorDiv.textContent = '⚠️ Please enter a name';
+      errorDiv.classList.add('error');
       return;
     }
 
@@ -341,14 +219,16 @@ export class BrutoCreationScene extends Phaser.Scene {
       const { available } = await apiClient.checkBrutoName(name);
       
       if (!available) {
-        errorDiv.textContent = 'Name already taken';
+        errorDiv.textContent = '❌ Name already taken';
+        errorDiv.classList.add('error');
         return;
       }
 
-      errorDiv.style.color = '#4CAF50';
-      errorDiv.textContent = '✓ Name available!';
+      errorDiv.textContent = '✅ Name available!';
+      errorDiv.classList.add('success');
     } catch (error) {
       errorDiv.textContent = error instanceof Error ? error.message : 'Error checking name';
+      errorDiv.classList.add('error');
     }
   }
 
@@ -358,16 +238,18 @@ export class BrutoCreationScene extends Phaser.Scene {
     const name = nameInput.value.trim();
 
     errorDiv.textContent = '';
-    errorDiv.style.color = '#D32F2F';
+    errorDiv.className = 'creation-message';
 
     const currentUser = useStore.getState().currentUser;
     if (!currentUser) {
-      errorDiv.textContent = 'User not logged in';
+      errorDiv.textContent = '❌ User not logged in';
+      errorDiv.classList.add('error');
       return;
     }
 
     if (!name) {
-      errorDiv.textContent = 'Please enter a name';
+      errorDiv.textContent = '⚠️ Please enter a name';
+      errorDiv.classList.add('error');
       return;
     }
 
@@ -414,6 +296,7 @@ export class BrutoCreationScene extends Phaser.Scene {
       this.scene.start('BrutoSelectionScene');
     } catch (error) {
       errorDiv.textContent = error instanceof Error ? error.message : 'Error creating bruto';
+      errorDiv.classList.add('error');
     }
   }
 
@@ -422,6 +305,8 @@ export class BrutoCreationScene extends Phaser.Scene {
       this.container.remove();
       this.container = null;
     }
+    // Remove body class
+    document.body.classList.remove('creation-active');
   }
 
   shutdown(): void {

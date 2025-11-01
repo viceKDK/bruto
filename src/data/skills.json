@@ -379,6 +379,742 @@
       ],
       "stackable": false,
       "implemented": false
+    },
+    {
+      "id": "weapon_master",
+      "name": "Weapon Master",
+      "category": "combat_modifier",
+      "description": "+50% daño con armas Sharp (Espada, Espadón, Cimitarra, Cuchillo, Alabarda)",
+      "odds": 0.97,
+      "effects": [
+        {
+          "type": "damage_modifier",
+          "timing": "passive",
+          "weaponCategory": "sharp",
+          "value": 50,
+          "modifier": "percentage",
+          "target": "opponent"
+        }
+      ],
+      "stackable": false,
+      "implemented": false
+    },
+    {
+      "id": "artes_marciales",
+      "name": "Artes Marciales",
+      "category": "combat_modifier",
+      "description": "+100% daño con puños y Taza. No se aplica con arma arrojadiza equipada.",
+      "odds": 0.97,
+      "effects": [
+        {
+          "type": "damage_modifier",
+          "timing": "passive",
+          "weaponType": "fists",
+          "value": 100,
+          "modifier": "percentage",
+          "target": "opponent"
+        },
+        {
+          "type": "damage_modifier",
+          "timing": "passive",
+          "weaponType": "cup",
+          "value": 100,
+          "modifier": "percentage",
+          "target": "opponent"
+        }
+      ],
+      "stackable": false,
+      "implemented": false
+    },
+    {
+      "id": "sexto_sentido",
+      "name": "6º Sentido",
+      "category": "passive_effect",
+      "description": "+10% Anticipo (no afecta alcance de armas)",
+      "odds": 1.94,
+      "effects": [
+        {
+          "type": "combat_bonus",
+          "timing": "passive",
+          "stat": "anticipation",
+          "value": 10,
+          "modifier": "percentage"
+        }
+      ],
+      "stackable": false,
+      "implemented": false
+    },
+    {
+      "id": "hostilidad",
+      "name": "Hostilidad",
+      "category": "passive_effect",
+      "description": "+30% probabilidad de contraataque al recibir un golpe",
+      "odds": 0.39,
+      "effects": [
+        {
+          "type": "combat_bonus",
+          "timing": "passive",
+          "stat": "counterattack",
+          "value": 30,
+          "modifier": "percentage"
+        }
+      ],
+      "stackable": false,
+      "implemented": false
+    },
+    {
+      "id": "fist_of_fury",
+      "name": "Fist of Fury",
+      "category": "passive_effect",
+      "description": "+20% probabilidad de combo (encadenar múltiples ataques)",
+      "odds": 0.97,
+      "effects": [
+        {
+          "type": "combat_bonus",
+          "timing": "passive",
+          "stat": "combo",
+          "value": 20,
+          "modifier": "percentage"
+        }
+      ],
+      "stackable": false,
+      "implemented": false
+    },
+    {
+      "id": "determinacion",
+      "name": "Determinación",
+      "category": "passive_effect",
+      "description": "70% probabilidad de lanzar otro golpe tras evasión/bloqueo del oponente",
+      "odds": 0,
+      "effects": [
+        {
+          "type": "special_ability",
+          "timing": "on_hit",
+          "trigger": "after_dodge_or_block",
+          "value": 70,
+          "modifier": "percentage",
+          "description": "Follow-up attack after opponent dodges or blocks"
+        }
+      ],
+      "stackable": false,
+      "implemented": false
+    },
+    {
+      "id": "primer_golpe",
+      "name": "Primer Golpe",
+      "category": "passive_effect",
+      "description": "+200 Iniciativa al inicio de la pelea",
+      "odds": 0,
+      "effects": [
+        {
+          "type": "combat_bonus",
+          "timing": "combat_start",
+          "stat": "initiative",
+          "value": 200,
+          "modifier": "flat"
+        }
+      ],
+      "stackable": false,
+      "implemented": false
+    },
+    {
+      "id": "shield",
+      "name": "Shield",
+      "category": "passive_effect",
+      "description": "+45% block, -25% daño. Build defensivo extremo.",
+      "odds": 0.97,
+      "effects": [
+        {
+          "type": "combat_bonus",
+          "timing": "passive",
+          "stat": "block",
+          "value": 45,
+          "modifier": "percentage"
+        },
+        {
+          "type": "damage_modifier",
+          "timing": "passive",
+          "value": -25,
+          "modifier": "percentage",
+          "target": "self",
+          "description": "Reduces damage dealt"
+        }
+      ],
+      "stackable": false,
+      "implemented": false
+    },
+    {
+      "id": "contra",
+      "name": "Contra",
+      "category": "passive_effect",
+      "description": "+10% Bloqueo, +90% Reversal tras bloquear",
+      "odds": 0,
+      "effects": [
+        {
+          "type": "combat_bonus",
+          "timing": "passive",
+          "stat": "block",
+          "value": 10,
+          "modifier": "percentage"
+        },
+        {
+          "type": "special_ability",
+          "timing": "on_hit",
+          "trigger": "after_block",
+          "value": 90,
+          "modifier": "percentage",
+          "description": "Counterattack after blocking"
+        }
+      ],
+      "stackable": false,
+      "implemented": false
+    },
+    {
+      "id": "untouchable",
+      "name": "Untouchable",
+      "category": "passive_effect",
+      "description": "+30% evasión. Build de evasión extrema.",
+      "odds": 0.10,
+      "effects": [
+        {
+          "type": "evasion_modifier",
+          "timing": "passive",
+          "value": 30,
+          "modifier": "percentage"
+        }
+      ],
+      "stackable": false,
+      "implemented": false
+    },
+    {
+      "id": "hide_away",
+      "name": "Hide Away",
+      "category": "passive_effect",
+      "description": "+25% Bloqueo vs arrojadizas. 50% probabilidad de lanzar arma sin perderla.",
+      "odds": 0,
+      "effects": [
+        {
+          "type": "combat_bonus",
+          "timing": "passive",
+          "stat": "block",
+          "value": 25,
+          "modifier": "percentage",
+          "condition": "vs_throwable_weapons"
+        },
+        {
+          "type": "special_ability",
+          "timing": "per_turn",
+          "value": 50,
+          "modifier": "percentage",
+          "description": "Throw weapon without losing it"
+        }
+      ],
+      "stackable": false,
+      "implemented": false
+    },
+    {
+      "id": "monk",
+      "name": "Monk",
+      "category": "passive_effect",
+      "description": "+40% Contraataque, -200 Iniciativa, -100% Velocidad de golpe",
+      "odds": 0,
+      "effects": [
+        {
+          "type": "combat_bonus",
+          "timing": "passive",
+          "stat": "counterattack",
+          "value": 40,
+          "modifier": "percentage"
+        },
+        {
+          "type": "combat_bonus",
+          "timing": "passive",
+          "stat": "initiative",
+          "value": -200,
+          "modifier": "flat"
+        },
+        {
+          "type": "combat_bonus",
+          "timing": "passive",
+          "stat": "hit_speed",
+          "value": -100,
+          "modifier": "percentage"
+        }
+      ],
+      "stackable": false,
+      "implemented": false
+    },
+    {
+      "id": "sabotaje",
+      "name": "Sabotaje",
+      "category": "active_ability",
+      "description": "En entrenamiento, probabilidad de que oponente pierda arma. -100 Iniciativa. Recibe herida persistente.",
+      "odds": 0,
+      "effects": [
+        {
+          "type": "special_ability",
+          "timing": "on_hit",
+          "trigger": "weapon_draw",
+          "description": "Opponent loses weapon on draw, -100 initiative"
+        }
+      ],
+      "stackable": false,
+      "implemented": false
+    },
+    {
+      "id": "cabeza_acero",
+      "name": "Cabeza de Acero",
+      "category": "passive_effect",
+      "description": "50% probabilidad de que oponente pierda arma al golpearte",
+      "odds": 0,
+      "effects": [
+        {
+          "type": "special_ability",
+          "timing": "on_hit",
+          "trigger": "when_hit",
+          "value": 50,
+          "modifier": "percentage",
+          "description": "Disarm on being hit"
+        }
+      ],
+      "stackable": false,
+      "implemented": false
+    },
+    {
+      "id": "ladron",
+      "name": "Ladrón",
+      "category": "active_ability",
+      "description": "Roba el arma actual del enemigo y continúas tu turno",
+      "odds": 0,
+      "effects": [
+        {
+          "type": "special_ability",
+          "timing": "per_turn",
+          "description": "Steal enemy weapon and continue turn"
+        }
+      ],
+      "stackable": false,
+      "implemented": false
+    },
+    {
+      "id": "espia",
+      "name": "Espía",
+      "category": "passive_effect",
+      "description": "Pre-combate: cambia armas del enemigo por versiones débiles y reduce 25% su daño",
+      "odds": 0,
+      "effects": [
+        {
+          "type": "special_ability",
+          "timing": "pre_combat",
+          "description": "Weaken enemy weapons, -25% weapon damage"
+        }
+      ],
+      "stackable": false,
+      "implemented": false
+    },
+    {
+      "id": "red",
+      "name": "Red",
+      "category": "active_ability",
+      "description": "Atrapa enemigo y mascotas, impide evasión. Se rompe tras 2 impactos.",
+      "odds": 0,
+      "effects": [
+        {
+          "type": "special_ability",
+          "timing": "per_turn",
+          "usesPerCombat": 1,
+          "description": "Trap enemies, disable evasion until broken (2 hits)"
+        }
+      ],
+      "stackable": false,
+      "implemented": false
+    },
+    {
+      "id": "bomba",
+      "name": "Bomba",
+      "category": "active_ability",
+      "description": "2 acciones: lanza bomba que inflige 15-25 daño AOE a todos los enemigos",
+      "odds": 0,
+      "effects": [
+        {
+          "type": "special_ability",
+          "timing": "per_turn",
+          "usesPerCombat": 2,
+          "value": 15,
+          "description": "AOE damage 15-25 to all enemies"
+        }
+      ],
+      "stackable": false,
+      "implemented": false
+    },
+    {
+      "id": "regeneracion",
+      "name": "Regeneración",
+      "category": "passive_effect",
+      "description": "Aumenta límite de peleas diarias a 8 (en lugar de 6)",
+      "odds": 0,
+      "effects": [
+        {
+          "type": "special_ability",
+          "timing": "passive",
+          "description": "Increases daily fight limit to 8"
+        }
+      ],
+      "stackable": false,
+      "implemented": false
+    },
+    {
+      "id": "refuerzos",
+      "name": "Refuerzos",
+      "category": "active_ability",
+      "description": "Invoca bruto de nivel inferior para ayudar temporalmente",
+      "odds": 0,
+      "effects": [
+        {
+          "type": "special_ability",
+          "timing": "per_turn",
+          "usesPerCombat": 1,
+          "description": "Summon lower-level bruto as support"
+        }
+      ],
+      "stackable": false,
+      "implemented": false
+    },
+    {
+      "id": "chef",
+      "name": "Chef",
+      "category": "passive_effect",
+      "description": "Enemigo pierde 2% vida máxima al final de cada turno (veneno)",
+      "odds": 0,
+      "effects": [
+        {
+          "type": "special_ability",
+          "timing": "end_of_turn",
+          "value": 2,
+          "modifier": "percentage",
+          "description": "Poison: 2% max HP per turn"
+        }
+      ],
+      "stackable": false,
+      "implemented": false
+    },
+    {
+      "id": "vampirism",
+      "name": "Vampirism",
+      "category": "active_ability",
+      "description": "1 acción: inflige 25% de tu HP actual, te curas el doble del daño infligido",
+      "odds": 0,
+      "effects": [
+        {
+          "type": "special_ability",
+          "timing": "per_turn",
+          "usesPerCombat": 1,
+          "value": 25,
+          "modifier": "percentage",
+          "description": "Deal 25% current HP damage, heal 2x damage dealt"
+        }
+      ],
+      "stackable": false,
+      "implemented": false
+    },
+    {
+      "id": "chaining",
+      "name": "Chaining",
+      "category": "passive_effect",
+      "description": "Cada 3er golpe cuerpo a cuerpo consecutivo aturde al oponente",
+      "odds": 0,
+      "effects": [
+        {
+          "type": "special_ability",
+          "timing": "on_hit",
+          "trigger": "every_3rd_melee_hit",
+          "description": "Stun opponent on 3rd consecutive melee hit"
+        }
+      ],
+      "stackable": false,
+      "implemented": false
+    },
+    {
+      "id": "haste",
+      "name": "Haste",
+      "category": "active_ability",
+      "description": "+5% crit. 1 acción: embestida con daño basado en Speed",
+      "odds": 0,
+      "effects": [
+        {
+          "type": "critical_bonus",
+          "timing": "passive",
+          "value": 5,
+          "modifier": "percentage"
+        },
+        {
+          "type": "special_ability",
+          "timing": "per_turn",
+          "usesPerCombat": 1,
+          "description": "Dash attack scaling with Speed"
+        }
+      ],
+      "stackable": false,
+      "implemented": false
+    },
+    {
+      "id": "treat",
+      "name": "Treat",
+      "category": "active_ability",
+      "description": "4 acciones: cura 50% HP de mascota, inmunidad próximo ataque, fuerza ataque inmediato",
+      "odds": 0,
+      "effects": [
+        {
+          "type": "special_ability",
+          "timing": "per_turn",
+          "usesPerCombat": 4,
+          "value": 50,
+          "modifier": "percentage",
+          "description": "Heal pet 50%, grant immunity next hit, force attack"
+        }
+      ],
+      "stackable": false,
+      "implemented": false
+    },
+    {
+      "id": "repulse",
+      "name": "Repulse",
+      "category": "passive_effect",
+      "description": "+30% Deflect (probabilidad de desviar ataques), +5% crítico",
+      "odds": 0,
+      "effects": [
+        {
+          "type": "combat_bonus",
+          "timing": "passive",
+          "stat": "deflect",
+          "value": 30,
+          "modifier": "percentage"
+        },
+        {
+          "type": "critical_bonus",
+          "timing": "passive",
+          "value": 5,
+          "modifier": "percentage"
+        }
+      ],
+      "stackable": false,
+      "implemented": false
+    },
+    {
+      "id": "fast_metabolism",
+      "name": "Fast Metabolism",
+      "category": "passive_effect",
+      "description": "-50% hit speed, -5% crit. Al caer a 50% HP: regenera 10 ticks de 5% HP (50% total) si no recibes daño",
+      "odds": 0,
+      "effects": [
+        {
+          "type": "combat_bonus",
+          "timing": "passive",
+          "stat": "hit_speed",
+          "value": -50,
+          "modifier": "percentage"
+        },
+        {
+          "type": "critical_bonus",
+          "timing": "passive",
+          "value": -5,
+          "modifier": "percentage"
+        },
+        {
+          "type": "special_ability",
+          "timing": "on_hit",
+          "trigger": "at_50_percent_hp",
+          "value": 50,
+          "modifier": "percentage",
+          "description": "Regenerate up to 50% HP in 10 ticks (5% each) if not hit"
+        }
+      ],
+      "stackable": false,
+      "implemented": false
+    },
+    {
+      "id": "martillo",
+      "name": "Martillo",
+      "category": "active_ability",
+      "description": "Súper: llave al oponente o mascota con daño basado en STR. 1 uso por pelea.",
+      "odds": 0,
+      "effects": [
+        {
+          "type": "special_ability",
+          "timing": "per_turn",
+          "usesPerCombat": 1,
+          "description": "Grapple super scaling with STR (cannot be dodged/blocked)"
+        }
+      ],
+      "stackable": false,
+      "implemented": false
+    },
+    {
+      "id": "grito_maldito",
+      "name": "Grito Maldito",
+      "category": "active_ability",
+      "description": "Súper: asusta mascotas (50% prob c/u). 2 usos. 50% despertar de aturdimiento.",
+      "odds": 0,
+      "effects": [
+        {
+          "type": "special_ability",
+          "timing": "per_turn",
+          "usesPerCombat": 2,
+          "value": 50,
+          "modifier": "percentage",
+          "description": "Scare away pets (50% each), 50% wake from stun"
+        }
+      ],
+      "stackable": false,
+      "implemented": false
+    },
+    {
+      "id": "hipnosis",
+      "name": "Hipnosis",
+      "category": "active_ability",
+      "description": "Súper: 90% probabilidad de robar cada mascota enemiga",
+      "odds": 0,
+      "effects": [
+        {
+          "type": "special_ability",
+          "timing": "per_turn",
+          "usesPerCombat": 1,
+          "value": 90,
+          "modifier": "percentage",
+          "description": "Steal enemy pets (90% chance each)"
+        }
+      ],
+      "stackable": false,
+      "implemented": false
+    },
+    {
+      "id": "diluvio",
+      "name": "Diluvio",
+      "category": "active_ability",
+      "description": "Súper: lanza mitad de armas (min 3 armas). Daño basado en Agilidad. 1 uso.",
+      "odds": 0,
+      "effects": [
+        {
+          "type": "special_ability",
+          "timing": "per_turn",
+          "usesPerCombat": 1,
+          "description": "Throw half of weapons (min 3), damage scales with Agility"
+        }
+      ],
+      "stackable": false,
+      "implemented": false
+    },
+    {
+      "id": "cazador",
+      "name": "Cazador",
+      "category": "active_ability",
+      "description": "Súper: come mascota derrotada y recupera vida (Perro 20%, Pantera 30%, Oso 50%). 4 usos.",
+      "odds": 0,
+      "effects": [
+        {
+          "type": "special_ability",
+          "timing": "per_turn",
+          "usesPerCombat": 4,
+          "description": "Eat defeated pet: Dog 20%, Panther 30%, Bear 50% HP heal"
+        }
+      ],
+      "stackable": false,
+      "implemented": false
+    },
+    {
+      "id": "shock",
+      "name": "Shock",
+      "category": "passive_effect",
+      "description": "50% probabilidad de hacer que el enemigo suelte su arma al golpearlo",
+      "odds": 0.39,
+      "effects": [
+        {
+          "type": "special_ability",
+          "timing": "on_hit",
+          "value": 50,
+          "modifier": "percentage",
+          "description": "Disarm enemy on hit (50% chance)"
+        }
+      ],
+      "stackable": false,
+      "implemented": false
+    },
+    {
+      "id": "bodybuilder",
+      "name": "Bodybuilder",
+      "category": "combat_modifier",
+      "description": "+40% hit speed para armas Heavy, +10% dexterity para armas Heavy",
+      "odds": 0.49,
+      "effects": [
+        {
+          "type": "combat_bonus",
+          "timing": "passive",
+          "stat": "hit_speed",
+          "value": 40,
+          "modifier": "percentage",
+          "condition": "with_heavy_weapons"
+        },
+        {
+          "type": "combat_bonus",
+          "timing": "passive",
+          "stat": "dexterity",
+          "value": 10,
+          "modifier": "percentage",
+          "condition": "with_heavy_weapons"
+        }
+      ],
+      "stackable": false,
+      "implemented": false
+    },
+    {
+      "id": "relentless",
+      "name": "Relentless",
+      "category": "passive_effect",
+      "description": "+30% precisión (accuracy)",
+      "odds": 0.39,
+      "effects": [
+        {
+          "type": "combat_bonus",
+          "timing": "passive",
+          "stat": "accuracy",
+          "value": 30,
+          "modifier": "percentage"
+        }
+      ],
+      "stackable": false,
+      "implemented": false
+    },
+    {
+      "id": "survival",
+      "name": "Survival",
+      "category": "passive_effect",
+      "description": "A 1 HP: +20% block/evasión. El primer golpe letal te deja a 1 HP (1 vez por combate)",
+      "odds": 0.39,
+      "effects": [
+        {
+          "type": "special_ability",
+          "timing": "passive",
+          "trigger": "at_1_hp",
+          "description": "First lethal hit leaves you at 1 HP (once per combat)"
+        },
+        {
+          "type": "combat_bonus",
+          "timing": "passive",
+          "stat": "block",
+          "value": 20,
+          "modifier": "percentage",
+          "condition": "at_1_hp"
+        },
+        {
+          "type": "evasion_modifier",
+          "timing": "passive",
+          "value": 20,
+          "modifier": "percentage",
+          "condition": "at_1_hp"
+        }
+      ],
+      "stackable": false,
+      "implemented": false
     }
   ]
 }

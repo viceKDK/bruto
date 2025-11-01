@@ -1,0 +1,897 @@
+/* ============================================
+   EL BRUTO - Profile/Casillero Styles
+   Inspired by MyBrute with fire theme
+   ============================================ */
+
+:root {
+  --profile-primary: #ff7b1c;
+  --profile-primary-light: #ff9f3d;
+  --profile-bg-vintage: #E8D4A0;
+  --profile-bg-card: #F5E6D3;
+  --profile-border: #8B7355;
+  --profile-text-dark: #8B4513;
+  --profile-text-light: #D2691E;
+  --profile-slot-locked: rgba(139, 115, 85, 0.3);
+  --profile-highlight: #FFD700;
+}
+
+/* ============================================
+   Body & Container Base
+   ============================================ */
+body.profile-active {
+  background: linear-gradient(145deg, var(--profile-bg-vintage) 0%, #D4B896 50%, #C9A87B 100%);
+  overflow-x: hidden;
+  min-height: 100vh;
+  position: relative;
+}
+
+body.profile-active::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: 
+    radial-gradient(circle at 20% 30%, rgba(255, 123, 28, 0.08) 0%, transparent 40%),
+    radial-gradient(circle at 80% 70%, rgba(139, 69, 19, 0.06) 0%, transparent 45%);
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* ============================================
+   Main Container
+   ============================================ */
+.profile-container {
+  position: relative;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 20px;
+  z-index: 10;
+}
+
+/* ============================================
+   Header Banner (like MyBrute top banner)
+   ============================================ */
+.profile-header {
+  background: linear-gradient(to bottom, #F5E6D3 0%, #E8D4A0 100%);
+  border: 4px solid var(--profile-border);
+  border-radius: 16px;
+  padding: 25px 40px;
+  margin-bottom: 30px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.15), inset 0 2px 0 rgba(255,255,255,0.4);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.profile-title {
+  font-size: 3.5rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 6px;
+  color: var(--profile-text-dark);
+  text-shadow: 
+    3px 3px 0 rgba(74, 37, 17, 0.6),
+    0 0 20px rgba(255, 123, 28, 0.3);
+  font-family: Impact, 'Arial Black', sans-serif;
+}
+
+.profile-user-info {
+  text-align: right;
+}
+
+.profile-username {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--profile-text-light);
+  margin-bottom: 8px;
+}
+
+.profile-coins {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--profile-text-dark);
+}
+
+.profile-coin-icon {
+  font-size: 1.5rem;
+  margin-right: 8px;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+}
+
+/* ============================================
+   Main Content Grid
+   ============================================ */
+.profile-grid {
+  display: grid;
+  grid-template-columns: 420px 1fr;
+  gap: 30px;
+  align-items: start;
+}
+
+/* ============================================
+   Left Panel - Bruto Card (like MyBrute character display)
+   ============================================ */
+.profile-bruto-card {
+  background: linear-gradient(to bottom, var(--profile-bg-card) 0%, var(--profile-bg-vintage) 100%);
+  border: 4px solid var(--profile-border);
+  border-radius: 16px;
+  padding: 30px;
+  box-shadow: 
+    0 8px 24px rgba(0,0,0,0.2),
+    inset 0 2px 0 rgba(255,255,255,0.3);
+}
+
+.profile-bruto-name {
+  font-size: 2rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  text-align: center;
+  color: var(--profile-text-dark);
+  margin-bottom: 10px;
+  text-shadow: 2px 2px 0 rgba(0,0,0,0.1);
+  letter-spacing: 2px;
+}
+
+.profile-bruto-level {
+  text-align: center;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--profile-text-light);
+  margin-bottom: 20px;
+}
+
+/* Character Display Area */
+.profile-bruto-display {
+  background: rgba(255,255,255,0.3);
+  border: 3px solid var(--profile-border);
+  border-radius: 12px;
+  padding: 30px 20px;
+  text-align: center;
+  margin-bottom: 25px;
+  min-height: 280px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  background-image: 
+    repeating-linear-pattern(45deg, transparent 0px, transparent 10px, rgba(139, 115, 85, 0.05) 10px, rgba(139, 115, 85, 0.05) 20px);
+}
+
+.profile-bruto-sprite {
+  width: 200px;
+  height: 240px;
+  margin: 0 auto;
+  position: relative;
+  filter: drop-shadow(0 8px 16px rgba(0,0,0,0.3));
+}
+
+/* Stats Grid (like MyBrute) */
+.profile-stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.profile-stat-item {
+  background: rgba(255,255,255,0.4);
+  border: 2px solid var(--profile-border);
+  border-radius: 8px;
+  padding: 12px;
+  text-align: center;
+}
+
+.profile-stat-label {
+  font-size: 0.85rem;
+  color: var(--profile-text-light);
+  font-weight: 600;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.profile-stat-value {
+  font-size: 1.4rem;
+  font-weight: 900;
+  color: var(--profile-text-dark);
+}
+
+/* HP Bar */
+.profile-hp-bar-container {
+  margin-bottom: 20px;
+}
+
+.profile-hp-label {
+  font-size: 0.9rem;
+  color: var(--profile-text-dark);
+  font-weight: 600;
+  margin-bottom: 6px;
+  text-align: center;
+}
+
+.profile-hp-bar {
+  width: 100%;
+  height: 28px;
+  background: rgba(139, 69, 19, 0.2);
+  border: 3px solid var(--profile-border);
+  border-radius: 14px;
+  overflow: hidden;
+  position: relative;
+}
+
+.profile-hp-fill {
+  height: 100%;
+  background: linear-gradient(to right, #ff4444 0%, #ff6b6b 50%, #ff4444 100%);
+  transition: width 0.5s ease;
+  box-shadow: inset 0 2px 6px rgba(0,0,0,0.2);
+}
+
+.profile-hp-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 0.9rem;
+  font-weight: 900;
+  color: #fff;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+}
+
+/* XP Bar */
+.profile-xp-bar-container {
+  margin-bottom: 20px;
+}
+
+.profile-xp-label {
+  font-size: 0.9rem;
+  color: var(--profile-text-dark);
+  font-weight: 600;
+  margin-bottom: 6px;
+  text-align: center;
+}
+
+.profile-xp-bar {
+  width: 100%;
+  height: 24px;
+  background: rgba(139, 69, 19, 0.2);
+  border: 3px solid var(--profile-border);
+  border-radius: 12px;
+  overflow: hidden;
+  position: relative;
+}
+
+.profile-xp-fill {
+  height: 100%;
+  background: linear-gradient(to right, #4CAF50 0%, #8BC34A 50%, #4CAF50 100%);
+  transition: width 0.5s ease;
+  box-shadow: inset 0 2px 6px rgba(0,0,0,0.2);
+}
+
+.profile-xp-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #fff;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+}
+
+/* ============================================
+   Right Panel - Skills, Weapons & Battles
+   ============================================ */
+.profile-right-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+/* Skills Grid (like MyBrute icons) */
+.profile-section {
+  background: linear-gradient(to bottom, var(--profile-bg-card) 0%, var(--profile-bg-vintage) 100%);
+  border: 4px solid var(--profile-border);
+  border-radius: 16px;
+  padding: 25px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.15), inset 0 2px 0 rgba(255,255,255,0.3);
+}
+
+.profile-section-title {
+  font-size: 1.6rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  color: var(--profile-text-dark);
+  margin-bottom: 18px;
+  padding-bottom: 10px;
+  border-bottom: 3px solid var(--profile-border);
+  letter-spacing: 2px;
+  text-shadow: 2px 2px 0 rgba(0,0,0,0.05);
+}
+
+/* Icon Grid for Skills/Weapons */
+.profile-icon-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+  gap: 12px;
+}
+
+.profile-icon-slot {
+  width: 70px;
+  height: 70px;
+  background: rgba(255,255,255,0.4);
+  border: 3px solid var(--profile-border);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.2rem;
+  position: relative;
+  box-shadow: 
+    0 4px 8px rgba(0,0,0,0.15),
+    inset 0 2px 4px rgba(255,255,255,0.4);
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.profile-icon-slot:hover {
+  transform: translateY(-3px);
+  box-shadow: 
+    0 6px 12px rgba(0,0,0,0.25),
+    inset 0 2px 4px rgba(255,255,255,0.5);
+  border-color: var(--profile-primary);
+}
+
+.profile-icon-slot.empty {
+  background: rgba(139, 115, 85, 0.15);
+  opacity: 0.5;
+  cursor: default;
+}
+
+.profile-icon-slot.empty:hover {
+  transform: none;
+  box-shadow: 
+    0 4px 8px rgba(0,0,0,0.15),
+    inset 0 2px 4px rgba(255,255,255,0.4);
+  border-color: var(--profile-border);
+}
+
+/* Battle History (like MyBrute tournament results) */
+.profile-battle-history {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 400px;
+  overflow-y: auto;
+  padding-right: 10px;
+}
+
+.profile-battle-item {
+  background: rgba(255,255,255,0.4);
+  border: 2px solid var(--profile-border);
+  border-radius: 10px;
+  padding: 14px 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.profile-battle-item:hover {
+  background: rgba(255,255,255,0.6);
+  border-color: var(--profile-primary);
+  transform: translateX(5px);
+  box-shadow: 0 4px 12px rgba(255, 123, 28, 0.2);
+}
+
+.profile-battle-item.victory {
+  border-left: 6px solid #4CAF50;
+}
+
+.profile-battle-item.defeat {
+  border-left: 6px solid #ff4444;
+}
+
+.profile-battle-opponent {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--profile-text-dark);
+}
+
+.profile-battle-result {
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 6px 14px;
+  border-radius: 8px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.profile-battle-result.victory {
+  background: linear-gradient(135deg, #4CAF50 0%, #66BB6A 100%);
+  color: #fff;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+}
+
+.profile-battle-result.defeat {
+  background: linear-gradient(135deg, #ff4444 0%, #ff6b6b 100%);
+  color: #fff;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+}
+
+.profile-battle-date {
+  font-size: 0.85rem;
+  color: var(--profile-text-light);
+  font-style: italic;
+}
+
+/* Empty State */
+.profile-empty-state {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--profile-text-light);
+  font-size: 1.1rem;
+  font-style: italic;
+}
+
+/* Action Buttons */
+.profile-actions {
+  display: flex;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.profile-btn {
+  flex: 1;
+  padding: 14px 24px;
+  font-size: 1.1rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: 'Arial Black', sans-serif;
+  box-shadow: 0 6px 0 rgba(0,0,0,0.2), 0 8px 16px rgba(0,0,0,0.3);
+}
+
+.profile-btn:active {
+  transform: translateY(4px);
+  box-shadow: 0 2px 0 rgba(0,0,0,0.2), 0 4px 8px rgba(0,0,0,0.3);
+}
+
+.profile-btn-primary {
+  background: linear-gradient(to bottom, #ff9f3d 0%, #ff7b1c 100%);
+  color: #fff;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+.profile-btn-primary:hover {
+  background: linear-gradient(to bottom, #ffb24a 0%, #ff8c1a 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 0 rgba(0,0,0,0.2), 0 12px 20px rgba(255, 123, 28, 0.4);
+}
+
+.profile-btn-secondary {
+  background: linear-gradient(to bottom, #7BC8A4 0%, #4A7C59 100%);
+  color: #fff;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+.profile-btn-secondary:hover {
+  background: linear-gradient(to bottom, #8FD4B5 0%, #5A8C69 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 0 rgba(0,0,0,0.2), 0 12px 20px rgba(74, 124, 89, 0.4);
+}
+
+.profile-btn-danger {
+  background: linear-gradient(to bottom, #ff6b6b 0%, #ff4444 100%);
+  color: #fff;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+.profile-btn-danger:hover {
+  background: linear-gradient(to bottom, #ff7b7b 0%, #ff5454 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 0 rgba(0,0,0,0.2), 0 12px 20px rgba(255, 68, 68, 0.4);
+}
+
+/* ============================================
+   Scrollbar Styling
+   ============================================ */
+.profile-battle-history::-webkit-scrollbar {
+  width: 10px;
+}
+
+.profile-battle-history::-webkit-scrollbar-track {
+  background: rgba(139, 115, 85, 0.2);
+  border-radius: 5px;
+}
+
+.profile-battle-history::-webkit-scrollbar-thumb {
+  background: var(--profile-border);
+  border-radius: 5px;
+}
+
+.profile-battle-history::-webkit-scrollbar-thumb:hover {
+  background: var(--profile-text-dark);
+}
+
+/* ============================================
+   Responsive Design
+   ============================================ */
+@media (max-width: 1200px) {
+  .profile-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .profile-bruto-card {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .profile-header {
+    flex-direction: column;
+    text-align: center;
+    padding: 20px 25px;
+  }
+
+  .profile-title {
+    font-size: 2.5rem;
+    letter-spacing: 3px;
+    margin-bottom: 15px;
+  }
+
+  .profile-user-info {
+    text-align: center;
+  }
+
+  .profile-icon-grid {
+    grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+    gap: 8px;
+  }
+
+  .profile-icon-slot {
+    width: 60px;
+    height: 60px;
+    font-size: 1.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .profile-container {
+    padding: 15px 10px;
+  }
+
+  .profile-title {
+    font-size: 1.8rem;
+    letter-spacing: 2px;
+  }
+
+  .profile-stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .profile-actions {
+    flex-direction: column;
+  }
+}
+
+/* ============================================
+   ANIMATIONS & TRANSITIONS
+   ============================================ */
+
+/* Fade in animation for the entire container */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+@keyframes fillBar {
+  from {
+    width: 0;
+  }
+}
+
+/* Apply animations */
+.profile-container {
+  animation: fadeIn 0.5s ease-out;
+}
+
+.profile-header {
+  animation: slideInLeft 0.6s ease-out;
+}
+
+.profile-bruto-card {
+  animation: scaleIn 0.6s ease-out;
+}
+
+.profile-right-panel {
+  animation: slideInRight 0.6s ease-out;
+}
+
+.profile-bruto-sprite img {
+  transition: transform 0.3s ease;
+  animation: scaleIn 0.8s ease-out;
+}
+
+.profile-bruto-sprite img:hover {
+  transform: scale(1.1) rotate(2deg);
+}
+
+/* HP and XP bar animations */
+.profile-hp-fill {
+  animation: fillBar 1s ease-out;
+  transition: width 0.5s ease;
+}
+
+.profile-xp-fill {
+  animation: fillBar 1.2s ease-out;
+  transition: width 0.5s ease;
+}
+
+/* Stats animation */
+.profile-stat-item {
+  animation: fadeIn 0.6s ease-out;
+  transition: all 0.3s ease;
+}
+
+.profile-stat-item:nth-child(1) { animation-delay: 0.1s; }
+.profile-stat-item:nth-child(2) { animation-delay: 0.2s; }
+.profile-stat-item:nth-child(3) { animation-delay: 0.3s; }
+.profile-stat-item:nth-child(4) { animation-delay: 0.4s; }
+
+.profile-stat-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+}
+
+/* Button hover animations */
+.profile-btn {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.profile-btn::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.profile-btn:hover::before {
+  width: 300px;
+  height: 300px;
+}
+
+.profile-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+}
+
+.profile-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+/* Icon slot animations */
+.profile-icon-slot {
+  transition: all 0.3s ease;
+  animation: scaleIn 0.5s ease-out;
+}
+
+.profile-icon-slot:hover {
+  transform: scale(1.15) rotate(5deg);
+  box-shadow: 0 6px 16px rgba(255, 123, 28, 0.4);
+  border-color: var(--profile-primary);
+}
+
+.profile-icon-slot.weapon:hover {
+  border-color: #FFD700;
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.2), rgba(255, 123, 28, 0.2));
+}
+
+.profile-icon-slot.skill:hover {
+  border-color: #4CAF50;
+  background: linear-gradient(135deg, rgba(76, 175, 80, 0.2), rgba(139, 195, 74, 0.2));
+}
+
+/* Battle history item animations */
+.profile-battle-item {
+  transition: all 0.3s ease;
+  animation: slideInRight 0.5s ease-out;
+}
+
+.profile-battle-item:nth-child(1) { animation-delay: 0.1s; }
+.profile-battle-item:nth-child(2) { animation-delay: 0.2s; }
+.profile-battle-item:nth-child(3) { animation-delay: 0.3s; }
+.profile-battle-item:nth-child(4) { animation-delay: 0.4s; }
+.profile-battle-item:nth-child(5) { animation-delay: 0.5s; }
+
+.profile-battle-item:hover {
+  transform: translateX(10px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+  border-left-width: 6px;
+}
+
+/* Loading/shimmer effect for empty states */
+.profile-empty-state {
+  animation: pulse 2s ease-in-out infinite;
+}
+
+/* Slot item hover effects */
+.profile-battle-item[data-action="select-bruto"] {
+  cursor: pointer;
+}
+
+.profile-battle-item[data-action="select-bruto"]:hover {
+  background: linear-gradient(to right, rgba(255, 123, 28, 0.1), transparent);
+}
+
+/* Section animations */
+.profile-section {
+  animation: fadeIn 0.6s ease-out;
+}
+
+.profile-section:nth-of-type(1) { animation-delay: 0.2s; }
+.profile-section:nth-of-type(2) { animation-delay: 0.4s; }
+.profile-section:nth-of-type(3) { animation-delay: 0.6s; }
+
+/* Coin icon animation */
+.profile-coin-icon {
+  display: inline-block;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+/* HP/XP bar pulse when low */
+.profile-hp-fill[style*="width: 0%"],
+.profile-hp-fill[style*="width: 1%"],
+.profile-hp-fill[style*="width: 2%"] {
+  animation: pulse 1s ease-in-out infinite, fillBar 1s ease-out;
+}
+
+/* Victory/Defeat animations */
+.profile-battle-result.victory {
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.profile-battle-result.defeat {
+  opacity: 0.8;
+}
+
+/* ============================================
+   TOAST NOTIFICATIONS
+   ============================================ */
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(400px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOutRight {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(400px);
+    opacity: 0;
+  }
+}
+
+.toast-container {
+  pointer-events: none;
+}
+
+.toast-container > * {
+  pointer-events: all;
+}
+
+/* ============================================
+   Selection Highlight Animation
+   ============================================ */
+@keyframes highlightPulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(255, 123, 28, 0.7);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 0 10px rgba(255, 123, 28, 0);
+    transform: scale(1.02);
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+.profile-bruto-card.highlighted {
+  animation: highlightPulse 0.6s ease-out;
+}
+
+/* ============================================
+   Disabled Button State
+   ============================================ */
+button[disabled] {
+  opacity: 0.5 !important;
+  cursor: not-allowed !important;
+  pointer-events: none !important;
+}

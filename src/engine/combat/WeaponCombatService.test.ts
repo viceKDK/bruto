@@ -111,10 +111,10 @@ describe('WeaponCombatService - Story 5 Combat Integration', () => {
       const withSword = service.calculateCombatModifiers(['sword']);
       expect(withSword.critChanceBonus).toBe(0.05);
 
-      // Sword disarmed
+      // Sword disarmed → falls back to bare-hands
       const withoutSword = service.calculateCombatModifiers(['sword'], ['sword']);
       expect(withoutSword.critChanceBonus).toBeUndefined();
-      expect(withoutSword.weaponDamage).toBe(0);
+      expect(withoutSword.weaponDamage).toBe(5); // bare-hands damage
     });
 
     it('should handle partial disarm (some weapons active)', () => {
@@ -167,7 +167,7 @@ describe('WeaponCombatService - Story 5 Combat Integration', () => {
     it('should handle all weapons disarmed', () => {
       const weapons = ['sword', 'spear', 'mace'];
       const modifiers = service.calculateCombatModifiers(weapons, weapons);
-      expect(modifiers.weaponDamage).toBe(0);
+      expect(modifiers.weaponDamage).toBe(5); // Falls back to bare-hands
     });
 
     it('should not crash with duplicate weapon IDs', () => {

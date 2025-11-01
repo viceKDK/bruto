@@ -231,6 +231,7 @@ export class CombatScene extends Phaser.Scene {
       healthBar: this.playerHealthBar, // Use top health bar
       maxHp: data.player.stats.hp,
       currentHp: data.player.stats.hp,
+      equippedWeapons: data.player.equippedWeapons || [],
     };
 
     // Opponent sprite (right side)
@@ -258,6 +259,7 @@ export class CombatScene extends Phaser.Scene {
       healthBar: this.opponentHealthBar, // Use top health bar
       maxHp: data.opponent.stats.hp,
       currentHp: data.opponent.stats.hp,
+      equippedWeapons: data.opponent.equippedWeapons || [],
     };
 
     // Turn indicator (updated position)

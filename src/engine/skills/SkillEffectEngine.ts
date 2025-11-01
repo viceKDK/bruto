@@ -7,6 +7,14 @@ import { IBruto } from '../../models/Bruto';
 import { Skill, SkillEffect, SkillEffectType, SkillEffectTiming, StatType } from '../../models/Skill';
 import { StatContribution, StatMultiplier } from '../StatsCalculator';
 import { ARMOR_CAP_PERCENT } from '../../utils/constants';
+import { 
+  ISkillEffectHandler,
+  ArmorBonusHandler,
+  EvasionModifierHandler,
+  CriticalBonusHandler,
+  DamageModifierHandler,
+  MultiHitBonusHandler
+} from './handlers';
 
 export interface SkillStatModifiers {
   flatModifiers: StatContribution[];
@@ -43,8 +51,18 @@ export interface CombatModifiers {
 
 export class SkillEffectEngine {
   private static instance: SkillEffectEngine;
+  private handlers: ISkillEffectHandler[];
 
-  private constructor() {}
+  private constructor() {
+    // Initialize Strategy Pattern handlers for combat effects
+    this.handlers = [
+      new ArmorBonusHandler(),
+      new EvasionModifierHandler(),
+      new CriticalBonusHandler(),
+      new DamageModifierHandler(),
+      new MultiHitBonusHandler()
+    ];
+  }
 
   public static getInstance(): SkillEffectEngine {
     if (!SkillEffectEngine.instance) {
@@ -57,7 +75,7 @@ export class SkillEffectEngine {
    * Calculate stat modifiers from skills for stat display
    * Returns flat bonuses and percentage multipliers
    */
-  public calculateStatModifiers(bruto: IBruto, skills: Skill[]): SkillStatModifiers {
+  public calculateStatModifiers(_bruto: IBruto, skills: Skill[]): SkillStatModifiers {
     const flatModifiers: StatContribution[] = [];
     const multipliers: StatMultiplier[] = [];
 
@@ -175,6 +193,7 @@ export class SkillEffectEngine {
 
   /**
    * Apply a single combat effect to modifiers
+   * Uses Strategy Pattern for handling different effect types
    */
   private applyCombatEffect(
     effect: SkillEffect,
@@ -182,57 +201,11 @@ export class SkillEffectEngine {
     bruto: IBruto,
     modifiers: CombatModifiers
   ): void {
-    switch (effect.type) {
-      case SkillEffectType.ARMOR_BONUS:
-        if (effect.value !== undefined) {
-          modifiers.armorBonus += effect.value;
-        }
-        break;
-
-      case SkillEffectType.EVASION_MODIFIER:
-        if (effect.value !== undefined) {
-          modifiers.evasionBonus += effect.value;
-        }
-        break;
-
-      case SkillEffectType.CRITICAL_BONUS:
-        if (effect.value !== undefined) {
-          modifiers.criticalBonus += effect.value;
-        }
-        break;
-
-      case SkillEffectType.DAMAGE_MODIFIER:
-        if (effect.value !== undefined) {
-          // Check if it's a damage type modifier
-          if (effect.damageType === 'blunt') {
-            if (effect.target === 'self') {
-              // Damage reduction against blunt
-              modifiers.bluntDamageReduction += Math.abs(effect.value);
-            } else {
-              // Damage bonus with blunt
-              modifiers.bluntDamageBonus += effect.value;
-            }
-          } else if (effect.damageType === 'slash') {
-            modifiers.slashDamageBonus += effect.value;
-          } else if (effect.damageType === 'pierce') {
-            modifiers.pierceDamageBonus += effect.value;
-          } else {
-            // General damage modifier
-            modifiers.damageBonus += effect.value;
-          }
-
-          // Check for max damage cap (Resistente skill)
-          if (effect.description?.includes('20%')) {
-            modifiers.maxDamagePerHit = bruto.maxHp * 0.2;
-          }
-        }
-        break;
-
-      case SkillEffectType.MULTI_HIT_BONUS:
-        if (effect.value !== undefined) {
-          modifiers.multiHitBonus += effect.value;
-        }
-        break;
+    // Find the appropriate handler for this effect type
+    const handler = this.handlers.find(h => h.canHandle(effect));
+    
+    if (handler) {
+      handler.applyCombatEffect(effect, skill, bruto, modifiers);
     }
   }
 

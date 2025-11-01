@@ -49,7 +49,12 @@ export class LoginScene extends Phaser.Scene {
 
   private showLoginForm(): void {
     this.cleanup();
-    
+
+    // Force scroll to top to prevent misaligned fixed elements
+    window.scrollTo(0, 0);
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+
     document.body.classList.add('auth-active');
     
     // Add fire glow effect
@@ -100,13 +105,13 @@ export class LoginScene extends Phaser.Scene {
 
     // Add warrior image on the right
     this.warriorImage = document.createElement('div');
-    this.warriorImage.className = 'warrior-hero';
+    this.warriorImage.className = 'warrior-hero login-mode warrior-login-right';
     this.warriorImage.innerHTML = `<img src="/src/assets/sprites/warrior-hero.png" alt="Guerrero Héroe" />`;
     document.body.appendChild(this.warriorImage);
 
     // Add bruto image on the left
     this.brutoLeftImage = document.createElement('div');
-    this.brutoLeftImage.className = 'bruto-left';
+    this.brutoLeftImage.className = 'bruto-left login-mode bruto-login-left';
     this.brutoLeftImage.innerHTML = `<img src="/src/assets/sprites/bruto-left.png" alt="Bruto" />`;
     document.body.appendChild(this.brutoLeftImage);
 
@@ -123,15 +128,32 @@ export class LoginScene extends Phaser.Scene {
       this.showRegisterForm();
     });
 
-    // Add entrance animation
+    // Ensure container is visible and force reflow before hiding preloader
+    if (this.container) {
+      this.container.style.opacity = '1';
+      this.container.style.visibility = 'visible';
+      // Force reflow to ensure DOM is rendered
+      void this.container.offsetHeight;
+    }
+
+    // Wait a frame to ensure rendering is complete, then hide preloader
     requestAnimationFrame(() => {
-      this.container?.classList.add('active');
+      setTimeout(() => {
+        if (typeof (window as any).hideLandingPreloader === 'function') {
+          (window as any).hideLandingPreloader();
+        }
+      }, 100); // Small delay to ensure form is visible
     });
   }
 
   private showRegisterForm(): void {
     this.cleanup();
-    
+
+    // Force scroll to top to prevent misaligned fixed elements
+    window.scrollTo(0, 0);
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+
     document.body.classList.add('auth-active');
     
     // Add fire glow effect
@@ -192,13 +214,13 @@ export class LoginScene extends Phaser.Scene {
 
     // Add zombie image on the right (for register)
     this.warriorImage = document.createElement('div');
-    this.warriorImage.className = 'warrior-hero zombie';
+    this.warriorImage.className = 'warrior-hero zombie zombie-register-right';
     this.warriorImage.innerHTML = `<img src="/src/assets/sprites/zombie.png" alt="Zombie" />`;
     document.body.appendChild(this.warriorImage);
 
     // Add chef image on the left (for register)
     this.brutoLeftImage = document.createElement('div');
-    this.brutoLeftImage.className = 'bruto-left chef';
+    this.brutoLeftImage.className = 'bruto-left chef chef-register-left';
     this.brutoLeftImage.innerHTML = `<img src="/src/assets/sprites/chef.png" alt="Chef" />`;
     document.body.appendChild(this.brutoLeftImage);
 
@@ -215,9 +237,21 @@ export class LoginScene extends Phaser.Scene {
       this.showLoginForm();
     });
 
-    // Add entrance animation
+    // Ensure container is visible and force reflow before hiding preloader
+    if (this.container) {
+      this.container.style.opacity = '1';
+      this.container.style.visibility = 'visible';
+      // Force reflow to ensure DOM is rendered
+      void this.container.offsetHeight;
+    }
+
+    // Wait a frame to ensure rendering is complete, then hide preloader
     requestAnimationFrame(() => {
-      this.container?.classList.add('active');
+      setTimeout(() => {
+        if (typeof (window as any).hideLandingPreloader === 'function') {
+          (window as any).hideLandingPreloader();
+        }
+      }, 100); // Small delay to ensure form is visible
     });
   }
 

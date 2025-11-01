@@ -8,12 +8,14 @@
 import { IBrutoCombatant } from '../../models/Bruto';
 import { CombatAction } from '../../models/Battle';
 import { SeededRandom } from '../../utils/SeededRandom';
-import { CombatStateMachine, CombatState, CombatSide, TurnQueueEntry } from './CombatStateMachine';
-import { DamageCalculator, DamageModifiers } from './DamageCalculator';
+import { CombatStateMachine, CombatSide, TurnQueueEntry } from './CombatStateMachine';
+import { DamageCalculator, DamageModifiers, IDamageCalculator } from './DamageCalculator';
 import { ActiveAbilityManager } from './ActiveAbilityManager';
 import { ActiveAbilityEffects } from './ActiveAbilityEffects';
-import { WeaponCombatService } from './WeaponCombatService';
-import { POCION_TRAGICA_USE_THRESHOLD } from '../../utils/constants';
+import { WeaponCombatService, IWeaponCombatService } from './WeaponCombatService';
+import { TurnProcessor, ITurnProcessor } from './TurnProcessor';
+import { CombatAbilityService, ICombatAbilityService } from './CombatAbilityService';
+import { DisarmedWeapon } from '../weapons/DisarmService';
 
 export interface BattleConfig {
   player: IBrutoCombatant;
@@ -32,6 +34,7 @@ export interface BattleResult {
 interface CombatantState {
   combatant: IBrutoCombatant;
   currentHp: number;
+  disarmedWeapons: DisarmedWeapon[]; // Story 5.4: Track disarmed weapons
 }
 
 /**
@@ -40,34 +43,50 @@ interface CombatantState {
 export class CombatEngine {
   private stateMachine: CombatStateMachine;
   private rng: SeededRandom;
-  private damageCalculator: DamageCalculator;
+  private damageCalculator: IDamageCalculator;
   private activeAbilityManager: ActiveAbilityManager;
   private activeAbilityEffects: ActiveAbilityEffects;
-  private weaponCombatService: WeaponCombatService;
+  private weaponCombatService: IWeaponCombatService;
+  private turnProcessor: ITurnProcessor;
+  private abilityService: ICombatAbilityService;
   private playerState: CombatantState;
   private opponentState: CombatantState;
   private actions: CombatAction[] = [];
 
-  constructor(config: BattleConfig) {
+  constructor(
+    config: BattleConfig,
+    damageCalculator?: IDamageCalculator,
+    weaponService?: IWeaponCombatService,
+    turnProcessor?: ITurnProcessor,
+    abilityService?: ICombatAbilityService
+  ) {
     this.stateMachine = new CombatStateMachine();
     this.rng = config.rngSeed
       ? new SeededRandom(config.rngSeed)
       : new SeededRandom(Date.now());
 
-    this.damageCalculator = new DamageCalculator();
+    // Dependency Injection: Use provided instances or create defaults
+    this.damageCalculator = damageCalculator || new DamageCalculator();
     this.activeAbilityManager = new ActiveAbilityManager();
     this.activeAbilityEffects = new ActiveAbilityEffects(this.rng);
-    this.weaponCombatService = new WeaponCombatService();
+    this.weaponCombatService = weaponService || new WeaponCombatService();
+    this.turnProcessor = turnProcessor || new TurnProcessor(this.rng);
+    this.abilityService = abilityService || new CombatAbilityService(
+      this.activeAbilityManager,
+      this.activeAbilityEffects
+    );
 
     // Initialize combatant states
     this.playerState = {
       combatant: config.player,
       currentHp: config.player.stats.hp,
+      disarmedWeapons: [], // Story 5.4: No weapons disarmed at start
     };
 
     this.opponentState = {
       combatant: config.opponent,
       currentHp: config.opponent.stats.hp,
+      disarmedWeapons: [], // Story 5.4: No weapons disarmed at start
     };
 
     // Initialize abilities for battle
@@ -107,11 +126,11 @@ export class CombatEngine {
     const queue: TurnQueueEntry[] = [];
 
     if (playerInitiative <= opponentInitiative) {
-      queue.push({ side: 'player', initiative: playerInitiative, isExtraTurn: false });
-      queue.push({ side: 'opponent', initiative: opponentInitiative, isExtraTurn: false });
+      queue.push({ side: 'player', initiative: playerInitiative, isExtraTurn: false, combatantType: 'bruto' });
+      queue.push({ side: 'opponent', initiative: opponentInitiative, isExtraTurn: false, combatantType: 'bruto' });
     } else {
-      queue.push({ side: 'opponent', initiative: opponentInitiative, isExtraTurn: false });
-      queue.push({ side: 'player', initiative: playerInitiative, isExtraTurn: false });
+      queue.push({ side: 'opponent', initiative: opponentInitiative, isExtraTurn: false, combatantType: 'bruto' });
+      queue.push({ side: 'player', initiative: playerInitiative, isExtraTurn: false, combatantType: 'bruto' });
     }
 
     return queue;
@@ -166,6 +185,9 @@ export class CombatEngine {
     const initiative = this.calculateInitiative(combatant);
     this.stateMachine.enqueueTurn(currentSide, initiative);
 
+    // Story 5.4: Update disarm timers for both combatants
+    this.updateDisarmTimers();
+
     // Advance to next turn
     this.stateMachine.nextTurn();
   }
@@ -179,9 +201,9 @@ export class CombatEngine {
     const attackerState = this.getCombatantState(attacker);
     const defenderState = this.getCombatantState(attacker === 'player' ? 'opponent' : 'player');
 
-    // Story 5: Calculate weapon modifiers for attacker and defender
-    const attackerModifiers = this.getWeaponModifiers(attackerState.combatant);
-    const defenderModifiers = this.getWeaponModifiers(defenderState.combatant);
+    // Story 5: Calculate weapon modifiers for attacker and defender (considering disarmed weapons)
+    const attackerModifiers = this.getWeaponModifiers(attackerState.combatant, attackerState.disarmedWeapons);
+    const defenderModifiers = this.getWeaponModifiers(defenderState.combatant, defenderState.disarmedWeapons);
 
     // Check dodge using DamageCalculator with weapon modifiers
     const dodgeChance = this.damageCalculator.getDodgeChance(defenderState.combatant, defenderModifiers);
@@ -209,26 +231,22 @@ export class CombatEngine {
       attackerModifiers
     );
 
-    // Check for Fuerza Bruta active ability
-    const fuerzaBrutaId = 'fuerza_bruta';
-    if (this.activeAbilityManager.isAbilityAvailable(attacker, fuerzaBrutaId)) {
-      const abilityEffect = this.activeAbilityEffects.applyFuerzaBruta();
-      if (abilityEffect.damageMultiplier !== undefined) {
-        damage = this.activeAbilityEffects.calculateAbilityDamage(damage, abilityEffect.damageMultiplier);
+    // Check for Fuerza Bruta active ability using CombatAbilityService
+    const abilityResult = this.abilityService.checkDamageAbility(
+      attacker,
+      turnNumber,
+      this.playerState.currentHp,
+      this.opponentState.currentHp
+    );
+
+    if (abilityResult.abilityUsed) {
+      damage = this.activeAbilityEffects.calculateAbilityDamage(
+        damage,
+        abilityResult.damageMultiplier
+      );
+      if (abilityResult.action) {
+        this.actions.push(abilityResult.action);
       }
-      this.activeAbilityManager.useAbility(attacker, fuerzaBrutaId);
-      
-      this.actions.push({
-        turn: turnNumber,
-        attacker,
-        action: 'ability',
-        damage: 0,
-        abilityUsed: 'fuerza_bruta',
-        hpRemaining: {
-          player: this.playerState.currentHp,
-          opponent: this.opponentState.currentHp,
-        },
-      });
     }
 
     // Check critical hit using DamageCalculator with weapon modifiers
@@ -262,6 +280,92 @@ export class CombatEngine {
 
     // Apply damage
     defenderState.currentHp = Math.max(0, defenderState.currentHp - damage);
+
+    // Story 5.4: Check for disarm after successful attack
+    this.checkDisarm(attacker, attackerState, defenderState, turnNumber);
+  }
+
+  /**
+   * Story 5.4: Check and apply disarm mechanics after attack
+   * Disarm chance is ONLY based on weapon modifiers (no base, no agility)
+   * Can reach 100% with the right weapon
+   * Uses "bare-hands" weapon stats when no weapon equipped
+   */
+  private checkDisarm(
+    attacker: CombatSide,
+    attackerState: CombatantState,
+    defenderState: CombatantState,
+    turnNumber: number
+  ): void {
+    // Defender must have weapons to disarm (bare-hands cannot be disarmed)
+    if (!defenderState.combatant.equippedWeapons || defenderState.combatant.equippedWeapons.length === 0) {
+      return;
+    }
+
+    // Get attacker's weapons (use bare-hands if none equipped)
+    const attackerWeapons = attackerState.combatant.equippedWeapons && attackerState.combatant.equippedWeapons.length > 0
+      ? attackerState.combatant.equippedWeapons
+      : ['bare-hands']; // Default to bare-hands (5% disarm)
+
+    // Get disarm chance ONLY from attacker's weapons (no base, no agility)
+    const disarmChanceModifier = this.weaponCombatService.getDisarmChanceModifier(
+      attackerWeapons,
+      attackerState.disarmedWeapons.map(d => d.weaponId)
+    );
+
+    // Disarm chance is purely weapon-based (can be 0% to 100%)
+    const disarmChance = Math.max(0, Math.min(100, disarmChanceModifier));
+
+    // Roll for disarm
+    const disarmSucceeds = this.rng.roll(disarmChance / 100);
+
+    if (disarmSucceeds) {
+      // Select random weapon from defender's equipped weapons
+      const equippedWeapons = defenderState.combatant.equippedWeapons;
+      const randomIndex = Math.floor(this.rng.next() * equippedWeapons.length);
+      const weaponToDisarm = equippedWeapons[randomIndex];
+
+      // Add to disarmed weapons list
+      defenderState.disarmedWeapons.push({
+        weaponId: weaponToDisarm,
+        turnsRemaining: 3, // Story 5.4: Weapons return after 3 turns
+        originallyEquipped: true,
+      });
+
+      // Log disarm action
+      this.actions.push({
+        turn: turnNumber,
+        attacker,
+        action: 'disarm',
+        weaponDisarmed: weaponToDisarm,
+        hpRemaining: {
+          player: this.playerState.currentHp,
+          opponent: this.opponentState.currentHp,
+        },
+      });
+    }
+  }
+
+  /**
+   * Story 5.4: Update disarm timers for both combatants
+   * Decrements turn counters and recovers weapons that reached 0
+   */
+  private updateDisarmTimers(): void {
+    // Update player disarm timers
+    this.playerState.disarmedWeapons = this.playerState.disarmedWeapons
+      .map(weapon => ({
+        ...weapon,
+        turnsRemaining: weapon.turnsRemaining - 1,
+      }))
+      .filter(weapon => weapon.turnsRemaining > 0);
+
+    // Update opponent disarm timers
+    this.opponentState.disarmedWeapons = this.opponentState.disarmedWeapons
+      .map(weapon => ({
+        ...weapon,
+        turnsRemaining: weapon.turnsRemaining - 1,
+      }))
+      .filter(weapon => weapon.turnsRemaining > 0);
   }
 
   /**
@@ -280,60 +384,33 @@ export class CombatEngine {
 
   /**
    * Check and apply healing abilities (Poción Trágica)
-   * Story 6.5: Active ability integration
+   * Story 6.5: Active ability integration using CombatAbilityService
    */
   private checkHealingAbilities(side: CombatSide, turnNumber: number): void {
-    const pocionTragicaId = 'pocion_tragica';
-    
-    if (!this.activeAbilityManager.isAbilityAvailable(side, pocionTragicaId)) {
-      return;
-    }
-
     const combatantState = this.getCombatantState(side);
-    const maxHp = combatantState.combatant.stats.maxHp || combatantState.combatant.stats.hp;
     
-    // Only use if HP is below threshold (strategic AI decision)
-    const hpPercent = combatantState.currentHp / maxHp;
-    if (hpPercent > POCION_TRAGICA_USE_THRESHOLD) {
-      return; // Don't waste heal at high HP
-    }
-
-    // Apply healing
-    const healResult = this.activeAbilityEffects.applyPocionTragica(
+    const healResult = this.abilityService.checkHealingAbility(
+      side,
+      combatantState.combatant,
       combatantState.currentHp,
-      maxHp
+      turnNumber,
+      this.playerState.currentHp,
+      this.opponentState.currentHp
     );
 
-    if (healResult.healAmount && healResult.healAmount > 0) {
-      combatantState.currentHp = Math.min(
-        combatantState.currentHp + healResult.healAmount,
-        maxHp
-      );
-
-      this.activeAbilityManager.useAbility(side, pocionTragicaId);
-
-      this.actions.push({
-        turn: turnNumber,
-        attacker: side,
-        action: 'heal',
-        healAmount: healResult.healAmount,
-        abilityUsed: 'pocion_tragica',
-        hpRemaining: {
-          player: this.playerState.currentHp,
-          opponent: this.opponentState.currentHp,
-        },
-      });
+    if (healResult.healed && healResult.action) {
+      combatantState.currentHp += healResult.healAmount;
+      this.actions.push(healResult.action);
     }
   }
 
   /**
-   * Roll for extra turn based on Speed stat
+   * Roll for extra turn based on Speed stat using TurnProcessor
    * Speed × 5% chance, capped at 60%
    */
   private rollExtraTurn(side: CombatSide): boolean {
     const combatant = this.getCombatantState(side).combatant;
-    const extraTurnChance = Math.min(0.6, combatant.stats.speed * 0.05);
-    return this.rng.roll(extraTurnChance);
+    return this.turnProcessor.rollExtraTurn(combatant);
   }
 
   /**
@@ -345,19 +422,20 @@ export class CombatEngine {
 
   /**
    * Calculate weapon modifiers for combatant
-   * Story 5: Weapon integration
+   * Story 5: Weapon integration with Story 5.4 disarm mechanics
+   * Uses "bare-hands" as default weapon when no weapons equipped
    */
-  private getWeaponModifiers(combatant: IBrutoCombatant): DamageModifiers {
-    if (!combatant.equippedWeapons || combatant.equippedWeapons.length === 0) {
-      return {}; // No weapons equipped
-    }
+  private getWeaponModifiers(combatant: IBrutoCombatant, disarmedWeapons: DisarmedWeapon[]): DamageModifiers {
+    // If no weapons equipped, use bare-hands (default weapon)
+    const equippedWeapons = combatant.equippedWeapons && combatant.equippedWeapons.length > 0
+      ? combatant.equippedWeapons
+      : ['bare-hands']; // Default to bare-hands
 
-    // Story 5.4: Disarm mechanics will be added here
-    // For now, all equipped weapons are active
-    const disarmedWeaponIds: string[] = [];
+    // Story 5.4: Exclude disarmed weapons from modifiers
+    const disarmedWeaponIds = disarmedWeapons.map(d => d.weaponId);
 
     return this.weaponCombatService.calculateCombatModifiers(
-      combatant.equippedWeapons,
+      equippedWeapons,
       disarmedWeaponIds
     );
   }

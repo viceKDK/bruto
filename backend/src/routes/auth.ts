@@ -1,6 +1,6 @@
 import { Router, Request, Response } from 'express';
 import { db } from '../database/connection';
-import bcrypt from 'bcrypt';
+import { PasswordService } from '../services/PasswordService';
 import jwt from 'jsonwebtoken';
 import { randomUUID } from 'crypto';
 
@@ -21,8 +21,17 @@ router.post('/register', async (req: Request, res: Response) => {
       return res.status(400).json({ error: 'Invalid email format' });
     }
 
-    if (password.length < 6) {
-      return res.status(400).json({ error: 'Password must be at least 6 characters' });
+    if (password.length < 8) {
+      return res.status(400).json({ error: 'Password must be at least 8 characters' });
+    }
+
+    // Validate password strength
+    const passwordStrength = PasswordService.validateStrength(password);
+    if (!passwordStrength.isValid) {
+      return res.status(400).json({ 
+        error: 'Password does not meet security requirements',
+        details: passwordStrength.errors 
+      });
     }
 
     // Check if email already exists
@@ -32,7 +41,7 @@ router.post('/register', async (req: Request, res: Response) => {
     }
 
     // Hash password
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await PasswordService.hash(password);
 
     // Create user
     const userId = randomUUID();
@@ -78,7 +87,7 @@ router.post('/login', async (req: Request, res: Response) => {
     }
 
     // Verify password
-    const validPassword = await bcrypt.compare(password, user.password);
+    const validPassword = await PasswordService.verify(password, user.password);
     if (!validPassword) {
       return res.status(401).json({ error: 'Invalid email or password' });
     }

@@ -8,7 +8,7 @@
  */
 
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { IBattleLog, IBrutoSnapshot } from '../../services/BattleLoggerService';
+import { IBattleLog } from '../../services/BattleLoggerService';
 
 // Mock Phaser completely
 vi.mock('phaser', () => ({
@@ -74,7 +74,7 @@ const mockScene = {
 };
 
 describe('BattleHistoryPanel', () => {
-  let panel: BattleHistoryPanel;
+  let panel: any;
   let onReplayClickSpy: ReturnType<typeof vi.fn>;
 
   beforeEach(() => {
@@ -412,7 +412,7 @@ describe('BattleHistoryPanel', () => {
       expect(replayButton).toBeDefined();
 
       // Get the click handler
-      const textMock = replayButton.value;
+      const textMock = replayButton!.value;
       const onCalls = textMock.on.mock.calls;
       const pointerdownCall = onCalls.find((call: any) => call[0] === 'pointerdown');
       expect(pointerdownCall).toBeDefined();
